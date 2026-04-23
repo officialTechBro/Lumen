@@ -351,3 +351,13 @@ Rows themselves are **not** scroll-animated — they're revealed as a single uni
 - **The range visualization is legible in 0.3 seconds.** A colored band, a dot, a status color. Anyone can parse it without reading numbers.
 - **Three distinct status colors** (Coral/neutral/Ink) match the three-pill legend on the left. Everything cross-references.
 - **The header's mono ID string** (`7A21K · QUEST DIAGNOSTICS`) adds credibility. It feels like a real medical document, not a mockup.
+
+
+## Reference
+- @context/home/00-index.md
+- @context/home/01-navigation.md
+- @context/home/03-hero.md
+- @context/home/04-how-it-works.md
+- @context/coding-standards.md
+- @context/lumen-branding.md
+- @context/lumen-project-overview.md
