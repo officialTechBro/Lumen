@@ -1,26 +1,163 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Class-based dark mode for Tailwind v4 */
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Semantic color tokens → CSS variable bridge */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand palette utilities */
+  --color-forest: var(--forest);
+  --color-forest-soft: var(--forest-soft);
+  --color-coral: var(--coral);
+  --color-coral-soft: var(--coral-soft);
+  --color-leaf: var(--leaf);
+  --color-leaf-soft: var(--leaf-soft);
+  --color-mint: var(--mint);
+  --color-paper: var(--paper);
+  --color-paper-elevated: var(--paper-elevated);
+  --color-paper-warm: var(--paper-warm);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-dim: var(--ink-dim);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+
+  /* Typography */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-newsreader);
+
+  /* Radius scale */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ─── Light mode (default) ──────────────────────────────── */
+:root {
+  --radius: 0.75rem;
+
+  /* ShadCN semantic tokens */
+  --background: #F6F3EC;
+  --foreground: #1A2620;
+  --card: #FBF8F1;
+  --card-foreground: #1A2620;
+  --popover: #FBF8F1;
+  --popover-foreground: #1A2620;
+  --primary: #1F5041;
+  --primary-foreground: #F6F3EC;
+  --secondary: #EFEADF;
+  --secondary-foreground: #1A2620;
+  --muted: #EFEADF;
+  --muted-foreground: #6B756F;
+  --accent: #EFEADF;
+  --accent-foreground: #1F5041;
+  --destructive: #C8563A;
+  --destructive-foreground: #FBF8F1;
+  --border: #D9D3C4;
+  --input: #D9D3C4;
+  --ring: #1F5041;
+
+  /* Lumen brand palette */
+  --paper: #F6F3EC;
+  --paper-elevated: #FBF8F1;
+  --paper-warm: #EFEADF;
+  --ink: #1A2620;
+  --ink-soft: #3D4842;
+  --ink-dim: #6B756F;
+  --ink-faint: #A8ADA6;
+  --forest: #1F5041;
+  --forest-soft: #2D6D5A;
+  --coral: #C8563A;
+  --coral-soft: #E8D4CC;
+  --leaf: #5A7A3F;
+  --leaf-soft: #D7E0C6;
+  --mint: #A8E6CF;
+  --line: #D9D3C4;
+  --line-soft: #E5DFD0;
+}
+
+/* ─── Dark mode ─────────────────────────────────────────── */
+.dark {
+  /* ShadCN semantic tokens */
+  --background: #0F1A16;
+  --foreground: #F6F3EC;
+  --card: #1A2620;
+  --card-foreground: #F6F3EC;
+  --popover: #172118;
+  --popover-foreground: #F6F3EC;
+  --primary: #2D6D5A;
+  --primary-foreground: #F6F3EC;
+  --secondary: #1E2E28;
+  --secondary-foreground: #F6F3EC;
+  --muted: #243328;
+  --muted-foreground: #A8ADA6;
+  --accent: #1F5041;
+  --accent-foreground: #A8E6CF;
+  --destructive: #C8563A;
+  --destructive-foreground: #F6F3EC;
+  --border: #2D3D35;
+  --input: #2D3D35;
+  --ring: #2D6D5A;
+
+  /* Lumen brand palette (dark overrides) */
+  --paper: #0F1A16;
+  --paper-elevated: #1A2620;
+  --paper-warm: #1E2E28;
+  --ink: #F6F3EC;
+  --ink-soft: #C8D4CE;
+  --ink-dim: #A8ADA6;
+  --ink-faint: #6B756F;
+  --forest: #2D6D5A;
+  --forest-soft: #3D8068;
+  --coral: #D4674D;
+  --coral-soft: #3D1A10;
+  --leaf: #6B9150;
+  --leaf-soft: #2A3D1A;
+  --mint: #A8E6CF;
+  --line: #2D3D35;
+  --line-soft: #243328;
+}
+
+/* ─── Base layer ────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ─── Paper grain texture overlay ──────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
 }
