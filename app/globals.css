@@ -236,6 +236,47 @@
   }
 }
 
+/* ─── Scroll-triggered fade-up ─────────────────────────── */
+.scroll-fade {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.scroll-fade.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── How It Works section ──────────────────────────────── */
+.how-step-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+@media (max-width: 860px) {
+  .how-step-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 719px) {
+  .how-section {
+    padding: 80px 0 !important;
+  }
+}
+
+.step-card {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--line);
+  box-shadow: 0 20px 40px -30px rgba(26, 38, 32, 0.3);
+}
+
 /* ─── Paper grain texture overlay ──────────────────────── */
 body::before {
   content: '';
