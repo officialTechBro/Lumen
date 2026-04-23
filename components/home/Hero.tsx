@@ -42,7 +42,7 @@ export function Hero() {
           <h1
             className="fade d2 font-display font-normal text-ink"
             style={{
-              fontSize: "clamp(48px, 7.5vw, 104px)",
+              fontSize: "clamp(38px, 5.5vw, 68px)",
               lineHeight: 1,
               letterSpacing: "-0.035em",
               marginTop: "28px",
@@ -52,7 +52,7 @@ export function Hero() {
             <br />
             <em
               className="text-forest"
-              style={{ fontStyle: "italic", fontWeight: 300, fontSize: "0.95em" }}
+              style={{ fontStyle: "italic", fontWeight: 300, fontSize: "0.90em" }}
             >
               in plain English.
             </em>
@@ -213,7 +213,7 @@ export function Hero() {
             className="hero-card-b"
             style={{
               position: "absolute",
-              top: "170px",
+              top: "145px",
               right: 0,
               width: "82%",
               transform: "rotate(2deg)",
