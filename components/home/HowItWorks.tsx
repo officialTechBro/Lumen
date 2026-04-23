@@ -200,7 +200,7 @@ export function HowItWorks() {
         </div>
 
         {/* Steps grid */}
-        <div className="how-step-grid">
+        <div className="grid grid-cols-1 gap-8 min-[861px]:grid-cols-3">
           {STEPS.map(({ num, headline, body, Viz }, i) => (
             <div key={num} className="scroll-fade" style={{ transitionDelay: DELAYS[i] }}>
               <div
