@@ -282,6 +282,40 @@
   }
 }
 
+/* ─── Trust Callout section ────────────────────────────── */
+.trust-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.trust-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  flex-shrink: 0;
+  animation: dotPulse 2.5s ease-in-out infinite;
+}
+
+@media (max-width: 859px) {
+  .trust-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .trust-block {
+    padding: 48px 32px !important;
+  }
+}
+
+@media (max-width: 559px) {
+  .trust-block {
+    padding: 40px 24px !important;
+  }
+}
+
 /* ─── Sample Report section ────────────────────────────── */
 .sample-grid {
   display: grid;

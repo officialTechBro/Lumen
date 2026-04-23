@@ -3,6 +3,7 @@ import { Hero } from "@/components/home/Hero";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { SampleReport } from "@/components/home/SampleReport";
 import { Features } from "@/components/home/Features";
+import { TrustCallout } from "@/components/home/TrustCallout";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <HowItWorks />
         <SampleReport />
         <Features />
+        <TrustCallout />
       </main>
     </>
   );
