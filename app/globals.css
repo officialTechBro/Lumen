@@ -59,6 +59,10 @@
 :root {
   --radius: 0.75rem;
 
+  /* Navigation translucent backgrounds */
+  --nav-bg: rgba(246, 243, 236, 0.82);
+  --nav-mobile-bg: rgba(246, 243, 236, 0.97);
+
   /* ShadCN semantic tokens */
   --background: #F6F3EC;
   --foreground: #1A2620;
@@ -101,6 +105,9 @@
 
 /* ─── Dark mode ─────────────────────────────────────────── */
 .dark {
+  /* Navigation translucent backgrounds */
+  --nav-bg: rgba(15, 26, 22, 0.88);
+  --nav-mobile-bg: rgba(15, 26, 22, 0.97);
   /* ShadCN semantic tokens */
   --background: #0F1A16;
   --foreground: #F6F3EC;
