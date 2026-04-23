@@ -234,3 +234,12 @@ BODY       Lumen writes a short, specific list of questions for
 - **Illustrations are information, not decoration.** The middle card literally shows what triage looks like. The third card literally shows a question list. A visitor who only looks at the pictures still understands the product.
 - **"No jargon, no gatekeeping"** — the italic accent phrase doubles as brand values. Not just what the product does, but what it refuses to do.
 - **Card hover lift is consistent** with the feature grid later on — same 4px translate, same shadow. Builds a visual system.
+
+
+## Reference
+- @context/home/00-index.md
+- @context/home/01-navigation.md
+- @context/home/03-hero.md
+- @context/coding-standards.md
+- @context/lumen-branding.md
+- @context/lumen-project-overview.md

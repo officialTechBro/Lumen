@@ -235,3 +235,12 @@ META 3        Reviewed by clinicians / MD & PharmD
 - **The rotation is intentional.** Zero-rotation cards look like a template. The -4°/+2° tilt makes the composition feel handled, editorial, designed.
 - **The italic forest accent on "in plain English"** is the signature that repeats across every headline on the site. Start it here.
 - **The meta strip is quiet credibility.** Not testimonials, not trust badges — just three true facts about the product. More powerful than "trusted by 10,000 users."
+
+
+## Reference
+- @context/home/00-index.md
+- @context/home/01-navigation.md
+- @context/coding-standards.md
+- @context/lumen-branding.md
+- @context/lumen-project-overview.md
+- @screenshots/hero.png

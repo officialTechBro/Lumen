@@ -101,6 +101,9 @@
   --mint: #A8E6CF;
   --line: #D9D3C4;
   --line-soft: #E5DFD0;
+
+  /* Hero */
+  --hero-raw-bg: #FDFAF3;
 }
 
 /* ─── Dark mode ─────────────────────────────────────────── */
@@ -146,6 +149,9 @@
   --mint: #A8E6CF;
   --line: #2D3D35;
   --line-soft: #243328;
+
+  /* Hero */
+  --hero-raw-bg: #1A2A22;
 }
 
 /* ─── Base layer ────────────────────────────────────────── */
@@ -155,6 +161,78 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* ─── Fade-up animation ─────────────────────────────────── */
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeUp 0.9s ease forwards;
+}
+
+.d1 { animation-delay: 0.1s; }
+.d2 { animation-delay: 0.2s; }
+.d3 { animation-delay: 0.35s; }
+.d4 { animation-delay: 0.5s; }
+.d5 { animation-delay: 0.65s; }
+
+/* ─── Eyebrow dot pulse ─────────────────────────────────── */
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.eyebrow-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--forest);
+  flex-shrink: 0;
+  animation: dotPulse 2.5s ease-in-out infinite;
+}
+
+/* ─── Hero layout ───────────────────────────────────────── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr;
+  gap: 80px;
+  align-items: end;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 40px;
+}
+
+@media (max-width: 1019px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
+
+@media (max-width: 719px) {
+  .hero-meta {
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 559px) {
+  .hero-card-a {
+    transform: rotate(-2deg) !important;
+  }
+  .hero-card-b {
+    transform: rotate(1deg) !important;
   }
 }
 
