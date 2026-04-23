@@ -1,3 +1,10 @@
+import { Navigation } from "@/components/home/Navigation";
+
 export default function Home() {
-  return <h1>Lumen</h1>;
+  return (
+    <>
+      <Navigation />
+      <main className="flex-1" />
+    </>
+  );
 }
