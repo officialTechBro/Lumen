@@ -1,22 +1,29 @@
-# Current Feature
-
-<!-- Feature Name -->
+# Current Feature: Home Testimonials
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- Goals & requirements -->
+- Render a 2×2 grid of four quote cards under the heading "Why people use it"
+- H2 headline: "Built for the twelve minutes you actually get with your doctor." — italic Forest on "twelve minutes"
+- Each card: Newsreader blockquote (24px), divider line, name (Newsreader 500) + mono context tag (right-aligned)
+- No hover lift — cards are static, document-like
+- Four archetypes covered: Hannah R. (annual physical), Marco D. (routine bloodwork), Priya S. RN (clinical), Evan K. (parent care)
+- Section background: Paper `#F6F3EC`, 1px Line-soft top border, 140px vertical padding
+- Scroll-triggered staggered fade-up (d1–d4 delay cascade)
+- Responsive: 2-col at ≥860px → 1-col below; blockquote drops to 22px and card padding tightens at <560px
 
 ## Notes
 
-<!-- Any extra notes -->
+- No photos, no star ratings, no "verified" checkmarks — typography only
+- Quotes use straight `"` characters (not CSS curly quote decoration)
+- Mono context line format: `City · occasion` (e.g. "Portland · annual physical")
+- Section is a visual breather after the dark Trust Callout, before Pricing
+- Voice check: quotes must sound like real adults — no exclamation points, no "life-changing", no perfect grammar
 
 ## History
-
-<!-- Keep this updated. Earliest to latest -->
 
 - Project setup and boilerplate cleanup
 - ShadCN setup and global theme foundation — installed core ShadCN deps, wired Lumen brand palette (light + dark) via CSS variables, added /dashboard and /reports routes, loaded Newsreader font
