@@ -54,15 +54,14 @@ export function TrustCallout() {
         {/* Callout block */}
         <div
           ref={blockRef}
-          className="trust-block scroll-fade"
+          className="scroll-fade"
           style={{
             background: '#1A2620',
             color: '#F6F3EC',
             borderRadius: '16px',
-            padding: '72px 56px',
           }}
         >
-          <div className="trust-grid">
+          <div className="grid grid-cols-2 max-[860px]:grid-cols-1 items-start" style={{ padding: 'clamp(40px, 5vw, 72px) clamp(24px, 5vw, 56px)', gap: 'clamp(40px, 5vw, 64px)' }}>
             {/* Left — thesis */}
             <div>
               {/* Eyebrow */}
