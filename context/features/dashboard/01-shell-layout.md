@@ -1,6 +1,7 @@
 # 01 — Shell Layout
 
 The outermost layout grid that holds every other element. Two columns: a fixed left sidebar and a scrollable main content area. The sidebar never scrolls; the main area scrolls independently.
+route: /dashboard
 
 ---
 
@@ -133,3 +134,11 @@ The shell currently has no responsive breakpoints — it's designed for desktop 
 - Sidebar collapses to a drawer (off-canvas) triggered by a hamburger button in the topbar
 - Main area takes full width with 20px padding
 - Cards reflow to single column (already done via the flex grid)
+
+## Reference
+- @context/lumen-project-overview.md
+- @context/coding-standards.md
+- @context/ai-interaction.md
+- @context/current-feature.md
+- @context/lumen-branding.md
+- @context/dashboard/00-index.md

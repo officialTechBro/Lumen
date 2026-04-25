@@ -267,3 +267,12 @@ PROFILE      SC avatar · Sarah Chen · Annual plan
 - **Upload CTA is dashed, not solid.** The dashed border reads "drop zone" — a design cue borrowed from file upload conventions. It primes the user for the drag-and-drop metaphor.
 - **`margin-top: auto` on the upload CTA.** This pushes the profile and CTA to the bottom regardless of how many nav items there are — a clean way to always anchor the identity at the footer of the sidebar.
 - **Initials avatar, no photo.** Forest background, Paper initials. Deliberate — a photo would make the sidebar feel social. The initials treatment keeps it clinical and professional.
+
+## Reference
+- @context/lumen-project-overview.md
+- @context/coding-standards.md
+- @context/ai-interaction.md
+- @context/current-feature.md
+- @context/lumen-branding.md
+- @context/dashboard/00-index.md
+- @context/dashboard/01-shell-layout.md

@@ -1,16 +1,26 @@
-# Current Feature
+# Current Feature: Dashboard Shell Layout
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Establish a two-column grid shell at `/dashboard` with a 248px sticky sidebar and a scrollable main area
+- Sidebar uses `paper-elev` background (`#FBF8F1`) with a 1px `line-soft` right border, sticky at `top: 0`, `height: 100vh`
+- Main column has `padding: 0 40px 60px` and `max-width: 1320px`
+- Body defaults: `background: var(--paper)`, Geist font, 15px/1.5, antialiased, paper grain overlay via `body::before`
+- Home content grid (`.home-grid`) stacks four cards vertically with 24px gap
+- Split layout (`.home-split`) is a 2-col equal grid, collapsing to 1-col at ≤1200px
+- Shell is desktop-first (≥1024px); no responsive breakpoints required yet
 
 ## Notes
 
-<!-- Add notes here -->
+- Shell itself is invisible — no background or border on the outer wrapper
+- Sidebar `overflow-y: auto` for short viewports
+- The topbar inside `.main` will handle its own sticky positioning (separate component)
+- Four home cards order: Hero Report → Flagged Markers → Trends Grid → Reports List
+- Route: `/dashboard`
 
 ## History
 
