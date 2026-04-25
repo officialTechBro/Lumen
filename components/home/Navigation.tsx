@@ -57,7 +57,7 @@ export function Navigation() {
 
           {/* Sign in — desktop only; also appears inside mobile menu */}
           <Link
-            href="/sign-in"
+            href="/login"
             className="hidden min-[860px]:block text-[14.5px] text-ink-soft transition-colors duration-150 hover:text-ink rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest"
           >
             Sign in

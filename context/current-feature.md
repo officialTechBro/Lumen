@@ -1,16 +1,36 @@
-# Current Feature
+# Current Feature: Login Page
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Authenticate returning users at `/login` in the fewest possible steps
+- Two-column layout: brand/reassurance panel (left, `var(--paper-warm)`) + focused login form (right, `var(--paper)`)
+- Left column: Lumen brand lockup, vertically-centered copy block (eyebrow + H1 + sub), stats strip, user quote, footer — all sticky to the viewport
+- Right column: no card/shadow — column background IS the form surface; form wrapper max-width 400px
+- Email field first, then password with show/hide toggle + inline "Forgot password?" link
+- Primary CTA: "Sign in →" full-width button
+- "or" separator then Google OAuth button ("Continue with Google")
+- Switch-to-signup footer link: "Don't have an account? Create one →"
+- Error states: wrong password (Coral border + inline message + reset link), unrecognised email (Coral border + "Sign up instead →"), network error (Coral-soft pill below button)
+- Loading state: button text → "Signing in…" with pulsing spinner, pointer-events disabled
+- Forgot password flow: in-place swap (no navigation) — reset form → success state (envelope icon + "Check your inbox." + resend link)
+- Staggered fade-up entrance animation (heading → email → password → button → separator → OAuth → switch)
+- Responsive: hide left column, single-column at ≤860px
 
 ## Notes
 
-<!-- Add notes here -->
+- No card border or shadow on the form — the Paper column IS the form surface
+- Email comes before Google on this screen (returning users remember how they signed up)
+- Forgot password is in-line, not a new page — keeps the user in flow
+- Stats use serif values + mono labels for clinical-editorial tension
+- Left column is `position: sticky; top: 0` so it stays fixed while the right scrolls on tall viewports
+- Brand lockup links back to `/`; switch link goes to `/signup`
+- Quote: "My LDL had been rising for two years. Nobody told me. Lumen showed me the trend." — Marco D. · Brooklyn
+- Left footer: "HIPAA-aligned · Encrypted · Not a substitute for medical advice"
+- Reference: `context/features/auth/01-login.md`, `context/coding-standards.md`, `context/lumen-branding.md`
 
 ## History
 
