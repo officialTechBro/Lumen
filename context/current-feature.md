@@ -1,16 +1,34 @@
-# Current Feature
+# Current Feature: Signup Page
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Build `/signup` route with two-column layout (feature rail left, form card right)
+- Sticky auth nav bar with brand lockup and "Already have an account? Sign in →" link
+- Left column: "WHY LUMEN?" feature list (4 items with Forest dots), divider, free plan callout box
+- Right column: Paper-elev card with headline, Google OAuth button, or-separator, full name / email / password fields, strength bar, CTA, legal line
+- Email field on-blur validation (valid checkmark, invalid coral error, already-registered with sign-in link)
+- Password show/hide toggle + 3-segment strength bar (weak/fair/strong)
+- Loading state on submit button ("Creating your account…" + spinner)
+- Success confirmation state replaces form (envelope icon, "Check your email." headline, resend link)
+- Staggered fade-up entrance animation (left rail features stagger, form card as one block)
+- Responsive: 2-col → 1-col at 960px breakpoint
 
 ## Notes
 
-<!-- Add notes here -->
+- Route: `/signup`
+- Form card uses `var(--paper-elev)` background + border + 16px radius — unlike Login which is a bare column
+- Google OAuth is the **lead** action (more prominent than email form)
+- Free plan callout lives in the left rail, NOT the form card — keeps it feeling like a benefit, not a caveat
+- Password strength: 3 states only (weak/fair/strong), not 4
+- No checkbox for Terms — legal-on-create pattern
+- Confirmation screen swaps the form card content in-place (no page navigation)
+- Italic Forest accent on "results." in headline; italic Forest on "your email." in confirm state
+- Shared input spec and primary button spec from auth/00-index.md apply
+- Free plan items: "3 lab translations / month", "All 94+ markers explained", "Doctor question generator"
 
 ## History
 
