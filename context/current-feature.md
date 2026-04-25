@@ -1,23 +1,16 @@
-# Current Feature: Home Footer
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Dark `#1A2620` `<footer>` with 64px top / 48px bottom padding, no top border
-- Logo lockup centered: Mint SVG mark (22×22) + Newsreader "Lumen" wordmark (22px, Paper), 10px gap
-- Bottom legal row below a faint 1px Paper 10% divider: © 2026 Lumen Health, Inc. · disclaimer · Made in Brooklyn & Oakland — Geist Mono 500, 10px, uppercase, Paper 50%
-- Legal row: flex wrap, justify center, 24px gap
-- Responsive: logo + legal row stack and center on all viewports, legal items wrap naturally at narrow widths
-- Scroll-triggered fade-up on enter
+<!-- List goals here -->
 
 ## Notes
 
-- Hardcode all colors (no CSS vars that invert) so footer stays dark in both light and dark mode
-- Mint mark (#A8E6CF) on dark surface only — same as trust callout
-- No Forest on dark surfaces (fails WCAG contrast)
+<!-- Add notes here -->
 
 ## History
 
@@ -33,3 +26,4 @@ In Progress
 - Home pricing section — two-tier centered grid (Free + Lumen Annual); Free: ₦0 forever, 2 lab reports; Annual: ₦9,999/year, unlimited reports; featured dark card (#1A2620) with Mint "Most chosen" ribbon, inverted text stays dark in both modes; feature list items with ::before horizontal rule (Forest/Mint); staggered scroll-triggered fade-up; 2-col centered at 880px max-width → 1-col stack at ≤680px, tighter card padding at ≤560px
 - Home FAQ section — 8-item exclusive accordion; purely typographic with ruled 1px Line-soft borders; center-aligned header with "Questions" eyebrow pill + Newsreader H2 "Short answers. No legalese." (italic Forest accent); ASCII + toggle (Geist Mono, Ink-dim → Forest, rotates 45deg on open); inline-style max-height 0→400px collapse with 0.3s ease; max-width 900px list, answers capped at 720px; scroll-triggered fade-up; responsive font reduction at ≤560px
 - Home CTA band — `<div id="upload">` closing conversion block on `var(--paper-warm)`; Newsreader H2 `clamp(40px,6vw,84px)` with italic Forest "ten minutes better." accent; Geist 19px sub with permission-to-stop copy; primary upload button (opens file picker) + secondary "See the sample read" link to `#sample`; dashed-border dropzone widget (flex row: 36×36 icon well with SVG upload arrow + Newsreader title / Geist Mono uppercase trust sub); Forest hover wash on dropzone; staggered scroll-fade (0 / 0.1s / 0.2s / 0.35s); responsive collapse at ≤560px (32×32 icon well, 16px title)
+- Home footer — minimal dark `#1A2620` footer; centered Mint SVG mark + Newsreader "Lumen" wordmark (Paper); faint 1px Paper 10% divider; legal row (Geist Mono 500, 10px, uppercase, Paper 50%): © 2026 Lumen Health, Inc. · disclaimer · Made in Brooklyn & Oakland; flex-wrap centering, responsive on all viewports; scroll-triggered fade-up; hardcoded dark-surface colors
