@@ -2,29 +2,19 @@
 
 ## Status
 
-Complete
+Not Started
 
 ## Goals
 
-Quick wins from the codebase audit — all are isolated, low-risk fixes with no architectural changes.
-
-1. **Fix broken CSS token** — `Testimonials.tsx:114`: change `var(--paper-elev)` → `var(--paper-elevated)`. Fixes transparent card backgrounds (visible rendering bug).
-2. **Fix inconsistent font variable** — `Testimonials.tsx:123,146`: change `var(--font-newsreader)` → `var(--font-display)` to match every other component.
-3. **Fix index-based `key` props** — replace `key={i}` with stable string keys in `FAQ.tsx`, `TrustCallout.tsx`, `SampleReport.tsx`, `HowItWorks.tsx`.
-4. **Add `prefers-reduced-motion` CSS block** — `globals.css`: wrap fade animations in a `@media (prefers-reduced-motion: reduce)` block so they skip for users who need it.
-5. **Change CTABand root element** — `CTABand.tsx:44`: `<div id="upload">` → `<section id="upload" aria-label="Upload your report">` for correct landmark structure.
-6. **Add `id="trust"` to TrustCallout** — enables deep-linking to that section, consistent with all other sections.
-7. **Document DELAYS intent** — `Features.tsx`: add a one-line comment explaining `i % 3` is intentional per-row stagger so future devs don't treat it as a bug.
+<!-- List goals here -->
 
 ## Notes
 
-- All fixes are contained to a single file and line (or a small block). No component structure changes, no logic changes.
-- FAQ ARIA fix (HIGH severity) was intentionally left out — it requires careful testing and is not a one-liner.
-- Inline-style migration and `'use client'` refactor are also excluded — those are medium-risk refactors for a separate feature.
+<!-- Add notes here -->
 
 ## History
 
-- Audit quick wins — fixed broken `var(--paper-elev)` CSS token in Testimonials (transparent card bug), normalized `var(--font-newsreader)` → `var(--font-display)` in Testimonials, replaced index-based `key` props with stable string keys in FAQ/TrustCallout/SampleReport/HowItWorks, added `prefers-reduced-motion` CSS override in globals.css, changed CTABand root from `<div>` to `<section aria-label>`, added `id="trust"` to TrustCallout, documented intentional `DELAYS i % 3` pattern in Features
+- Audit quick wins — fixed broken `var(--paper-elev)` CSS token in Testimonials (transparent card bug), normalized `var(--font-newsreader)` → `var(--font-display)` in Testimonials, replaced index-based `key` props with stable string keys in FAQ/TrustCallout/SampleReport/HowItWorks, added `prefers-reduced-motion` CSS override in globals.css, changed CTABand root from `<div>` to `<section aria-label>`, added `id="trust"` to TrustCallout, documented intentional `DELAYS i % 3` pattern in Features; updated Pricing from ₦ to USD ($0 free / $79/yr)
 
 - Project setup and boilerplate cleanup
 - ShadCN setup and global theme foundation — installed core ShadCN deps, wired Lumen brand palette (light + dark) via CSS variables, added /dashboard and /reports routes, loaded Newsreader font
