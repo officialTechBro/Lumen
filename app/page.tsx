@@ -7,6 +7,7 @@ import { TrustCallout } from "@/components/home/TrustCallout";
 import { Testimonials } from "@/components/home/Testimonials";
 import { Pricing } from "@/components/home/Pricing";
 import { FAQ } from "@/components/home/FAQ";
+import { CTABand } from "@/components/home/CTABand";
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
         <Testimonials />
         <Pricing />
         <FAQ />
+        <CTABand />
       </main>
     </>
   );

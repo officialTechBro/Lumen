@@ -525,6 +525,32 @@
   border-color: #1A2620;
 }
 
+/* ─── CTA Band ─────────────────────────────────────────────── */
+.cta-drop:hover {
+  border-color: var(--forest);
+  background: rgba(31, 80, 65, 0.04);
+}
+
+.cta-drop:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 2px;
+}
+
+@media (max-width: 559px) {
+  .cta-band {
+    padding: 80px 0;
+  }
+
+  .cta-drop-ico {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .cta-drop-title {
+    font-size: 16px !important;
+  }
+}
+
 .price-card.featured:hover {
   border-color: #1F5041;
 }
