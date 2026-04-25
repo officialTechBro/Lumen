@@ -1,28 +1,20 @@
-# Current Feature: Dashboard Shell Layout
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Establish a two-column grid shell at `/dashboard` with a 248px sticky sidebar and a scrollable main area
-- Sidebar uses `paper-elev` background (`#FBF8F1`) with a 1px `line-soft` right border, sticky at `top: 0`, `height: 100vh`
-- Main column has `padding: 0 40px 60px` and `max-width: 1320px`
-- Body defaults: `background: var(--paper)`, Geist font, 15px/1.5, antialiased, paper grain overlay via `body::before`
-- Home content grid (`.home-grid`) stacks four cards vertically with 24px gap
-- Split layout (`.home-split`) is a 2-col equal grid, collapsing to 1-col at ≤1200px
-- Shell is desktop-first (≥1024px); no responsive breakpoints required yet
+<!-- List goals here -->
 
 ## Notes
 
-- Shell itself is invisible — no background or border on the outer wrapper
-- Sidebar `overflow-y: auto` for short viewports
-- The topbar inside `.main` will handle its own sticky positioning (separate component)
-- Four home cards order: Hero Report → Flagged Markers → Trends Grid → Reports List
-- Route: `/dashboard`
+<!-- Add notes here -->
 
 ## History
+
+- Dashboard shell layout — `/dashboard` route; `app/dashboard/layout.tsx` wraps pages in a two-column `.shell` grid (248px sidebar + `1fr` main); `.sidebar` uses `paper-elevated` background, 1px `line-soft` right border, `position: sticky / top: 0 / height: 100vh`, `overflow-y: auto`, `padding: 28px 20px`, flex column with 32px gap; `.main` has `padding: 0 40px 60px` and `max-width: 1320px`; `.home-grid` single-column stack with 24px gap and 8px top margin; `.home-split` 2-col equal grid collapsing to 1-col at ≤1200px; all layout classes added to `globals.css`; `DashboardSidebar` server component placeholder (Lumen lockup + nav items); `page.tsx` renders four labeled placeholder cards (Hero Report / Flagged Markers / Trends Grid / Reports List) in `.home-grid`; desktop-first, no mobile breakpoints
 
 - Login page — `/login` route; server component page with sticky auth nav (Lumen lockup left, "Don't have an account? Create one →" right), two-column grid hidden-left-rail-at-960px layout matching signup shell; left rail has "SINCE FEB 2024" eyebrow, Newsreader H1 with italic Forest accent, sub copy, Forest-dot stats strip (94 panels / 11 seconds / MD + PharmD), paper-warm quote callout box; `LoginForm` client component with email field first, password field + SHOW/HIDE text toggle, inline "Forgot password?" link, "Sign in →" primary CTA, or separator, Google OAuth button, "Create one →" switch link; three mode states (login / forgot / forgot-success) with in-place swap; error states for wrong-password (Coral border + reset link), unknown-email (Coral border + "Sign up instead →"), network (Coral-soft pill); loading state with Forest bg + pulsing spinner; staggered fade-up entrance (0.08s increments); `LoginMode` and `LoginError` types extracted to `lib/types.ts`; Navigation Sign in link corrected to `/login`
 
