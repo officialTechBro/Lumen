@@ -1,31 +1,16 @@
-# Current Feature: Home CTA Band
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Render a centered `<div id="upload">` closing band with `var(--paper-warm)` background and 1px top border
-- Big H2 headline: "Your next appointment, *ten minutes better.*" — italic Forest on last phrase, `clamp(40px, 6vw, 84px)`, max-width 900px
-- Sub paragraph: Geist 400, 19px, Ink-soft, max-width 540px, three short sentences
-- Two buttons: primary "Upload a report →" and secondary "See the sample read" (links to `#sample`)
-- Dropzone widget (`.drop`): dashed 1.5px `var(--line)` border, 12px radius, flex row with icon well + copy block; hover shifts border to Forest and faint forest background wash
-- Icon well: 36×36px, 8px radius, Paper bg, 1px Line-soft border; 18×18 inline SVG upload arrow in Forest
-- Copy block: Newsreader 500 17px title + Geist Mono 500 10px uppercase sub with three trust statements
-- Staggered `.fade` animation: H2 → .d1 → .d2 → .d3
-- Clicking the dropzone (or "Upload a report") opens file picker; wire `dragover`/`drop` events
-- Responsive: ≥720px centered; <720px container padding drops to 20px; <560px icon well 32×32, title 16px
+<!-- List goals here -->
 
 ## Notes
 
-- `id="upload"` — this is the anchor target for the nav CTA, hero CTA, and all other upload links on the page
-- Uses `<div>` not `<section>` (closing band, not content section)
-- 140px vertical padding
-- Background `var(--paper-warm)` — matches pricing section to bracket the end of marketing content
-- Dropzone is **visual only** on the marketing page; the actual upload happens in the app
-- "Keep going if it helps" is the key unusual copy line — permission-to-stop framing
-- The dropzone sub copy: "Up to 20MB · encrypted in transit · you control deletion" — three trust statements, middle-dot separated
+<!-- Add notes here -->
 
 ## History
 
@@ -40,3 +25,4 @@ In Progress
 - Home testimonials — 2×2 quote card grid; italic Forest "twelve minutes" headline; four archetypes (patient, ignored-result patient, clinician, caregiver); Newsreader blockquote + divider + serif name / mono context tag; staggered scroll-triggered fade-up (d1–d4); responsive 2-col → 1-col at 860px, tighter padding/font at 560px
 - Home pricing section — two-tier centered grid (Free + Lumen Annual); Free: ₦0 forever, 2 lab reports; Annual: ₦9,999/year, unlimited reports; featured dark card (#1A2620) with Mint "Most chosen" ribbon, inverted text stays dark in both modes; feature list items with ::before horizontal rule (Forest/Mint); staggered scroll-triggered fade-up; 2-col centered at 880px max-width → 1-col stack at ≤680px, tighter card padding at ≤560px
 - Home FAQ section — 8-item exclusive accordion; purely typographic with ruled 1px Line-soft borders; center-aligned header with "Questions" eyebrow pill + Newsreader H2 "Short answers. No legalese." (italic Forest accent); ASCII + toggle (Geist Mono, Ink-dim → Forest, rotates 45deg on open); inline-style max-height 0→400px collapse with 0.3s ease; max-width 900px list, answers capped at 720px; scroll-triggered fade-up; responsive font reduction at ≤560px
+- Home CTA band — `<div id="upload">` closing conversion block on `var(--paper-warm)`; Newsreader H2 `clamp(40px,6vw,84px)` with italic Forest "ten minutes better." accent; Geist 19px sub with permission-to-stop copy; primary upload button (opens file picker) + secondary "See the sample read" link to `#sample`; dashed-border dropzone widget (flex row: 36×36 icon well with SVG upload arrow + Newsreader title / Geist Mono uppercase trust sub); Forest hover wash on dropzone; staggered scroll-fade (0 / 0.1s / 0.2s / 0.35s); responsive collapse at ≤560px (32×32 icon well, 16px title)
