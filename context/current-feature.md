@@ -1,16 +1,31 @@
-# Current Feature
+# Current Feature: Home CTA Band
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Render a centered `<div id="upload">` closing band with `var(--paper-warm)` background and 1px top border
+- Big H2 headline: "Your next appointment, *ten minutes better.*" — italic Forest on last phrase, `clamp(40px, 6vw, 84px)`, max-width 900px
+- Sub paragraph: Geist 400, 19px, Ink-soft, max-width 540px, three short sentences
+- Two buttons: primary "Upload a report →" and secondary "See the sample read" (links to `#sample`)
+- Dropzone widget (`.drop`): dashed 1.5px `var(--line)` border, 12px radius, flex row with icon well + copy block; hover shifts border to Forest and faint forest background wash
+- Icon well: 36×36px, 8px radius, Paper bg, 1px Line-soft border; 18×18 inline SVG upload arrow in Forest
+- Copy block: Newsreader 500 17px title + Geist Mono 500 10px uppercase sub with three trust statements
+- Staggered `.fade` animation: H2 → .d1 → .d2 → .d3
+- Clicking the dropzone (or "Upload a report") opens file picker; wire `dragover`/`drop` events
+- Responsive: ≥720px centered; <720px container padding drops to 20px; <560px icon well 32×32, title 16px
 
 ## Notes
 
-<!-- Add notes here -->
+- `id="upload"` — this is the anchor target for the nav CTA, hero CTA, and all other upload links on the page
+- Uses `<div>` not `<section>` (closing band, not content section)
+- 140px vertical padding
+- Background `var(--paper-warm)` — matches pricing section to bracket the end of marketing content
+- Dropzone is **visual only** on the marketing page; the actual upload happens in the app
+- "Keep going if it helps" is the key unusual copy line — permission-to-stop framing
+- The dropzone sub copy: "Up to 20MB · encrypted in transit · you control deletion" — three trust statements, middle-dot separated
 
 ## History
 
