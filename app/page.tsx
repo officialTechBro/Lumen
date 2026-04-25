@@ -6,6 +6,7 @@ import { Features } from "@/components/home/Features";
 import { TrustCallout } from "@/components/home/TrustCallout";
 import { Testimonials } from "@/components/home/Testimonials";
 import { Pricing } from "@/components/home/Pricing";
+import { FAQ } from "@/components/home/FAQ";
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
         <TrustCallout />
         <Testimonials />
         <Pricing />
+        <FAQ />
       </main>
     </>
   );

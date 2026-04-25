@@ -570,6 +570,19 @@
   }
 }
 
+/* ─── FAQ section ──────────────────────────────────────── */
+@media (max-width: 559px) {
+  .faq-section {
+    padding: 80px 0 !important;
+  }
+  .faq-q-text {
+    font-size: 19px !important;
+  }
+  .faq-a-text {
+    font-size: 15px !important;
+  }
+}
+
 /* ─── Paper grain texture overlay ──────────────────────── */
 body::before {
   content: '';
