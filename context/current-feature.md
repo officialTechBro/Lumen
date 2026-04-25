@@ -1,38 +1,20 @@
-# Current Feature: Login Page
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Authenticate returning users at `/login` in the fewest possible steps
-- Two-column layout: brand/reassurance panel (left, `var(--paper-warm)`) + focused login form (right, `var(--paper)`)
-- Left column: Lumen brand lockup, vertically-centered copy block (eyebrow + H1 + sub), stats strip, user quote, footer — all sticky to the viewport
-- Right column: no card/shadow — column background IS the form surface; form wrapper max-width 400px
-- Email field first, then password with show/hide toggle + inline "Forgot password?" link
-- Primary CTA: "Sign in →" full-width button
-- "or" separator then Google OAuth button ("Continue with Google")
-- Switch-to-signup footer link: "Don't have an account? Create one →"
-- Error states: wrong password (Coral border + inline message + reset link), unrecognised email (Coral border + "Sign up instead →"), network error (Coral-soft pill below button)
-- Loading state: button text → "Signing in…" with pulsing spinner, pointer-events disabled
-- Forgot password flow: in-place swap (no navigation) — reset form → success state (envelope icon + "Check your inbox." + resend link)
-- Staggered fade-up entrance animation (heading → email → password → button → separator → OAuth → switch)
-- Responsive: hide left column, single-column at ≤860px
+<!-- List goals here -->
 
 ## Notes
 
-- No card border or shadow on the form — the Paper column IS the form surface
-- Email comes before Google on this screen (returning users remember how they signed up)
-- Forgot password is in-line, not a new page — keeps the user in flow
-- Stats use serif values + mono labels for clinical-editorial tension
-- Left column is `position: sticky; top: 0` so it stays fixed while the right scrolls on tall viewports
-- Brand lockup links back to `/`; switch link goes to `/signup`
-- Quote: "My LDL had been rising for two years. Nobody told me. Lumen showed me the trend." — Marco D. · Brooklyn
-- Left footer: "HIPAA-aligned · Encrypted · Not a substitute for medical advice"
-- Reference: `context/features/auth/01-login.md`, `context/coding-standards.md`, `context/lumen-branding.md`
+<!-- Add notes here -->
 
 ## History
+
+- Login page — `/login` route; server component page with sticky auth nav (Lumen lockup left, "Don't have an account? Create one →" right), two-column grid hidden-left-rail-at-960px layout matching signup shell; left rail has "SINCE FEB 2024" eyebrow, Newsreader H1 with italic Forest accent, sub copy, Forest-dot stats strip (94 panels / 11 seconds / MD + PharmD), paper-warm quote callout box; `LoginForm` client component with email field first, password field + SHOW/HIDE text toggle, inline "Forgot password?" link, "Sign in →" primary CTA, or separator, Google OAuth button, "Create one →" switch link; three mode states (login / forgot / forgot-success) with in-place swap; error states for wrong-password (Coral border + reset link), unknown-email (Coral border + "Sign up instead →"), network (Coral-soft pill); loading state with Forest bg + pulsing spinner; staggered fade-up entrance (0.08s increments); `LoginMode` and `LoginError` types extracted to `lib/types.ts`; Navigation Sign in link corrected to `/login`
 
 - Signup page — `/signup` route; server component page with sticky auth nav, two-column layout (feature rail left hidden on mobile / form card right); `WHY LUMEN?` feature list with Forest dots + free plan callout in left rail; `SignupForm` client component with Google OAuth button, full name/email/password fields, on-blur email validation (valid checkmark, coral error, taken + sign-in link), password show/hide toggle, 3-segment strength bar (weak/fair/strong), loading state with pulsing spinner, in-place success confirmation state (envelope icon, resend link); staggered fade-up entrance; responsive grid-cols-1 → grid-cols-[1fr_1.4fr] at 960px; extracted `lib/types.ts` and `lib/helpers.ts` for shared types and utility functions; added rules to coding-standards.md
 
