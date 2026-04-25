@@ -179,7 +179,7 @@ export function SignupForm() {
           placeholder="Sarah Chen"
           required
           autoComplete="name"
-          className="auth-input w-full"
+          className="auth-input"
         />
       </div>
 
@@ -198,7 +198,7 @@ export function SignupForm() {
             placeholder="you@email.com"
             required
             autoComplete="email"
-            className={`auth-input w-full ${isError ? 'auth-input-error' : ''} ${emailVal.status === 'valid' ? 'pr-10' : ''}`}
+            className={`auth-input ${isError ? 'auth-input-error' : ''} ${emailVal.status === 'valid' ? 'pr-10' : ''}`}
           />
           {emailVal.status === 'valid' && (
             <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--leaf)]">
@@ -234,7 +234,7 @@ export function SignupForm() {
             onChange={e => setPassword(e.target.value)}
             required
             autoComplete="new-password"
-            className="auth-input w-full pr-11"
+            className="auth-input pr-11"
           />
           <button
             type="button"
