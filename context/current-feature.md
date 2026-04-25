@@ -1,36 +1,20 @@
-# Current Feature: Signup Page
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Build `/signup` route with two-column layout (feature rail left, form card right)
-- Sticky auth nav bar with brand lockup and "Already have an account? Sign in →" link
-- Left column: "WHY LUMEN?" feature list (4 items with Forest dots), divider, free plan callout box
-- Right column: Paper-elev card with headline, Google OAuth button, or-separator, full name / email / password fields, strength bar, CTA, legal line
-- Email field on-blur validation (valid checkmark, invalid coral error, already-registered with sign-in link)
-- Password show/hide toggle + 3-segment strength bar (weak/fair/strong)
-- Loading state on submit button ("Creating your account…" + spinner)
-- Success confirmation state replaces form (envelope icon, "Check your email." headline, resend link)
-- Staggered fade-up entrance animation (left rail features stagger, form card as one block)
-- Responsive: 2-col → 1-col at 960px breakpoint
+<!-- List goals here -->
 
 ## Notes
 
-- Route: `/signup`
-- Form card uses `var(--paper-elev)` background + border + 16px radius — unlike Login which is a bare column
-- Google OAuth is the **lead** action (more prominent than email form)
-- Free plan callout lives in the left rail, NOT the form card — keeps it feeling like a benefit, not a caveat
-- Password strength: 3 states only (weak/fair/strong), not 4
-- No checkbox for Terms — legal-on-create pattern
-- Confirmation screen swaps the form card content in-place (no page navigation)
-- Italic Forest accent on "results." in headline; italic Forest on "your email." in confirm state
-- Shared input spec and primary button spec from auth/00-index.md apply
-- Free plan items: "3 lab translations / month", "All 94+ markers explained", "Doctor question generator"
+<!-- Add notes here -->
 
 ## History
+
+- Signup page — `/signup` route; server component page with sticky auth nav, two-column layout (feature rail left hidden on mobile / form card right); `WHY LUMEN?` feature list with Forest dots + free plan callout in left rail; `SignupForm` client component with Google OAuth button, full name/email/password fields, on-blur email validation (valid checkmark, coral error, taken + sign-in link), password show/hide toggle, 3-segment strength bar (weak/fair/strong), loading state with pulsing spinner, in-place success confirmation state (envelope icon, resend link); staggered fade-up entrance; responsive grid-cols-1 → grid-cols-[1fr_1.4fr] at 960px; extracted `lib/types.ts` and `lib/helpers.ts` for shared types and utility functions; added rules to coding-standards.md
 
 - Audit quick wins — fixed broken `var(--paper-elev)` CSS token in Testimonials (transparent card bug), normalized `var(--font-newsreader)` → `var(--font-display)` in Testimonials, replaced index-based `key` props with stable string keys in FAQ/TrustCallout/SampleReport/HowItWorks, added `prefers-reduced-motion` CSS override in globals.css, changed CTABand root from `<div>` to `<section aria-label>`, added `id="trust"` to TrustCallout, documented intentional `DELAYS i % 3` pattern in Features; updated Pricing from ₦ to USD ($0 free / $79/yr)
 
