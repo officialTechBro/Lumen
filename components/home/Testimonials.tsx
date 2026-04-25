@@ -111,7 +111,7 @@ export function Testimonials() {
               className="scroll-fade quote-card"
               style={{
                 transitionDelay: delay,
-                background: 'var(--paper-elev)',
+                background: 'var(--paper-elevated)',
                 border: '1px solid var(--line-soft)',
                 borderRadius: '12px',
                 padding: '40px 36px',
@@ -120,7 +120,7 @@ export function Testimonials() {
               <blockquote
                 style={{
                   margin: '0 0 24px 0',
-                  fontFamily: 'var(--font-newsreader)',
+                  fontFamily: 'var(--font-display)',
                   fontSize: '24px',
                   fontWeight: 400,
                   lineHeight: 1.35,
@@ -143,7 +143,7 @@ export function Testimonials() {
               >
                 <span
                   style={{
-                    fontFamily: 'var(--font-newsreader)',
+                    fontFamily: 'var(--font-display)',
                     fontSize: '16px',
                     fontWeight: 500,
                     color: 'var(--ink)',

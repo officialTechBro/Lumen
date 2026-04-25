@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
+// 3 delays for 6 cards — i % 3 repeats them per row intentionally
 const DELAYS = ['0.1s', '0.2s', '0.35s'];
 
 const CARDS = [

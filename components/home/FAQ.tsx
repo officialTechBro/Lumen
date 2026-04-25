@@ -117,7 +117,7 @@ export function FAQ() {
         >
           {FAQS.map((item, i) => (
             <div
-              key={i}
+              key={item.q}
               className="faq-item"
               style={{
                 borderTop: i === 0 ? '1px solid var(--line-soft)' : undefined,

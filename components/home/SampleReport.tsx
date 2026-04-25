@@ -245,8 +245,8 @@ function Expansion({ row, isOpen }: { row: RowData; isOpen: boolean }) {
           <div className="text-forest" style={{ ...MONO_LABEL, marginBottom: '10px' }}>
             Ask your doctor
           </div>
-          {row.askYourDoctor.map((q, i) => (
-            <p key={i} className="ask-q">
+          {row.askYourDoctor.map((q) => (
+            <p key={q} className="ask-q">
               {q}
             </p>
           ))}
