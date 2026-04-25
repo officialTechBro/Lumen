@@ -8,6 +8,7 @@ import { Testimonials } from "@/components/home/Testimonials";
 import { Pricing } from "@/components/home/Pricing";
 import { FAQ } from "@/components/home/FAQ";
 import { CTABand } from "@/components/home/CTABand";
+import { Footer } from "@/components/home/Footer";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
         <FAQ />
         <CTABand />
       </main>
+      <Footer />
     </>
   );
 }

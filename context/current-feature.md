@@ -1,16 +1,23 @@
-# Current Feature
+# Current Feature: Home Footer
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Dark `#1A2620` `<footer>` with 64px top / 48px bottom padding, no top border
+- Logo lockup centered: Mint SVG mark (22×22) + Newsreader "Lumen" wordmark (22px, Paper), 10px gap
+- Bottom legal row below a faint 1px Paper 10% divider: © 2026 Lumen Health, Inc. · disclaimer · Made in Brooklyn & Oakland — Geist Mono 500, 10px, uppercase, Paper 50%
+- Legal row: flex wrap, justify center, 24px gap
+- Responsive: logo + legal row stack and center on all viewports, legal items wrap naturally at narrow widths
+- Scroll-triggered fade-up on enter
 
 ## Notes
 
-<!-- Add notes here -->
+- Hardcode all colors (no CSS vars that invert) so footer stays dark in both light and dark mode
+- Mint mark (#A8E6CF) on dark surface only — same as trust callout
+- No Forest on dark surfaces (fails WCAG contrast)
 
 ## History
 
