@@ -49,11 +49,17 @@ Example v4 configuration:
 
 ## File Organization
 
-- Components: `src/components/[feature]/ComponentName.tsx`
-- Pages: `src/app/[route]/page.tsx`
-- Server Actions: `src/actions/[feature].ts`
-- Types: `src/types/[feature].ts`
-- Lib/Utils: `src/lib/[utility].ts`
+- Components: `components/[feature]/ComponentName.tsx`
+- Pages: `app/[route]/page.tsx`
+- Server Actions: `actions/[feature].ts`
+- Types: `lib/types.ts` — all shared TypeScript types and interfaces live here
+- Helpers: `lib/helpers.ts` — all pure utility/helper functions live here
+- Lib/Utils: `lib/[utility].ts`
+
+**Rules:**
+- Always add new types and interfaces to `lib/types.ts`, not inline in component files
+- Always add new pure helper/utility functions to `lib/helpers.ts`, not inline in component files
+- Import types with `import type` to keep type-only imports explicit
 
 ## Naming
 
