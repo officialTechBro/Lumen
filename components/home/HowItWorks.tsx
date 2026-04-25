@@ -46,8 +46,8 @@ function ReadViz() {
       preserveAspectRatio="xMidYMid meet"
       aria-hidden="true"
     >
-      {bars.map(({ y, fillWidth, dotCx, dotFill }, i) => (
-        <g key={i}>
+      {bars.map(({ y, fillWidth, dotCx, dotFill }) => (
+        <g key={y}>
           {/* Track */}
           <rect x="40" y={y} width="220" height="10" rx="5" fill="#E5DFD0" />
           {/* Fill */}

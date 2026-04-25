@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 export function CTABand() {
-  const bandRef = useRef<HTMLDivElement>(null);
+  const bandRef = useRef<HTMLElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -40,8 +40,9 @@ export function CTABand() {
   };
 
   return (
-    <div
+    <section
       id="upload"
+      aria-label="Upload your report"
       ref={bandRef}
       className="cta-band"
       style={{
@@ -221,6 +222,6 @@ export function CTABand() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

@@ -86,7 +86,7 @@ export function Footer() {
         >
           <span>© 2026 Lumen Health, Inc.</span>
           <span>Not a substitute for medical advice, diagnosis, or treatment.</span>
-          <span>Made in Brooklyn &amp; Oakland</span>
+          {/* <span>Made in Brooklyn &amp; Oakland</span> */}
         </div>
       </div>
     </footer>

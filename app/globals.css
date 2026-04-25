@@ -184,6 +184,17 @@
 .d4 { animation-delay: 0.5s; }
 .d5 { animation-delay: 0.65s; }
 
+/* ─── Reduced-motion override ───────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .fade,
+  .scroll-fade {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* ─── Eyebrow dot pulse ─────────────────────────────────── */
 @keyframes dotPulse {
   0%, 100% { opacity: 1; }

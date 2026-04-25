@@ -44,6 +44,7 @@ export function TrustCallout() {
 
   return (
     <section
+      id="trust"
       style={{
         padding: '140px 0',
         background: 'var(--paper)',
@@ -118,7 +119,7 @@ export function TrustCallout() {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {COMMITMENTS.map(({ label, body }, i) => (
                 <li
-                  key={i}
+                  key={label}
                   style={{
                     display: 'grid',
                     gridTemplateColumns: '28px 1fr',

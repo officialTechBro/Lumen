@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 const TIERS = [
   {
     name: 'Free',
-    price: '₦0',
+    price: '$0',
     unit: 'forever',
     description:
       'Start here. Two full report reads, no card required. See what Lumen does before committing.',
@@ -23,7 +23,7 @@ const TIERS = [
   },
   {
     name: 'Lumen annual',
-    price: '₦9,999',
+    price: '$79',
     unit: '/ year',
     description:
       'For anyone who retests regularly or wants to track markers over time. Unlimited reports, full history.',
