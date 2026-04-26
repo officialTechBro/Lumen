@@ -151,3 +151,17 @@ BTN 2          Upload new report →
 - **`align-items: flex-end` on the outer flex.** The headline is three lines tall; the buttons are one line tall. Aligning to the bottom means the buttons sit next to the last line of the headline — a clean typographic relationship.
 - **Time-of-day greeting.** Small detail, but it signals the app knows when you're using it — makes the product feel alive without being intrusive.
 - **Middle-dot separator in meta.** Same as the marketing site's fine-print lines. Builds a consistent visual language across the entire product.
+
+## Reference
+- @context/lumen-project-overview.md
+- @context/coding-standards.md
+- @context/ai-interaction.md
+- @context/current-feature.md
+- @context/lumen-branding.md
+- @context/dashboard/00-index.md
+- @context/dashboard/01-shell-layout.md
+- @context/dashboard/02-sidebar.md
+- @context/dashboard/03-topbar.md
+- @context/screenshots/dashboard-ui-1.png
+- @context/screenshots/dashboard-ui-2.png
+- @context/screenshots/dashboard-ui-3.png

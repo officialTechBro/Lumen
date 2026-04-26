@@ -1,15 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import type { DashboardShellProps } from "@/lib/types";
 import DashboardTopbar from "./DashboardTopbar";
 
-export default function DashboardShell({
-  sidebar,
-  children,
-}: {
-  sidebar: React.ReactNode;
-  children: React.ReactNode;
-}) {
+export default function DashboardShell({ sidebar, children }: DashboardShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (

@@ -15,3 +15,19 @@ export function getPasswordStrength(password: string): PasswordStrength {
 export function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
+
+export function daysAgo(dateString: string): number {
+  const ms = Date.now() - new Date(dateString).getTime();
+  return Math.floor(ms / 86_400_000);
+}
+
+export function getTimeOfDayGreeting(): string {
+  const h = new Date().getHours();
+  if (h < 12) return 'Good morning';
+  if (h < 18) return 'Good afternoon';
+  return 'Good evening';
+}
+
+export function getInitials(fullName: string): string {
+  return fullName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+}

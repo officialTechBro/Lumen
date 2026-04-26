@@ -173,3 +173,17 @@ GEAR TITLE    Settings
 - **Coral notification dot, no count.** In most dashboards, a badge number reads as "you're behind." A simple dot reads as "something's new" — softer, less alarming. Right for a health app.
 - **Mono breadcrumb, not a page title.** The page title is the big serif `<h1>` in the page header below. The breadcrumb is just wayfinding — it earns its small, dim treatment.
 - **280px search input.** Wide enough to type a marker name ("Vitamin D") or a lab ("Quest") without truncation, but not so wide it pushes the icon buttons off-screen at standard viewport widths.
+
+
+## Reference
+- @context/lumen-project-overview.md
+- @context/coding-standards.md
+- @context/ai-interaction.md
+- @context/current-feature.md
+- @context/lumen-branding.md
+- @context/dashboard/00-index.md
+- @context/dashboard/01-shell-layout.md
+- @context/dashboard/02-sidebar.md
+- @context/screenshots/dashboard-ui-1.png
+- @context/screenshots/dashboard-ui-2.png
+- @context/screenshots/dashboard-ui-3.png

@@ -161,3 +161,21 @@ When `refHigh > 500` (like Ferritin where ref is 30–300 but could be higher), 
 - **The sparkline takes up most of the cell height.** The chart isn't decorative — it's the headline. The current value is below it, reinforcing the story the chart already told. You see the direction before you read the number.
 - **Negative margin on `.tc-spark`.** A 4px bleed on each side of the cell makes the sparkline feel flush with the cell's natural width, not padded inside it. Small detail, significant visual difference.
 - **Flag markers listed first.** The grid order is not alphabetical or physiological — it's priority order. The user's attention should go to Vitamin D and LDL first. OK markers follow.
+
+
+## Reference
+- @context/lumen-project-overview.md
+- @context/coding-standards.md
+- @context/ai-interaction.md
+- @context/current-feature.md
+- @context/lumen-branding.md
+- @context/dashboard/00-index.md
+- @context/dashboard/01-shell-layout.md
+- @context/dashboard/02-sidebar.md
+- @context/dashboard/03-topbar.md
+- @context/dashboard/04-page-header.md
+- @context/dashboard/05-hero-report.md
+- @context/dashboard/06-flagged-markers.md
+- @context/screenshots/dashboard-ui-1.png
+- @context/screenshots/dashboard-ui-2.png
+- @context/screenshots/dashboard-ui-3.png
