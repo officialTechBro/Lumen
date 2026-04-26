@@ -42,12 +42,9 @@ export default function Sparkline({
   const pad = (maxVal - minVal) * 0.15 || 1;
   const domain: [number, number] = [minVal - pad, maxVal + pad];
 
-  const refY1 = refLow != null && refHigh != null
-    ? Math.max(refLow, domain[0])
-    : null;
-  const refY2 = refLow != null && refHigh != null
-    ? Math.min(refHigh, domain[1])
-    : null;
+  const drawBand = refLow != null && refHigh != null && refHigh < 500;
+  const refY1 = drawBand ? Math.max(refLow!, domain[0]) : null;
+  const refY2 = drawBand ? Math.min(refHigh!, domain[1]) : null;
 
   return (
     <AreaChart

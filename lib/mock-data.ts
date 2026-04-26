@@ -1,5 +1,5 @@
 // Static mock data for dashboard UI development — replace with real DB queries once Prisma is wired.
-import type { NavItem, HeroReport, ReportSummary, FlaggedMarker } from "@/lib/types";
+import type { NavItem, HeroReport, ReportSummary, FlaggedMarker, TrendCell } from "@/lib/types";
 
 // ── User ──────────────────────────────────────────────────────────────────────
 
@@ -632,6 +632,71 @@ export const MOCK_FLAGGED_MARKERS: FlaggedMarker[] = [
     trendValues: [72, 64, 58, 49, 44, 38],
     plainEnglish: "In range but on the low end. Track it.",
     doctorQuestion: "Would a full iron panel be useful?",
+  },
+];
+
+// ── Trends grid cells (last 6 reports, priority order: flagged → ok → watch) ──
+
+export const MOCK_TREND_CELLS: TrendCell[] = [
+  {
+    id: "tc_vitd",
+    name: "Vitamin D",
+    unit: "ng/mL",
+    values: [34, 32, 28, 29, 26, 24],
+    refLow: 30,
+    refHigh: 100,
+    current: 24,
+    status: "flag",
+  },
+  {
+    id: "tc_ldl",
+    name: "LDL",
+    unit: "mg/dL",
+    values: [118, 124, 131, 135, 138, 142],
+    refLow: 0,
+    refHigh: 100,
+    current: 142,
+    status: "flag",
+  },
+  {
+    id: "tc_hba1c",
+    name: "HbA1c",
+    unit: "%",
+    values: [5.2, 5.3, 5.3, 5.4, 5.3, 5.4],
+    refLow: 0,
+    refHigh: 5.7,
+    current: 5.4,
+    status: "ok",
+  },
+  {
+    id: "tc_tsh",
+    name: "TSH",
+    unit: "μIU/mL",
+    values: [2.4, 2.3, 2.0, 2.2, 2.1, 2.1],
+    refLow: 0.4,
+    refHigh: 4.0,
+    current: 2.1,
+    status: "ok",
+  },
+  {
+    id: "tc_hdl",
+    name: "HDL",
+    unit: "mg/dL",
+    values: [54, 56, 58, 57, 59, 58],
+    refLow: 40,
+    refHigh: 100,
+    current: 58,
+    status: "ok",
+  },
+  {
+    id: "tc_ferr",
+    name: "Ferritin",
+    unit: "ng/mL",
+    values: [72, 64, 58, 49, 44, 38],
+    refLow: 30,
+    refHigh: 300,
+    current: 38,
+    status: "watch",
   },
 ];
 

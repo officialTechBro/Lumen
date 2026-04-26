@@ -1432,6 +1432,66 @@ body::before {
 }
 .card-link:hover { color: var(--ink); }
 
+/* ── trends grid ── */
+.trends-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--line-soft);
+}
+
+.trend-cell {
+  padding: 22px 24px;
+  border-right: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.trend-cell:nth-child(3n)       { border-right: none; }
+.trend-cell:nth-last-child(-n+3) { border-bottom: none; }
+
+.tc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.tc-name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.tc-spark { margin: 6px -4px 12px; }
+
+.tc-bot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.tc-v {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.tc-u {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-dim);
+  margin-left: 4px;
+}
+
+.tc-ref {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--ink-dim);
+}
+
 /* ── list ── */
 .flagged-list { border-top: 1px solid var(--line-soft); }
 
@@ -1489,14 +1549,14 @@ body::before {
 
 /* col 2 — sparkline */
 .fr-spark {
-  flex: 0 0 110px;
+  flex: 1 1 0;
   display: flex;
   align-items: center;
 }
 
 /* col 3 — delta badge */
 .fr-delta {
-  flex: 0 0 128px;
+  flex: 1 1 0;
   display: flex;
   align-items: center;
 }
@@ -1517,7 +1577,7 @@ body::before {
 
 /* col 4 — value */
 .fr-val {
-  flex: 0 0 130px;
+  flex: 1 1 0;
   text-align: right;
   font-family: var(--font-mono);
   font-size: 11px;
@@ -1542,7 +1602,7 @@ body::before {
 
 /* col 5 — status pill */
 .fr-pill {
-  flex: 0 0 66px;
+  flex: 1 1 0;
   display: flex;
   align-items: center;
 }
@@ -1618,14 +1678,25 @@ body::before {
 
 /* ── responsive ── */
 
-/* tablet: hide sparkline, keep delta */
+/* tablet: hide sparkline, keep delta; collapse trends to 2-col */
 @media (max-width: 860px) {
   .fr-spark { display: none; }
+
+  .trends-grid { grid-template-columns: repeat(2, 1fr); }
+  .trend-cell:nth-child(3n)       { border-right: 1px solid var(--line-soft); }
+  .trend-cell:nth-last-child(-n+3) { border-bottom: 1px solid var(--line-soft); }
+  .trend-cell:nth-child(2n)       { border-right: none; }
+  .trend-cell:nth-last-child(-n+2) { border-bottom: none; }
 }
 
-/* mobile: hide delta too, collapse expansion to single col */
+/* mobile: hide delta too, collapse expansion and trends to single col */
 @media (max-width: 640px) {
   .card-head { padding: 16px 20px 12px; }
+
+  .trends-grid { grid-template-columns: 1fr; }
+  .trend-cell:nth-child(2n)       { border-right: none; }
+  .trend-cell:nth-last-child(-n+2) { border-bottom: 1px solid var(--line-soft); }
+  .trend-cell:last-child           { border-bottom: none; }
 
   .fr-delta { display: none; }
 
