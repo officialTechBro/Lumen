@@ -1,34 +1,20 @@
-# Current Feature — 08 Reports List Card
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Render a table-style list of 6 recent lab reports inside a `.card` container
-- Column header row (`.reports-head`) with 6 columns: Report · Lab · Date · Markers · Status · (chevron)
-- Each `.report-row` uses the same 6-column grid (`2fr 1fr 1fr 0.7fr 1.3fr 28px`), hover background, bottom border, no border on last row
-- Column 1: Newsreader 500 title + Mono ID sub, with `.pill.new` badge for "Latest" (row 1) and "First" (row 6)
-- Column 2–3: Lab and Date in `.rr-sub` mono style
-- Column 4: Markers count in Newsreader 500 19px
-- Column 5: Status pills — `{N} flag` / `{N} watch` / `All clear` using `.pill.flag` / `.pill.watch` / `.pill.ok`
-- Column 6: Chevron slides 2px right on hover (not rotation — indicates navigation, not expansion)
-- Card header: "Recent reports" title + "7 total" mono count + "Archive →" Forest link
-- Animation: `.fade .d5`
-- Add `MOCK_REPORTS` data (6 rows per spec) to `lib/mock-data.ts`; add `ReportRow` type to `lib/types.ts`
+<!-- List goals here -->
 
 ## Notes
 
-- Server component — no client interactivity needed (onClick on row 1 is stubbed for future nav)
-- Grid columns: `2fr 1fr 1fr 0.7fr 1.3fr 28px` — must match exactly between header and data rows
-- Chevron motion: `translateX(2px)` on hover, color → Forest — distinct from FlaggedMarkersCard's rotate-90° pattern
-- Column header row background is `var(--paper-warm)` to visually separate it from data rows
-- `.rr-sub` mono class shared across lab, date, and report ID — same semantic weight
-- Status pills use `flex-wrap` so multi-pill rows don't overflow at narrow column widths
-- Background: `var(--paper-elevated)` · border: 1px `var(--line-soft)` · radius: 14px · overflow: hidden
+<!-- Add notes here -->
 
 ## History
+
+- Reports List Card — `components/dashboard/ReportsListCard.tsx` server component; `.card` container with `.fade .d5` animation; header (`.card-head`): Newsreader 500 20px `.card-title` with `.card-count` "7 total" + Forest mono `.card-link` "Archive →"; `.reports-head` column header row (`2fr 1fr 1fr 0.7fr 1.3fr 28px` grid, `var(--paper-warm)` bg, Mono 10px uppercase Ink-dim); six `.report-row` items (`2fr 1fr 1fr 0.7fr 1.3fr 28px` grid, `18px 26px` padding, `rgba(31,80,65,.03)` hover, no border on last row); column 1: `.rr-title` (Newsreader 500 17px + inline `.pill.new` badge for "Latest" row 1 / "First" row 6) + `.rr-sub` mono report ID; columns 2–3 (lab, date): `.rr-sub` mono 11.5px Ink-dim; column 4 `.rr-markers` (Newsreader 500 19px); column 5 `.rr-status` (`flex-wrap`, `.pill.flag` / `.pill.watch` / `.pill.ok` "All clear"); column 6 `.rr-chev` (14×14 SVG right-chevron, `translateX(2px)` + Forest on hover — navigation affordance, not rotation); `MOCK_REPORT_ROWS` (6 rows per spec: Annual panel Latest, Follow-up, Annual panel, Thyroid check, Lipid panel, Baseline First) added to `lib/mock-data.ts`; `ReportRow` type added to `lib/types.ts`; `.pill.ok` (leaf-soft bg / leaf text) added to `globals.css`; responsive: ≤860px hides date + markers columns (`2fr 1fr 1.3fr 28px`), ≤560px also hides lab column (`1fr 1.3fr 28px`)
 
 - Trends Grid Card — `components/dashboard/TrendsGridCard.tsx` server component; `.card` container with `.fade .d4` animation; header (`.card-head`): Newsreader 500 20px `.card-title` with `.card-count` "Last 6 reports · 2 yrs" + Forest mono `.card-link` "View all →"; `.trends-grid` CSS grid (`repeat(3, 1fr)`, `border-top: 1px solid var(--line-soft)`); six `.trend-cell` items (padding `22px 24px`) with `nth-child` border rules (no right border on col 3, no bottom border on last row); each cell: `.tc-top` (flex space-between: `.tc-name` Newsreader 500 17px + status `.pill`), `.tc-spark` (negative margin `6px -4px 12px`, reuses `Sparkline.tsx` at 260×52), `.tc-bot` (flex space-between: `.tc-v` Newsreader 500 26px + `.tc-u` Geist Mono 11px Ink-dim left, `.tc-ref` Geist Mono 500 11px Ink-dim right); `refRangeLabel()` helper formats `Ref 30–100` / `Ref < 100` (when refLow=0) / `Ref 30–—` (when refHigh>500); `MOCK_TREND_CELLS` (6 cells, priority order: Vitamin D flag, LDL flag, HbA1c ok, TSH ok, HDL ok, Ferritin watch) added to `lib/mock-data.ts`; `TrendCell` type added to `lib/types.ts`; `Sparkline.tsx` updated with `refHigh < 500` guard for reference band; responsive: 2-col ≤860px with corrected nth-child overrides, 1-col ≤640px; flagged-row columns changed to `flex: 1 1 0` (from fixed widths) so all columns share equal space across the row
 
