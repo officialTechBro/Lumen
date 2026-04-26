@@ -1,31 +1,10 @@
 import DashboardPageHeader from "@/components/dashboard/DashboardPageHeader";
+import HeroReportCard from "@/components/dashboard/HeroReportCard";
 
 function PlaceholderCard({ label }: { label: string }) {
   return (
-    <div
-      style={{
-        background: "var(--paper-elevated)",
-        border: "1px solid var(--line-soft)",
-        borderRadius: 12,
-        padding: "32px",
-        minHeight: 180,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <span
-        style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: 11,
-          fontWeight: 500,
-          letterSpacing: "0.1em",
-          textTransform: "uppercase",
-          color: "var(--ink-faint)",
-        }}
-      >
-        {label}
-      </span>
+    <div className="placeholder-card">
+      <span className="placeholder-card-label">{label}</span>
     </div>
   );
 }
@@ -35,7 +14,7 @@ export default function DashboardPage() {
     <>
       <DashboardPageHeader />
       <div className="home-grid">
-        <PlaceholderCard label="Hero Report" />
+        <HeroReportCard />
         <PlaceholderCard label="Flagged Markers" />
         <PlaceholderCard label="Trends Grid" />
         <PlaceholderCard label="Reports List" />

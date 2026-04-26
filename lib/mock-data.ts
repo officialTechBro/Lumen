@@ -1,5 +1,5 @@
 // Static mock data for dashboard UI development — replace with real DB queries once Prisma is wired.
-import type { NavItem } from "@/lib/types";
+import type { NavItem, HeroReport, ReportSummary } from "@/lib/types";
 
 // ── User ──────────────────────────────────────────────────────────────────────
 
@@ -556,6 +556,25 @@ export const MOCK_REMINDER = {
   markerName: "Vitamin D",
   dueDate: "2026-06-14",
   note: "Retest after 3 months of supplementation",
+};
+
+// ── Hero report card ─────────────────────────────────────────────────────────
+
+export const MOCK_HERO_REPORT: HeroReport = {
+  title: "Annual panel",
+  lab: "Quest Diagnostics",
+  date: "March 14, 2026",
+  shortDate: "Mar 14",
+  sub: "Quest Diagnostics · March 14, 2026 · 21 markers read in 11 seconds. Two need a conversation with your doctor, one worth watching.",
+  normal: 18,
+  watch: 1,
+  flagged: 2,
+};
+
+export const MOCK_SUMMARY: ReportSummary = {
+  trackedSince: "Feb 2024",
+  totalReports: 7,
+  nextReminder: "Vitamin D retest — June 14",
 };
 
 // ── Latest report summary (for page header) ───────────────────────────────────

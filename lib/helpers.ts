@@ -31,3 +31,7 @@ export function getTimeOfDayGreeting(): string {
 export function getInitials(fullName: string): string {
   return fullName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 }
+
+export function donutArcLen(count: number, total: number, circ = 314): number {
+  return (count / total) * circ;
+}

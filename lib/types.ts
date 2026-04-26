@@ -22,6 +22,23 @@ export interface DashboardShellProps {
   children: React.ReactNode;
 }
 
+export interface HeroReport {
+  title: string;
+  lab: string;
+  date: string;
+  shortDate: string;
+  sub: string;
+  normal: number;
+  watch: number;
+  flagged: number;
+}
+
+export interface ReportSummary {
+  trackedSince: string;
+  totalReports: number;
+  nextReminder: string;
+}
+
 export interface DashboardTopbarProps {
   onToggle: () => void;
 }

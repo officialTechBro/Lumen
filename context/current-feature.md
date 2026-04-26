@@ -1,16 +1,40 @@
-# Current Feature
+# Current Feature — Hero Report Card
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Surface the most recent report immediately — no hunting, no clicks needed
+- Translate the report in one sentence so the user gets the gist before opening the full view
+- Show a donut summary (18 normal / 1 watch / 2 flagged) as a visual at a glance
+- Drive to action — "Open full report" and "Draft my questions" are the two primary CTAs
 
 ## Notes
 
-<!-- Add notes here -->
+- Two-column layout: left = copy/CTAs/meta strip; right = donut chart on `paper-warm` background
+- Container `.hero-report`: `grid-template-columns: 1.4fr 1fr`, `border-radius: 16px`, `overflow: hidden`, `border: 1px solid var(--line-soft)`, `background: var(--paper-elev)`
+- Animation: `.fade .d2`
+
+### Left column (`.hr-left`) — padding 36px 40px, `border-right: 1px solid var(--line-soft)`
+- **Badge row** (`.badges`): three pills — `.pill.new` "Latest report" (Forest-tint), `.pill.flag` "2 flagged" (Coral-soft), `.pill.watch` "1 watch" (grey tint)
+- **Headline** (`.hr-title`): 44px Newsreader 400, tracking -0.03em — `Annual panel, [explained.]` where `explained.` is `.italic` (Newsreader 300 italic, Forest)
+- **Subheading** (`.hr-sub`): 16px Ink-soft, max-width 480px — lab · date · marker count + plain-English summary sentence
+- **CTA row** (`.hr-ctas`): primary "Open full report →" `.btn.btn-primary` + secondary "Draft my questions" `.btn.btn-secondary`
+- **Meta strip** (`.hr-meta`): `grid-template-columns: repeat(3, auto)`, gap 40px, border-top — three stats: Tracked since / Total reports / Next reminder; each has a Mono 500 Ink-dim label and Newsreader 500 22px value
+
+### Right column (`.hr-right`) — padding 36px, `background: var(--paper-warm)`, centered
+- **Summary header** (`.hr-sum-head`): flex space-between — "Summary · Mar 14" (Mono Ink-dim) + "21 markers" (Mono Ink-dim)
+- **Donut chart** (`.hr-donut`): 120×120 SVG; base ring `#E5DFD0` strokeWidth 14; three arcs — Normal `#D7E0C6` (18/21)×314, Watch `#6B756F` 30% opacity (1/21)×314, Flag `#C8563A` (2/21)×314; center: "18" Newsreader 26px 500 + "NORMAL" Mono 8px; all arcs `rotate(-90 60 60)` to start at 12 o'clock; offsets chain sequentially
+- **Legend** (`.hr-legend`): flex column, gap 8px, 13px Ink-soft, border-top; three rows with 10×10 colored dot + label text
+
+### Data bindings (from mock data)
+- `latestReport`: title, lab, date, markers (21), normal (18), watch (1), flagged (2)
+- `summary`: trackedSince ("Feb 2024"), totalReports (7), nextReminder ("Vitamin D retest — June 14")
+
+### Bug fix — main area not stretching on large screens
+The `.main` column in the dashboard shell does not fill the full available width on larger viewports. Fix: ensure `.shell` grid uses `grid-template-columns: 248px 1fr` and `.main` has `width: 100%` (or `min-width: 0`) so it expands to fill remaining space. Check that no max-width constraint on `.main` itself is causing the shrink — `max-width` should be on the inner content wrapper, not on `.main`.
 
 ## History
 

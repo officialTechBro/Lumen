@@ -101,3 +101,5 @@ Example v4 configuration:
 - No unused imports or variables
 - Keep functions under 50 lines when possible
 ```
+## Note 
+- use shadcn component where needed e.g charts etc.
