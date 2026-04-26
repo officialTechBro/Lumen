@@ -1,31 +1,20 @@
-# Current Feature: Flagged Markers Card
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Build the `FlaggedMarkersCard` client component at `components/dashboard/FlaggedMarkersCard.tsx`
-- Render three flagged marker rows (Vitamin D, LDL Cholesterol, Ferritin) each with: status dot, name + code, sparkline, delta badge, value + reference range, status pill, and chevron
-- Implement the `Sparkline` SVG component (`components/dashboard/Sparkline.tsx`) with status-colored stroke/fill, optional reference band, and end-dot halo
-- Expansion panel per row: two-column layout with plain-English explanation (left) and doctor question + "Add to my questions" ghost button (right)
-- Only one row open at a time; default open = 0 (Vitamin D); clicking open row closes it
-- Add mock data (`MOCK_FLAGGED_MARKERS`) to `lib/mock-data.ts` and types (`FlaggedMarker`) to `lib/types.ts`
-- Wire the card into `app/dashboard/page.tsx` replacing the flagged-markers placeholder
-- Pass `npm run build` with zero errors
+<!-- List goals here -->
 
 ## Notes
 
-- Card container: `.card` pattern — `var(--paper-elev)` bg, 1px `var(--line-soft)` border, 14px radius, `overflow: hidden`, `.fade .d3` animation
-- Header (`.card-head`): Newsreader 500 20px title "Needs attention" + Geist Mono 11px `.count` badge; right link "All markers →" Geist Mono 10px Forest
-- Row grid: `200px 130px 120px 140px 80px 28px` — name | sparkline | delta | value | pill | chevron
-- Delta badge `.chg.up` = Coral-soft/Coral (bad direction for LDL); `.chg.down` = neutral grey (bad for VitD/Ferritin)
-- Sparkline: 110×30px in this card; `flag` → Coral stroke `#C8563A` / fill `#E8D4CC`; `watch` → `#6B756F` / `rgba(107,117,111,.15)`; reference band `rgba(90,122,63,.08)`
-- Expansion panel (`.flagged-expand`): `var(--paper-warm)` bg, two-column grid, plain-English in Newsreader 400 19px, doctor question in Newsreader 300 italic Forest 17px, ghost button `.btn .btn-ghost`
-- Responsive: row grid collapses at ≤900px (hide sparkline and delta columns, or stack)
+<!-- Add notes here -->
 
 ## History
+
+- Flagged Markers Card — `components/dashboard/FlaggedMarkersCard.tsx` client component; `.card` container (`var(--paper-elevated)` bg, 1px `var(--line-soft)` border, 14px radius, `overflow: clip`); header (`.card-head`): Newsreader 500 20px `.card-title` + Geist Mono 11px `.card-count` badge + Forest mono `.card-link` "All markers →"; flex rows (`.flagged-row`): `.fr-name` (flex: 1 1 0, status dot + Newsreader 17px name + Mono 10px code), `.fr-spark` (110px recharts AreaChart), `.fr-delta` (128px, `.chg.up` Coral-soft/Coral · `.chg.down` grey), `.fr-val` (130px right-aligned, Newsreader 18px value + Mono 11px unit/ref), `.fr-pill` (66px status pill), `.fr-chev` (20px chevron rotates 90° when open); expansion panel (`.flagged-expand`): paper-warm bg, two-column grid, `.fe-plain` Newsreader 18px + `.fe-q` Newsreader 16px italic Forest + `.btn.btn-ghost.btn-sm` "Add to my questions"; single-open accordion (`useState(0)`, default Vitamin D open); `Sparkline.tsx` uses recharts `AreaChart` + `Area` + `ReferenceArea` with `mounted` guard for SSR safety, status-colored stroke/fill, reference band `rgba(90,122,63,.08)`, end-dot halo; `MOCK_FLAGGED_MARKERS` and `FlaggedMarker` / `FlaggedMarkerDelta` types added; responsive: sparkline hidden ≤860px, delta hidden ≤640px (no horizontal scroll), expansion collapses to 1-col ≤640px; `recharts` installed as dependency
 
 - Hero report card — `components/dashboard/HeroReportCard.tsx` server component; `.hero-report` two-column grid (`1.4fr 1fr`, `border-radius: 16px`, `overflow: hidden`); left column (`.hr-left`): `.badges` flex row with three `.pill` variants (`.new` Forest-tint, `.flag` Coral-soft, `.watch` grey-tint), `.hr-title` 44px Newsreader 400 with `.italic` Forest accent, `.hr-sub` 16px Ink-soft sub, `.hr-ctas` flex row (primary "Open full report →" + secondary "Draft my questions"), `.hr-meta` 3-col auto grid with Tracked since / Total reports / Next reminder (`.v.long` override for long reminder string); right column (`.hr-right`): `paper-warm` background, `.hr-summary` max-width 280px — `.hr-sum-head` flex space-between header, 120×120 SVG donut (base ring `#E5DFD0`, three chained arcs rotating from −90°: Normal `#D7E0C6`, Watch `#6B756F` 30% opacity, Flagged `#C8563A`; center "18" Newsreader 26px + "NORMAL" Mono 8px), `.hr-legend` flex column with 10×10 colored dots; `MOCK_HERO_REPORT` and `MOCK_SUMMARY` added to `lib/mock-data.ts`; `HeroReport` and `ReportSummary` types added to `lib/types.ts`; `donutArcLen()` helper added to `lib/helpers.ts`; `.placeholder-card` / `.placeholder-card-label` CSS classes replace inline styles in `page.tsx`; `.main` max-width bug fixed — removed `max-width: 1320px` and `width: 100%`, replaced with `min-width: 0` so `1fr` column fills full viewport width on large screens; responsive breakpoint at ≤900px collapses hero card to single column with border-bottom divider
 
