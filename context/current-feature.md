@@ -1,42 +1,20 @@
-# Current Feature — Hero Report Card
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Surface the most recent report immediately — no hunting, no clicks needed
-- Translate the report in one sentence so the user gets the gist before opening the full view
-- Show a donut summary (18 normal / 1 watch / 2 flagged) as a visual at a glance
-- Drive to action — "Open full report" and "Draft my questions" are the two primary CTAs
+<!-- List goals here -->
 
 ## Notes
 
-- Two-column layout: left = copy/CTAs/meta strip; right = donut chart on `paper-warm` background
-- Container `.hero-report`: `grid-template-columns: 1.4fr 1fr`, `border-radius: 16px`, `overflow: hidden`, `border: 1px solid var(--line-soft)`, `background: var(--paper-elev)`
-- Animation: `.fade .d2`
-
-### Left column (`.hr-left`) — padding 36px 40px, `border-right: 1px solid var(--line-soft)`
-- **Badge row** (`.badges`): three pills — `.pill.new` "Latest report" (Forest-tint), `.pill.flag` "2 flagged" (Coral-soft), `.pill.watch` "1 watch" (grey tint)
-- **Headline** (`.hr-title`): 44px Newsreader 400, tracking -0.03em — `Annual panel, [explained.]` where `explained.` is `.italic` (Newsreader 300 italic, Forest)
-- **Subheading** (`.hr-sub`): 16px Ink-soft, max-width 480px — lab · date · marker count + plain-English summary sentence
-- **CTA row** (`.hr-ctas`): primary "Open full report →" `.btn.btn-primary` + secondary "Draft my questions" `.btn.btn-secondary`
-- **Meta strip** (`.hr-meta`): `grid-template-columns: repeat(3, auto)`, gap 40px, border-top — three stats: Tracked since / Total reports / Next reminder; each has a Mono 500 Ink-dim label and Newsreader 500 22px value
-
-### Right column (`.hr-right`) — padding 36px, `background: var(--paper-warm)`, centered
-- **Summary header** (`.hr-sum-head`): flex space-between — "Summary · Mar 14" (Mono Ink-dim) + "21 markers" (Mono Ink-dim)
-- **Donut chart** (`.hr-donut`): 120×120 SVG; base ring `#E5DFD0` strokeWidth 14; three arcs — Normal `#D7E0C6` (18/21)×314, Watch `#6B756F` 30% opacity (1/21)×314, Flag `#C8563A` (2/21)×314; center: "18" Newsreader 26px 500 + "NORMAL" Mono 8px; all arcs `rotate(-90 60 60)` to start at 12 o'clock; offsets chain sequentially
-- **Legend** (`.hr-legend`): flex column, gap 8px, 13px Ink-soft, border-top; three rows with 10×10 colored dot + label text
-
-### Data bindings (from mock data)
-- `latestReport`: title, lab, date, markers (21), normal (18), watch (1), flagged (2)
-- `summary`: trackedSince ("Feb 2024"), totalReports (7), nextReminder ("Vitamin D retest — June 14")
-
-### Bug fix — main area not stretching on large screens
-The `.main` column in the dashboard shell does not fill the full available width on larger viewports. Fix: ensure `.shell` grid uses `grid-template-columns: 248px 1fr` and `.main` has `width: 100%` (or `min-width: 0`) so it expands to fill remaining space. Check that no max-width constraint on `.main` itself is causing the shrink — `max-width` should be on the inner content wrapper, not on `.main`.
+<!-- Add notes here -->
 
 ## History
+
+- Hero report card — `components/dashboard/HeroReportCard.tsx` server component; `.hero-report` two-column grid (`1.4fr 1fr`, `border-radius: 16px`, `overflow: hidden`); left column (`.hr-left`): `.badges` flex row with three `.pill` variants (`.new` Forest-tint, `.flag` Coral-soft, `.watch` grey-tint), `.hr-title` 44px Newsreader 400 with `.italic` Forest accent, `.hr-sub` 16px Ink-soft sub, `.hr-ctas` flex row (primary "Open full report →" + secondary "Draft my questions"), `.hr-meta` 3-col auto grid with Tracked since / Total reports / Next reminder (`.v.long` override for long reminder string); right column (`.hr-right`): `paper-warm` background, `.hr-summary` max-width 280px — `.hr-sum-head` flex space-between header, 120×120 SVG donut (base ring `#E5DFD0`, three chained arcs rotating from −90°: Normal `#D7E0C6`, Watch `#6B756F` 30% opacity, Flagged `#C8563A`; center "18" Newsreader 26px + "NORMAL" Mono 8px), `.hr-legend` flex column with 10×10 colored dots; `MOCK_HERO_REPORT` and `MOCK_SUMMARY` added to `lib/mock-data.ts`; `HeroReport` and `ReportSummary` types added to `lib/types.ts`; `donutArcLen()` helper added to `lib/helpers.ts`; `.placeholder-card` / `.placeholder-card-label` CSS classes replace inline styles in `page.tsx`; `.main` max-width bug fixed — removed `max-width: 1320px` and `width: 100%`, replaced with `min-width: 0` so `1fr` column fills full viewport width on large screens; responsive breakpoint at ≤900px collapses hero card to single column with border-bottom divider
 
 - Dashboard page header + sidebar polish — `components/dashboard/DashboardPageHeader.tsx` client component; `.page-head` flex row (`align-items: flex-end`, `justify-content: space-between`, `flex-wrap: wrap`, `margin: 32px 0`); left block: `.greet` (Geist Mono 11px, Forest, uppercase, 0.14em tracking, time-of-day computed client-side via `getTimeOfDayGreeting()`), H1 52px Newsreader 400 (`letter-spacing: -0.035em`) with `.italic` span (0.95em, Newsreader 300 italic, Forest), `.meta` (Ink soft, 15px, middle-dot separator); right block: `.page-head-ctas` flex row with `.btn .btn-secondary` ("Share with doctor") + `.btn .btn-primary` ("Upload new report →" with 12×12 arrowhead SVG); all wrapped in `.fade .d1`; `MOCK_LATEST_REPORT` (title, lab, uploadedAt) added to `lib/mock-data.ts`; `.btn`, `.btn-primary`, `.btn-secondary` added to `globals.css`; `getInitials()` and `getTimeOfDayGreeting()` added to `lib/helpers.ts`; `DashboardShellProps` and `DashboardTopbarProps` moved to `lib/types.ts`; sidebar brand `<div>` replaced with `<Link href="/">` (logo → home); topbar gear button replaced with moon/sun theme toggle using `useTheme` + `mounted` guard; `SidebarProfile.tsx` new client component — bordered `.profile` button (1px Line-soft border, 10px radius, hover to Paper-warm) opens `.profile-popup` card above (position absolute, `bottom: calc(100% + 8px)`) with avatar, full name, email, plan badge, divider, and Coral sign-out button; click-outside closes via `mousedown` listener on `wrapRef`; reads from `MOCK_USER`
 
