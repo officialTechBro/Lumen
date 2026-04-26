@@ -1,32 +1,20 @@
-# Current Feature: Dashboard Page Header
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Render `.page-head` flex row below the topbar with `align-items: flex-end` and `justify-content: space-between`
-- Left block: `.greet` mono eyebrow (Geist Mono 11px, Forest, uppercase, 0.14em tracking) with time-of-day greeting and first name
-- Left block: H1 "Your health, *in plain English.*" — 52px Newsreader 400, italic Forest `.italic` span at 0.95em
-- Left block: `.meta` line (Ink soft, 15px) — "Last upload N days ago · Report title from Lab name"
-- Right block: two CTAs side by side — "Share with doctor" (`.btn .btn-secondary`) + "Upload new report →" (`.btn .btn-primary`, Ink bg)
-- All elements animate in together with `.fade .d1` (single fade-up, no stagger)
-- All data (name, days ago, report title, lab) bound from mock data; time-of-day computed from local time
-- Responsive: wraps gracefully on narrow viewports via `flex-wrap: wrap`
+<!-- List goals here -->
 
 ## Notes
 
-- `align-items: flex-end` is intentional — buttons align to the bottom of the 3-line headline block
-- `in plain English.` italic span uses `font-size: 0.95em` to optically balance with the upright text (italic Newsreader renders slightly larger)
-- Middle-dot separator `·` (U+00B7) — same pattern used on marketing site meta lines
-- "Share with doctor" has no icon; "Upload new report →" has a 12×12 arrowhead SVG
-- Time-of-day: morning before 12pm / afternoon 12–6pm / evening after 6pm
-- Data bindings: `user.name.split(" ")[0]` → "Sarah", `latestReport.daysAgo` → "4", `latestReport.title` → "Annual panel", `latestReport.lab` → "Quest Diagnostics"
-- Margin: `32px 0 32px` top and bottom
-- Spec: `context/features/dashboard/04-page-header.md`
+<!-- Add notes here -->
 
 ## History
+
+- Dashboard page header + sidebar polish — `components/dashboard/DashboardPageHeader.tsx` client component; `.page-head` flex row (`align-items: flex-end`, `justify-content: space-between`, `flex-wrap: wrap`, `margin: 32px 0`); left block: `.greet` (Geist Mono 11px, Forest, uppercase, 0.14em tracking, time-of-day computed client-side via `getTimeOfDayGreeting()`), H1 52px Newsreader 400 (`letter-spacing: -0.035em`) with `.italic` span (0.95em, Newsreader 300 italic, Forest), `.meta` (Ink soft, 15px, middle-dot separator); right block: `.page-head-ctas` flex row with `.btn .btn-secondary` ("Share with doctor") + `.btn .btn-primary` ("Upload new report →" with 12×12 arrowhead SVG); all wrapped in `.fade .d1`; `MOCK_LATEST_REPORT` (title, lab, uploadedAt) added to `lib/mock-data.ts`; `.btn`, `.btn-primary`, `.btn-secondary` added to `globals.css`; `getInitials()` and `getTimeOfDayGreeting()` added to `lib/helpers.ts`; `DashboardShellProps` and `DashboardTopbarProps` moved to `lib/types.ts`; sidebar brand `<div>` replaced with `<Link href="/">` (logo → home); topbar gear button replaced with moon/sun theme toggle using `useTheme` + `mounted` guard; `SidebarProfile.tsx` new client component — bordered `.profile` button (1px Line-soft border, 10px radius, hover to Paper-warm) opens `.profile-popup` card above (position absolute, `bottom: calc(100% + 8px)`) with avatar, full name, email, plan badge, divider, and Coral sign-out button; click-outside closes via `mousedown` listener on `wrapRef`; reads from `MOCK_USER`
 
 - Dashboard topbar — `components/dashboard/DashboardTopbar.tsx` client component; `.topbar` sticky (top 0, z-index 5) with Paper-to-transparent gradient background; `.topbar-left` flex group: hamburger `.sidebar-toggle` (18×18 SVG, hidden on desktop, shown at ≤900px) + `.crumb` breadcrumb (Geist Mono 11px, Ink-dim, uppercase, 0.14em tracking, populated via `usePathname()`); `.topbar-right` flex group: 280px `.topbar-search` pill (Paper-elevated bg, 1px Line-soft border, 14×14 magnifying glass SVG, hidden at ≤900px) + two `.icobtn` circle buttons (36×36, Paper-elevated bg, 1px Line-soft border): bell with 6×6 Coral `.dot` (title="Reminders") + gear (title="Settings"); `DashboardShell.tsx` new client component owns `sidebarOpen` state — renders `.shell` grid, passes sidebar as RSC prop from layout, renders `DashboardTopbar` with `onToggle`; mobile: sidebar `position: fixed; transform: translateX(-100%)`; `.shell.sidebar-open .sidebar` slides in (0.25s ease) with `box-shadow`; `.sidebar-backdrop` fixed overlay closes sidebar on click; responsive breakpoints at ≤900px (toggle visible, search hidden, padding 24px) and ≤600px (padding 16px); layout.tsx delegates grid to DashboardShell; page.tsx no longer renders topbar
 
