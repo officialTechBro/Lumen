@@ -1044,6 +1044,7 @@
     position: fixed;
     left: 0;
     top: 0;
+    width: 300px;
     height: 100vh;
     transform: translateX(-100%);
     z-index: 50;
@@ -1067,6 +1068,9 @@
 @media (max-width: 600px) {
   .main {
     padding: 0 16px 40px;
+  }
+  .sidebar {
+    width: 85vw;
   }
 }
 
