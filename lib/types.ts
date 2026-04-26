@@ -75,3 +75,15 @@ export interface TrendCell {
   current: number;
   status: 'flag' | 'watch' | 'ok';
 }
+
+export interface ReportRow {
+  id: string;
+  title: string;
+  lab: string;
+  date: string;
+  reportCode: string;
+  markers: number;
+  flagged: number;
+  watch: number;
+  badge?: 'Latest' | 'First';
+}

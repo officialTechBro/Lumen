@@ -1,5 +1,5 @@
 // Static mock data for dashboard UI development — replace with real DB queries once Prisma is wired.
-import type { NavItem, HeroReport, ReportSummary, FlaggedMarker, TrendCell } from "@/lib/types";
+import type { NavItem, HeroReport, ReportSummary, FlaggedMarker, TrendCell, ReportRow } from "@/lib/types";
 
 // ── User ──────────────────────────────────────────────────────────────────────
 
@@ -698,6 +698,17 @@ export const MOCK_TREND_CELLS: TrendCell[] = [
     current: 38,
     status: "watch",
   },
+];
+
+// ── Reports list card (display rows — 6 most recent, newest first) ────────────
+
+export const MOCK_REPORT_ROWS: ReportRow[] = [
+  { id: "rr_01", title: "Annual panel",  lab: "Quest",   date: "Mar 14, 2026", reportCode: "R-2026-03", markers: 21, flagged: 2, watch: 1, badge: "Latest" },
+  { id: "rr_02", title: "Follow-up",     lab: "Labcorp", date: "Sep 02, 2025", reportCode: "R-2025-09", markers:  8, flagged: 1, watch: 1 },
+  { id: "rr_03", title: "Annual panel",  lab: "Quest",   date: "Mar 11, 2025", reportCode: "R-2025-03", markers: 19, flagged: 1, watch: 2 },
+  { id: "rr_04", title: "Thyroid check", lab: "Kaiser",  date: "Oct 22, 2024", reportCode: "R-2024-10", markers:  5, flagged: 0, watch: 0 },
+  { id: "rr_05", title: "Lipid panel",   lab: "Quest",   date: "Jun 04, 2024", reportCode: "R-2024-06", markers:  6, flagged: 1, watch: 0 },
+  { id: "rr_06", title: "Baseline",      lab: "Quest",   date: "Feb 09, 2024", reportCode: "R-2024-02", markers: 18, flagged: 0, watch: 1, badge: "First" },
 ];
 
 // ── Sidebar nav ───────────────────────────────────────────────────────────────
