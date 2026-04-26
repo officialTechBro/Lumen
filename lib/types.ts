@@ -42,3 +42,25 @@ export interface ReportSummary {
 export interface DashboardTopbarProps {
   onToggle: () => void;
 }
+
+export interface FlaggedMarkerDelta {
+  dir: 'up' | 'down';
+  amount: number;
+  period: string;
+}
+
+export interface FlaggedMarker {
+  id: string;
+  name: string;
+  code: string;
+  status: 'flag' | 'watch';
+  value: number;
+  unit: string;
+  refLow: number | null;
+  refHigh: number | null;
+  refLabel: string;
+  delta: FlaggedMarkerDelta;
+  trendValues: number[];
+  plainEnglish: string;
+  doctorQuestion: string;
+}

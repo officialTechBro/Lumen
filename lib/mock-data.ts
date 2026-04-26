@@ -1,5 +1,5 @@
 // Static mock data for dashboard UI development — replace with real DB queries once Prisma is wired.
-import type { NavItem, HeroReport, ReportSummary } from "@/lib/types";
+import type { NavItem, HeroReport, ReportSummary, FlaggedMarker } from "@/lib/types";
 
 // ── User ──────────────────────────────────────────────────────────────────────
 
@@ -584,6 +584,56 @@ export const MOCK_LATEST_REPORT = {
   lab: "Quest Diagnostics",
   uploadedAt: MOCK_REPORTS[0].uploadedAt,
 };
+
+// ── Flagged markers (dashboard "Needs attention" card) ────────────────────────
+
+export const MOCK_FLAGGED_MARKERS: FlaggedMarker[] = [
+  {
+    id: "fm_vitd",
+    name: "Vitamin D",
+    code: "25(OH)D",
+    status: "flag",
+    value: 24,
+    unit: "ng/mL",
+    refLow: 30,
+    refHigh: 100,
+    refLabel: "Ref 30–100",
+    delta: { dir: "down", amount: 10, period: "in 2 yrs" },
+    trendValues: [34, 32, 28, 29, 26, 24],
+    plainEnglish: "Mildly low. Common in winter.",
+    doctorQuestion: "Is 2,000 IU daily enough, or do I need a loading dose?",
+  },
+  {
+    id: "fm_ldl",
+    name: "LDL Cholesterol",
+    code: "LDL-C",
+    status: "flag",
+    value: 142,
+    unit: "mg/dL",
+    refLow: null,
+    refHigh: 100,
+    refLabel: "Ref < 100",
+    delta: { dir: "up", amount: 24, period: "in 2 yrs" },
+    trendValues: [118, 124, 131, 135, 138, 142],
+    plainEnglish: "Elevated, not alarming. Worth a conversation.",
+    doctorQuestion: "What’s my 10-year cardiovascular risk score?",
+  },
+  {
+    id: "fm_ferr",
+    name: "Ferritin",
+    code: "Ferritin",
+    status: "watch",
+    value: 38,
+    unit: "ng/mL",
+    refLow: 30,
+    refHigh: 300,
+    refLabel: "Ref 30–300",
+    delta: { dir: "down", amount: 34, period: "in 2 yrs" },
+    trendValues: [72, 64, 58, 49, 44, 38],
+    plainEnglish: "In range but on the low end. Track it.",
+    doctorQuestion: "Would a full iron panel be useful?",
+  },
+];
 
 // ── Sidebar nav ───────────────────────────────────────────────────────────────
 
