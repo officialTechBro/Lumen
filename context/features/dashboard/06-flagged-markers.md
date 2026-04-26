@@ -297,3 +297,19 @@ If `refLow` and `refHigh` are provided, a `<rect>` fills the area representing t
 - **Plain English + Doctor Question side by side.** The two-column expansion mirrors the product's core promise: understand it, then act on it. Not one without the other.
 - **Newsreader italic for the doctor question.** The question is rendered the same way as italic accent phrases in headlines — Forest, italic, 300 weight. It signals "this is Lumen speaking" with the same visual voice.
 - **`+ Add to my questions` ghost button.** Low commitment, clear action. The user can save the question to their "Doctor Q's" list with one click without leaving the dashboard home.
+
+## Reference
+- @context/lumen-project-overview.md
+- @context/coding-standards.md
+- @context/ai-interaction.md
+- @context/current-feature.md
+- @context/lumen-branding.md
+- @context/dashboard/00-index.md
+- @context/dashboard/01-shell-layout.md
+- @context/dashboard/02-sidebar.md
+- @context/dashboard/03-topbar.md
+- @context/dashboard/04-page-header.md
+- @context/dashboard/05-hero-report.md
+- @context/screenshots/dashboard-ui-1.png
+- @context/screenshots/dashboard-ui-2.png
+- @context/screenshots/dashboard-ui-3.png

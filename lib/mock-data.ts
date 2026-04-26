@@ -558,6 +558,14 @@ export const MOCK_REMINDER = {
   note: "Retest after 3 months of supplementation",
 };
 
+// ── Latest report summary (for page header) ───────────────────────────────────
+
+export const MOCK_LATEST_REPORT = {
+  title: "Annual panel",
+  lab: "Quest Diagnostics",
+  uploadedAt: MOCK_REPORTS[0].uploadedAt,
+};
+
 // ── Sidebar nav ───────────────────────────────────────────────────────────────
 
 export const MOCK_NAV_LIBRARY: NavItem[] = [

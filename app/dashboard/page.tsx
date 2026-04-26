@@ -1,3 +1,5 @@
+import DashboardPageHeader from "@/components/dashboard/DashboardPageHeader";
+
 function PlaceholderCard({ label }: { label: string }) {
   return (
     <div
@@ -30,11 +32,14 @@ function PlaceholderCard({ label }: { label: string }) {
 
 export default function DashboardPage() {
   return (
-    <div className="home-grid">
-      <PlaceholderCard label="Hero Report" />
-      <PlaceholderCard label="Flagged Markers" />
-      <PlaceholderCard label="Trends Grid" />
-      <PlaceholderCard label="Reports List" />
-    </div>
+    <>
+      <DashboardPageHeader />
+      <div className="home-grid">
+        <PlaceholderCard label="Hero Report" />
+        <PlaceholderCard label="Flagged Markers" />
+        <PlaceholderCard label="Trends Grid" />
+        <PlaceholderCard label="Reports List" />
+      </div>
+    </>
   );
 }

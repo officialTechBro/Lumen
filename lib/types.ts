@@ -16,3 +16,12 @@ export interface EmailValidation {
 export type LoginMode = 'login' | 'forgot' | 'forgot-success';
 
 export type LoginError = null | 'wrong-password' | 'unknown-email' | 'network';
+
+export interface DashboardShellProps {
+  sidebar: React.ReactNode;
+  children: React.ReactNode;
+}
+
+export interface DashboardTopbarProps {
+  onToggle: () => void;
+}

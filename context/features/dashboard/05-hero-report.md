@@ -248,3 +248,19 @@ Dots: 10×10px, `border-radius: 999px`
 - **Donut shows proportions, not drama.** 18/21 in Leaf-soft is 86% of the circle. The user sees immediately that most things are fine. The Coral slice is small. The visual leads with calm, not alarm.
 - **Meta strip uses `grid-template-columns: repeat(3, auto)`.** Auto-sized columns mean the grid adjusts to the longest value without needing fixed pixel widths. The "Next reminder" string is long — auto handles it.
 - **Paper-warm on the right column** creates a subtle differentiation between "interpretation" (white left) and "data" (warm right) — even though they're in the same card.
+
+
+## Reference
+- @context/lumen-project-overview.md
+- @context/coding-standards.md
+- @context/ai-interaction.md
+- @context/current-feature.md
+- @context/lumen-branding.md
+- @context/dashboard/00-index.md
+- @context/dashboard/01-shell-layout.md
+- @context/dashboard/02-sidebar.md
+- @context/dashboard/03-topbar.md
+- @context/dashboard/04-page-header.md
+- @context/screenshots/dashboard-ui-1.png
+- @context/screenshots/dashboard-ui-2.png
+- @context/screenshots/dashboard-ui-3.png

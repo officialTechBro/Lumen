@@ -1,16 +1,30 @@
-# Current Feature
+# Current Feature: Dashboard Page Header
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Render `.page-head` flex row below the topbar with `align-items: flex-end` and `justify-content: space-between`
+- Left block: `.greet` mono eyebrow (Geist Mono 11px, Forest, uppercase, 0.14em tracking) with time-of-day greeting and first name
+- Left block: H1 "Your health, *in plain English.*" — 52px Newsreader 400, italic Forest `.italic` span at 0.95em
+- Left block: `.meta` line (Ink soft, 15px) — "Last upload N days ago · Report title from Lab name"
+- Right block: two CTAs side by side — "Share with doctor" (`.btn .btn-secondary`) + "Upload new report →" (`.btn .btn-primary`, Ink bg)
+- All elements animate in together with `.fade .d1` (single fade-up, no stagger)
+- All data (name, days ago, report title, lab) bound from mock data; time-of-day computed from local time
+- Responsive: wraps gracefully on narrow viewports via `flex-wrap: wrap`
 
 ## Notes
 
-<!-- Add notes here -->
+- `align-items: flex-end` is intentional — buttons align to the bottom of the 3-line headline block
+- `in plain English.` italic span uses `font-size: 0.95em` to optically balance with the upright text (italic Newsreader renders slightly larger)
+- Middle-dot separator `·` (U+00B7) — same pattern used on marketing site meta lines
+- "Share with doctor" has no icon; "Upload new report →" has a 12×12 arrowhead SVG
+- Time-of-day: morning before 12pm / afternoon 12–6pm / evening after 6pm
+- Data bindings: `user.name.split(" ")[0]` → "Sarah", `latestReport.daysAgo` → "4", `latestReport.title` → "Annual panel", `latestReport.lab` → "Quest Diagnostics"
+- Margin: `32px 0 32px` top and bottom
+- Spec: `context/features/dashboard/04-page-header.md`
 
 ## History
 

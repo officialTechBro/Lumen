@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import type { NavItem } from "@/lib/types";
+import Link from "next/link";
 import { MOCK_NAV_LIBRARY, MOCK_NAV_ACTIONS } from "@/lib/mock-data";
+import SidebarProfile from "./SidebarProfile";
 
 const ICONS: Record<string, ReactNode> = {
   home: (
@@ -67,13 +69,13 @@ export default function DashboardSidebar() {
   return (
     <aside className="sidebar">
       {/* Brand */}
-      <div className="brand">
+      <Link href="/" className="brand">
         <svg viewBox="0 0 22 22" fill="none" width={22} height={22} aria-hidden>
           <circle cx="11" cy="11" r="10" stroke="var(--forest)" strokeWidth="1.5" />
           <path d="M6 11 Q 11 5, 16 11 T 6 11" fill="var(--forest)" />
         </svg>
         <span>Lumen</span>
-      </div>
+      </Link>
 
       {/* Nav */}
       <nav className="sidebar-nav">
@@ -83,14 +85,7 @@ export default function DashboardSidebar() {
         {MOCK_NAV_ACTIONS.map((item) => <NavBtn key={item.id} item={item} />)}
       </nav>
 
-      {/* Profile — margin-top: auto in CSS anchors this to the bottom */}
-      <div className="profile">
-        <div className="avatar">SC</div>
-        <div>
-          <div className="name">Sarah Chen</div>
-          <div className="plan">Annual plan</div>
-        </div>
-      </div>
+      <SidebarProfile />
     </aside>
   );
 }

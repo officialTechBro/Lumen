@@ -74,7 +74,6 @@ Sparkline and full-chart views showing how each marker has moved across past upl
 
 ### G) Additional Features
 
-- Family profiles (Pro) — manage results for up to 4 dependents
 - Export PDF (translation + question list to show doctor)
 - Favorites & saved reports
 - Dark mode (opt-in; default is warm paper)

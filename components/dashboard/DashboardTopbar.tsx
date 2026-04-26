@@ -1,6 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+import type { DashboardTopbarProps } from "@/lib/types";
 
 const CRUMBS: Record<string, string> = {
   "/dashboard": "Dashboard / Overview",
@@ -13,9 +16,13 @@ const CRUMBS: Record<string, string> = {
   "/dashboard/settings": "Dashboard / Settings",
 };
 
-export default function DashboardTopbar({ onToggle }: { onToggle: () => void }) {
+export default function DashboardTopbar({ onToggle }: DashboardTopbarProps) {
   const pathname = usePathname();
   const crumb = CRUMBS[pathname] ?? "Dashboard";
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted && resolvedTheme === "dark";
 
   return (
     <div className="topbar">
@@ -74,16 +81,34 @@ export default function DashboardTopbar({ onToggle }: { onToggle: () => void }) 
           <span className="dot" />
         </button>
 
-        <button className="icobtn" title="Settings" type="button">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <circle cx="8" cy="8" r="2" stroke="currentColor" strokeWidth="1.5" />
-            <path
-              d="M8 1.5v1M8 13.5v1M1.5 8h1M13.5 8h1M3.4 3.4l.7.7M11.9 11.9l.7.7M3.4 12.6l.7-.7M11.9 4.1l.7-.7"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
+        <button
+          className="icobtn"
+          type="button"
+          onClick={() => setTheme(isDark ? "light" : "dark")}
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {isDark ? (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="8" cy="8" r="3" stroke="currentColor" strokeWidth="1.5" />
+              <path
+                d="M8 1.5v1M8 13.5v1M1.5 8h1M13.5 8h1M3.4 3.4l.7.7M11.9 11.9l.7.7M3.4 12.6l.7-.7M11.9 4.1l.7-.7"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M13 10a6 6 0 1 1-7-7 5 5 0 0 0 7 7z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
         </button>
       </div>
     </div>
