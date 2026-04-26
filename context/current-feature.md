@@ -1,16 +1,28 @@
-# Current Feature
+# Current Feature: Dashboard Topbar
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Render a sticky `.topbar` inside `.main` with breadcrumb left, right group (search + bell + gear) right
+- Breadcrumb (`.crumb`) shows `DASHBOARD / OVERVIEW` in Geist Mono 11px, Ink-dim, uppercase, 0.14em tracking
+- Search pill (`.search`) — 280px, full pill radius, Paper-elevated bg, 1px Line-soft border, 14×14 magnifying glass SVG, placeholder "Search markers, reports…"; not an `<input>`, purely visual
+- Bell icon button (`.icobtn`) — 36×36 pill, Paper-elevated bg, 1px Line-soft border, 16×16 Bell SVG, Coral notification dot (`.dot`) at top-right (6×6px), title="Reminders"
+- Settings icon button (`.icobtn`) — same shell, 16×16 Gear SVG, no dot, title="Settings"
+- Topbar background: gradient from solid Paper (`#F6F3EC`) at 70% fading to transparent — soft "peek" effect as content scrolls under
+- `position: sticky; top: 0; z-index: 5`; padding: `24px 0 8px`; full width of `.main`
+- Hover states: search border → `var(--line)`; icon buttons border → `var(--line)`, color → `var(--ink)`
+- All CSS classes added to `globals.css` (`.topbar`, `.crumb`, `.right`, `.search`, `.icobtn`, `.dot`)
 
 ## Notes
 
-<!-- Add notes here -->
+- Not a real search input — visual only; clicking would open a modal in a future build
+- Coral notification dot signals unread presence only — no count number
+- Breadcrumb is wayfinding only; the page `<h1>` (page header below) is the actual title
+- The gradient fade is intentional — prevents hard clip over scrolled card content
+- Topbar lives inside `app/dashboard/page.tsx` (or as a shared component consumed by the page), not in the layout — it's scoped to `.main`
 
 ## History
 
