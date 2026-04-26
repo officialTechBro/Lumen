@@ -1,16 +1,29 @@
-# Current Feature
+# Current Feature: Flagged Markers Card
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Build the `FlaggedMarkersCard` client component at `components/dashboard/FlaggedMarkersCard.tsx`
+- Render three flagged marker rows (Vitamin D, LDL Cholesterol, Ferritin) each with: status dot, name + code, sparkline, delta badge, value + reference range, status pill, and chevron
+- Implement the `Sparkline` SVG component (`components/dashboard/Sparkline.tsx`) with status-colored stroke/fill, optional reference band, and end-dot halo
+- Expansion panel per row: two-column layout with plain-English explanation (left) and doctor question + "Add to my questions" ghost button (right)
+- Only one row open at a time; default open = 0 (Vitamin D); clicking open row closes it
+- Add mock data (`MOCK_FLAGGED_MARKERS`) to `lib/mock-data.ts` and types (`FlaggedMarker`) to `lib/types.ts`
+- Wire the card into `app/dashboard/page.tsx` replacing the flagged-markers placeholder
+- Pass `npm run build` with zero errors
 
 ## Notes
 
-<!-- Add notes here -->
+- Card container: `.card` pattern — `var(--paper-elev)` bg, 1px `var(--line-soft)` border, 14px radius, `overflow: hidden`, `.fade .d3` animation
+- Header (`.card-head`): Newsreader 500 20px title "Needs attention" + Geist Mono 11px `.count` badge; right link "All markers →" Geist Mono 10px Forest
+- Row grid: `200px 130px 120px 140px 80px 28px` — name | sparkline | delta | value | pill | chevron
+- Delta badge `.chg.up` = Coral-soft/Coral (bad direction for LDL); `.chg.down` = neutral grey (bad for VitD/Ferritin)
+- Sparkline: 110×30px in this card; `flag` → Coral stroke `#C8563A` / fill `#E8D4CC`; `watch` → `#6B756F` / `rgba(107,117,111,.15)`; reference band `rgba(90,122,63,.08)`
+- Expansion panel (`.flagged-expand`): `var(--paper-warm)` bg, two-column grid, plain-English in Newsreader 400 19px, doctor question in Newsreader 300 italic Forest 17px, ghost button `.btn .btn-ghost`
+- Responsive: row grid collapses at ≤900px (hide sparkline and delta columns, or stack)
 
 ## History
 

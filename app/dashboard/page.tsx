@@ -1,5 +1,6 @@
 import DashboardPageHeader from "@/components/dashboard/DashboardPageHeader";
 import HeroReportCard from "@/components/dashboard/HeroReportCard";
+import FlaggedMarkersCard from "@/components/dashboard/FlaggedMarkersCard";
 
 function PlaceholderCard({ label }: { label: string }) {
   return (
@@ -15,7 +16,7 @@ export default function DashboardPage() {
       <DashboardPageHeader />
       <div className="home-grid">
         <HeroReportCard />
-        <PlaceholderCard label="Flagged Markers" />
+        <FlaggedMarkersCard />
         <PlaceholderCard label="Trends Grid" />
         <PlaceholderCard label="Reports List" />
       </div>
