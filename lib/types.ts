@@ -64,3 +64,14 @@ export interface FlaggedMarker {
   plainEnglish: string;
   doctorQuestion: string;
 }
+
+export interface TrendCell {
+  id: string;
+  name: string;
+  unit: string;
+  values: number[];
+  refLow: number;
+  refHigh: number;
+  current: number;
+  status: 'flag' | 'watch' | 'ok';
+}
