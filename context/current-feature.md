@@ -1,16 +1,32 @@
-# Current Feature
+# Current Feature — 08 Reports List Card
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Render a table-style list of 6 recent lab reports inside a `.card` container
+- Column header row (`.reports-head`) with 6 columns: Report · Lab · Date · Markers · Status · (chevron)
+- Each `.report-row` uses the same 6-column grid (`2fr 1fr 1fr 0.7fr 1.3fr 28px`), hover background, bottom border, no border on last row
+- Column 1: Newsreader 500 title + Mono ID sub, with `.pill.new` badge for "Latest" (row 1) and "First" (row 6)
+- Column 2–3: Lab and Date in `.rr-sub` mono style
+- Column 4: Markers count in Newsreader 500 19px
+- Column 5: Status pills — `{N} flag` / `{N} watch` / `All clear` using `.pill.flag` / `.pill.watch` / `.pill.ok`
+- Column 6: Chevron slides 2px right on hover (not rotation — indicates navigation, not expansion)
+- Card header: "Recent reports" title + "7 total" mono count + "Archive →" Forest link
+- Animation: `.fade .d5`
+- Add `MOCK_REPORTS` data (6 rows per spec) to `lib/mock-data.ts`; add `ReportRow` type to `lib/types.ts`
 
 ## Notes
 
-<!-- Add notes here -->
+- Server component — no client interactivity needed (onClick on row 1 is stubbed for future nav)
+- Grid columns: `2fr 1fr 1fr 0.7fr 1.3fr 28px` — must match exactly between header and data rows
+- Chevron motion: `translateX(2px)` on hover, color → Forest — distinct from FlaggedMarkersCard's rotate-90° pattern
+- Column header row background is `var(--paper-warm)` to visually separate it from data rows
+- `.rr-sub` mono class shared across lab, date, and report ID — same semantic weight
+- Status pills use `flex-wrap` so multi-pill rows don't overflow at narrow column widths
+- Background: `var(--paper-elevated)` · border: 1px `var(--line-soft)` · radius: 14px · overflow: hidden
 
 ## History
 
