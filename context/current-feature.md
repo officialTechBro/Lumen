@@ -1,30 +1,20 @@
-# Current Feature: Dashboard Topbar
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Render a sticky `.topbar` inside `.main` with breadcrumb left, right group (search + bell + gear) right
-- Breadcrumb (`.crumb`) shows `DASHBOARD / OVERVIEW` in Geist Mono 11px, Ink-dim, uppercase, 0.14em tracking
-- Search pill (`.search`) — 280px, full pill radius, Paper-elevated bg, 1px Line-soft border, 14×14 magnifying glass SVG, placeholder "Search markers, reports…"; not an `<input>`, purely visual
-- Bell icon button (`.icobtn`) — 36×36 pill, Paper-elevated bg, 1px Line-soft border, 16×16 Bell SVG, Coral notification dot (`.dot`) at top-right (6×6px), title="Reminders"
-- Settings icon button (`.icobtn`) — same shell, 16×16 Gear SVG, no dot, title="Settings"
-- Topbar background: gradient from solid Paper (`#F6F3EC`) at 70% fading to transparent — soft "peek" effect as content scrolls under
-- `position: sticky; top: 0; z-index: 5`; padding: `24px 0 8px`; full width of `.main`
-- Hover states: search border → `var(--line)`; icon buttons border → `var(--line)`, color → `var(--ink)`
-- All CSS classes added to `globals.css` (`.topbar`, `.crumb`, `.right`, `.search`, `.icobtn`, `.dot`)
+<!-- List goals here -->
 
 ## Notes
 
-- Not a real search input — visual only; clicking would open a modal in a future build
-- Coral notification dot signals unread presence only — no count number
-- Breadcrumb is wayfinding only; the page `<h1>` (page header below) is the actual title
-- The gradient fade is intentional — prevents hard clip over scrolled card content
-- Topbar lives inside `app/dashboard/page.tsx` (or as a shared component consumed by the page), not in the layout — it's scoped to `.main`
+<!-- Add notes here -->
 
 ## History
+
+- Dashboard topbar — `components/dashboard/DashboardTopbar.tsx` client component; `.topbar` sticky (top 0, z-index 5) with Paper-to-transparent gradient background; `.topbar-left` flex group: hamburger `.sidebar-toggle` (18×18 SVG, hidden on desktop, shown at ≤900px) + `.crumb` breadcrumb (Geist Mono 11px, Ink-dim, uppercase, 0.14em tracking, populated via `usePathname()`); `.topbar-right` flex group: 280px `.topbar-search` pill (Paper-elevated bg, 1px Line-soft border, 14×14 magnifying glass SVG, hidden at ≤900px) + two `.icobtn` circle buttons (36×36, Paper-elevated bg, 1px Line-soft border): bell with 6×6 Coral `.dot` (title="Reminders") + gear (title="Settings"); `DashboardShell.tsx` new client component owns `sidebarOpen` state — renders `.shell` grid, passes sidebar as RSC prop from layout, renders `DashboardTopbar` with `onToggle`; mobile: sidebar `position: fixed; transform: translateX(-100%)`; `.shell.sidebar-open .sidebar` slides in (0.25s ease) with `box-shadow`; `.sidebar-backdrop` fixed overlay closes sidebar on click; responsive breakpoints at ≤900px (toggle visible, search hidden, padding 24px) and ≤600px (padding 16px); layout.tsx delegates grid to DashboardShell; page.tsx no longer renders topbar
 
 - Dashboard sidebar — `components/dashboard/DashboardSidebar.tsx` full implementation; brand block (22×22 Lumen SVG mark + Newsreader 500 "Lumen" wordmark, no hover); two nav groups in `<nav class="sidebar-nav">`: **Library** (Dashboard active, Reports 7, Markers 23, Flagged 2, Doctor Q's 3, Reminders 1) and **Actions** (Upload report, Settings); each `.navbtn` has a 16×16 inline SVG icon, label, and optional `.count` badge (`margin-left: auto`); active state = Ink bg / Paper text / Mint count; hover = Paper-warm bg / Ink text; upload CTA nudge removed per design decision; profile row (`.profile`) with 32×32 Forest initials avatar "SC", "Sarah Chen" (Geist 500 13px), "Annual plan" (Geist Mono 500 9px Ink-dim uppercase) anchored to bottom via `margin-top: auto` — required removing `overflow-y: auto` from `.sidebar` to allow the flex engine to compute free space correctly; `NavItem` type extracted to `lib/types.ts`; `MOCK_NAV_LIBRARY` and `MOCK_NAV_ACTIONS` added to `lib/mock-data.ts`; all CSS classes (`.brand`, `.sidebar-nav`, `.group-label`, `.navbtn`, `.ico`, `.count`, `.profile`, `.avatar`, `.name`, `.plan`) added to `globals.css`
 
