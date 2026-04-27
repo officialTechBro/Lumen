@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import type { UploadStage } from '@/lib/types';
+import type { UploadStage, UploadFlowProps } from '@/lib/types';
 
 const STEPS = [
   { n: 1, title: 'Uploading', sub: 'Encrypted · 2.4MB', activeAt: 0, doneAt: 30 },
@@ -29,11 +29,6 @@ function stepClass(step: typeof STEPS[0], progress: number): string {
   return 'up-step';
 }
 
-interface UploadFlowProps {
-  onBack: () => void;
-  onDone: () => void;
-}
-
 export default function UploadFlow({ onBack, onDone }: UploadFlowProps) {
   const [stage, setStage] = useState<UploadStage>('idle');
   const [progress, setProgress] = useState(0);
@@ -56,7 +51,7 @@ export default function UploadFlow({ onBack, onDone }: UploadFlowProps) {
   return (
     <div className="upload-wrap fade d1">
       <div className="upload-head">
-        <button className="btn btn-ghost" onClick={onBack}>
+        <button type="button" className="btn btn-ghost" onClick={onBack}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -96,6 +91,7 @@ export default function UploadFlow({ onBack, onDone }: UploadFlowProps) {
             <span>· HIPAA-aligned</span>
           </div>
           <button
+            type="button"
             className="btn btn-primary dz-cta"
             onClick={e => { e.stopPropagation(); start(); }}
           >
@@ -192,13 +188,13 @@ export default function UploadFlow({ onBack, onDone }: UploadFlowProps) {
           </div>
 
           <div className="ud-ctas">
-            <button className="btn btn-primary" onClick={onDone}>
+            <button type="button" className="btn btn-primary" onClick={onDone}>
               Open full report
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <path d="M2.5 6h7m-3-3 3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <button className="btn btn-secondary" onClick={reset}>
+            <button type="button" className="btn btn-secondary" onClick={reset}>
               Upload another
             </button>
           </div>

@@ -12,6 +12,12 @@ interface SparklineProps {
   height?: number;
 }
 
+interface DotProps {
+  cx?: number;
+  cy?: number;
+  index: number;
+}
+
 const COLORS = {
   flag:  { stroke: "#C8563A", fill: "#E8D4CC" },
   watch: { stroke: "#6B756F", fill: "rgba(107,117,111,.15)" },
@@ -65,9 +71,9 @@ export default function Sparkline({
         strokeWidth={1.5}
         isAnimationActive={false}
         activeDot={false}
-        dot={(props: any) => {
+        dot={(props: DotProps) => {
           const { cx, cy, index } = props;
-          if (index !== n - 1) return <g key={`d${index}`} />;
+          if (index !== n - 1 || cx == null || cy == null) return <g key={`d${index}`} />;
           return (
             <g key={`d${index}`}>
               <circle cx={cx} cy={cy} r={5} fill="none" stroke={c.stroke} strokeWidth={1} opacity={0.3} />

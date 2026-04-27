@@ -5,10 +5,10 @@ import type { NavItem, HeroReport, ReportSummary, FlaggedMarker, TrendCell, Repo
 
 export const MOCK_USER = {
   id: "user_01",
-  email: "taiwooladosu1@gmail.com",
-  fullName: "Taiwo Oladosu",
-  dateOfBirth: "1992-06-14",
-  biologicalSex: "male",
+  email: "sarah.chen@example.com",
+  fullName: "Sarah Chen",
+  dateOfBirth: "1990-03-22",
+  biologicalSex: "female",
   isPro: true,
   createdAt: "2024-02-01T10:00:00Z",
 };

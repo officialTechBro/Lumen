@@ -22,8 +22,8 @@ export default function DashboardPageHeader({ onUpload }: DashboardPageHeaderPro
         </p>
       </div>
       <div className="page-head-ctas">
-        <button className="btn btn-secondary">Share with doctor</button>
-        <button className="btn btn-primary" onClick={onUpload}>
+        <button type="button" className="btn btn-secondary">Share with doctor</button>
+        <button type="button" className="btn btn-primary" onClick={onUpload}>
           Upload new report
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
             <path

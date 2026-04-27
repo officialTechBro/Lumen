@@ -1,12 +1,6 @@
 import { MOCK_TREND_CELLS } from "@/lib/mock-data";
-import type { TrendCell } from "@/lib/types";
+import { refRangeLabel } from "@/lib/helpers";
 import Sparkline from "./Sparkline";
-
-function refRangeLabel(cell: TrendCell): string {
-  if (cell.refHigh > 500) return `Ref ${cell.refLow}–—`;
-  if (cell.refLow === 0) return `Ref < ${cell.refHigh}`;
-  return `Ref ${cell.refLow}–${cell.refHigh}`;
-}
 
 export default function TrendsGridCard() {
   return (
@@ -16,7 +10,7 @@ export default function TrendsGridCard() {
           <span>Trends</span>
           <span className="card-count">Last 6 reports · 2 yrs</span>
         </span>
-        <a href="#" className="card-link">View all →</a>
+        <a href="/dashboard/markers" className="card-link">View all →</a>
       </div>
 
       <div className="trends-grid">
@@ -45,7 +39,7 @@ export default function TrendsGridCard() {
                 <span className="tc-v">{cell.current}</span>
                 <span className="tc-u">{cell.unit}</span>
               </div>
-              <span className="tc-ref">{refRangeLabel(cell)}</span>
+              <span className="tc-ref">{refRangeLabel(cell.refLow, cell.refHigh)}</span>
             </div>
           </div>
         ))}

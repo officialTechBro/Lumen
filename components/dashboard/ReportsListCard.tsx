@@ -25,7 +25,7 @@ export default function ReportsListCard() {
           <span>Recent reports</span>
           <span className="card-count">7 total</span>
         </span>
-        <a href="#" className="card-link">Archive →</a>
+        <a href="/reports" className="card-link">Archive →</a>
       </div>
 
       <div className="reports-head">

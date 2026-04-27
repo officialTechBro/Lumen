@@ -28,10 +28,18 @@ export function getTimeOfDayGreeting(): string {
   return 'Good evening';
 }
 
-export function getInitials(fullName: string): string {
-  return fullName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+export function getInitials(fullName: string | null | undefined): string {
+  if (!fullName) return '?';
+  return fullName.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase();
 }
 
 export function donutArcLen(count: number, total: number, circ = 314): number {
+  if (total === 0) return 0;
   return (count / total) * circ;
+}
+
+export function refRangeLabel(refLow: number, refHigh: number): string {
+  if (refHigh > 500) return `Ref ${refLow}–—`;
+  if (refLow === 0) return `Ref < ${refHigh}`;
+  return `Ref ${refLow}–${refHigh}`;
 }

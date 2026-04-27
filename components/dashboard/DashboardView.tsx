@@ -3,10 +3,7 @@
 import { useState } from 'react';
 import DashboardPageHeader from '@/components/dashboard/DashboardPageHeader';
 import UploadFlow from '@/components/dashboard/UploadFlow';
-
-interface DashboardViewProps {
-  children: React.ReactNode;
-}
+import type { DashboardViewProps } from '@/lib/types';
 
 export default function DashboardView({ children }: DashboardViewProps) {
   const [showUpload, setShowUpload] = useState(false);

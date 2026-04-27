@@ -14,7 +14,7 @@ export default function FlaggedMarkersCard() {
           <span>Needs attention</span>
           <span className="card-count">3 markers</span>
         </span>
-        <a href="#" className="card-link">All markers →</a>
+        <a href="#" className="card-link" onClick={e => e.preventDefault()}>All markers →</a>
       </div>
 
       <div className="flagged-list">
@@ -96,7 +96,7 @@ export default function FlaggedMarkersCard() {
                 <div>
                   <div className="fe-label">Ask Your Doctor</div>
                   <p className="fe-q">&ldquo;{m.doctorQuestion}&rdquo;</p>
-                  <button className="btn btn-ghost btn-sm">
+                  <button type="button" className="btn btn-ghost btn-sm">
                     + Add to my questions
                   </button>
                 </div>

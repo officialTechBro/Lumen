@@ -82,6 +82,15 @@ export interface TrendCell {
   status: 'flag' | 'watch' | 'ok';
 }
 
+export interface DashboardViewProps {
+  children: React.ReactNode;
+}
+
+export interface UploadFlowProps {
+  onBack: () => void;
+  onDone: () => void;
+}
+
 export interface ReportRow {
   id: string;
   title: string;

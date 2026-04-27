@@ -2,15 +2,26 @@
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+Fix low-risk code quality issues surfaced by the dashboard audit. All changes are isolated — no architectural decisions, no new dependencies, no routing changes.
+
+1. **Fix real email in `MOCK_USER`** — replace developer email with fictional `sarah.chen@example.com` in `lib/mock-data.ts` (PII in source control)
+2. **Guard `donutArcLen` for division by zero** — add `if (total === 0) return 0` in `lib/helpers.ts`
+3. **Guard `getInitials` for null/empty** — handle `null | undefined | ""` input gracefully in `lib/helpers.ts`; return `'?'` and filter empty tokens
+4. **Move `refRangeLabel` to `lib/helpers.ts`** — pure utility function currently defined inline in `TrendsGridCard.tsx`; update import
+5. **Move `DashboardViewProps` and `UploadFlowProps` to `lib/types.ts`** — inline interface definitions in `DashboardView.tsx` and `UploadFlow.tsx` violate coding standards
+6. **Fix `any` type in `Sparkline` dot renderer** — replace `(props: any)` with a proper `DotProps` interface `{ cx: number; cy: number; index: number }`
+7. **Add `type="button"` to all non-submit buttons** — `FlaggedMarkersCard`, `DashboardPageHeader`, `UploadFlow` back button
+8. **Suppress `<a href="#">` scroll-to-top** — add `onClick={e => e.preventDefault()}` to card header links in `FlaggedMarkersCard`, `TrendsGridCard`, `ReportsListCard` until real routes exist
 
 ## Notes
 
-<!-- Add notes here -->
+- Scope is strictly fixes — no new features, no routing, no auth wiring
+- Each fix is independent; implement and verify one file at a time
+- Run `npm run build` and `npm run lint` before committing
 
 ## History
 
