@@ -1,32 +1,20 @@
-# Current Feature: Prisma + Neon PostgreSQL Setup
+# Current Feature
 
 ## Status
 
-Complete
+Not Started
 
 ## Goals
 
-- Install and configure Prisma 7 ORM with Neon PostgreSQL (serverless)
-- Create initial schema matching the data models in `lumen-project-overview.md` (User, Profile, Report, Marker, Question, MarkerCatalog)
-- Include NextAuth v5 models (Account, Session, VerificationToken)
-- Add appropriate indexes and cascade deletes
-- Use `prisma migrate dev` workflow — never `db push` to dev, never push directly to prod (must use `prisma migrate deploy`)
-- Keep dev branch in `DATABASE_URL` and maintain a separate production branch
+<!-- List goals here -->
 
 ## Notes
 
-- Use **Prisma 7** — has breaking changes. Read the full upgrade guide before writing any Prisma code.
-- Neon PostgreSQL is serverless; use the `@prisma/adapter-neon` or Neon connection pooling as appropriate for Prisma 7.
-- Always create migrations (`prisma migrate dev`), never `db push`, unless explicitly instructed.
-- Run `prisma migrate status` before committing to verify migrations are in sync.
-- Production deployments must run `prisma migrate deploy` before the app starts.
-- References:
-  - Data models: `context/lumen-project-overview.md`
-  - Database standards: `context/coding-standards.md`
-  - Prisma 7 upgrade guide: https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-7
-  - Prisma Postgres quickstart: https://www.prisma.io/docs/getting-started/prisma-orm/quickstart/prisma-postgres
+<!-- Add notes here -->
 
 ## History
+
+- Prisma 7 + Neon PostgreSQL setup — installed `prisma@7`, `@prisma/client@7`, `@prisma/adapter-pg`, `pg`, `dotenv`, `tsx`; created `prisma.config.ts` (Prisma 7 datasource config — URL lives here, not in schema); `prisma/schema.prisma` with 9 models: `User`, `Profile`, `Report`, `Marker`, `Question`, `MarkerCatalog` (app) + `Account`, `Session`, `VerificationToken` (NextAuth v5); all foreign keys cascade on delete; indexes on every FK column; `lib/prisma.ts` singleton client using `PrismaPg` adapter (hot-reload safe via `globalThis`); import path is `generated/prisma/client` (Prisma 7 generates to custom output, not `node_modules`); initial migration `20260427200020_init` applied to Neon dev branch; `scripts/test-db.ts` verifies connection with create → query → delete round-trip; `.env.example` documents the direct (non-pooler) connection string requirement; `/generated/` added to `.gitignore`; `.env.example` exempted from `.env*` ignore rule
 
 - Dashboard audit quick wins — eight low-risk code quality fixes surfaced by the lumen-code-scanner audit: (1) replaced real developer email in `MOCK_USER` with fictional `sarah.chen@example.com` persona in `lib/mock-data.ts`; (2) guarded `donutArcLen` against division by zero (`total === 0` returns 0); (3) guarded `getInitials` against `null | undefined | ""` (returns `'?'`, filters empty tokens); (4) moved `refRangeLabel` from inline in `TrendsGridCard.tsx` to `lib/helpers.ts`, updated call site to pass `(refLow, refHigh)` separately; (5) moved `DashboardViewProps` and `UploadFlowProps` from inline component definitions to `lib/types.ts` with `import type`; (6) replaced `(props: any)` with typed `DotProps` interface (`cx?: number; cy?: number; index: number`) in `Sparkline.tsx` dot renderer, added null guard on `cx`/`cy`; (7) added `type="button"` to all non-submit buttons in `FlaggedMarkersCard`, `DashboardPageHeader`, and `UploadFlow`; (8) fixed `<a href="#">` card header links — `FlaggedMarkersCard` gets `onClick={e => e.preventDefault()}`, `TrendsGridCard` points to `/dashboard/markers`, `ReportsListCard` points to `/reports`
 
