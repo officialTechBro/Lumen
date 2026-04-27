@@ -2,28 +2,19 @@
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-Fix low-risk code quality issues surfaced by the dashboard audit. All changes are isolated — no architectural decisions, no new dependencies, no routing changes.
-
-1. **Fix real email in `MOCK_USER`** — replace developer email with fictional `sarah.chen@example.com` in `lib/mock-data.ts` (PII in source control)
-2. **Guard `donutArcLen` for division by zero** — add `if (total === 0) return 0` in `lib/helpers.ts`
-3. **Guard `getInitials` for null/empty** — handle `null | undefined | ""` input gracefully in `lib/helpers.ts`; return `'?'` and filter empty tokens
-4. **Move `refRangeLabel` to `lib/helpers.ts`** — pure utility function currently defined inline in `TrendsGridCard.tsx`; update import
-5. **Move `DashboardViewProps` and `UploadFlowProps` to `lib/types.ts`** — inline interface definitions in `DashboardView.tsx` and `UploadFlow.tsx` violate coding standards
-6. **Fix `any` type in `Sparkline` dot renderer** — replace `(props: any)` with a proper `DotProps` interface `{ cx: number; cy: number; index: number }`
-7. **Add `type="button"` to all non-submit buttons** — `FlaggedMarkersCard`, `DashboardPageHeader`, `UploadFlow` back button
-8. **Suppress `<a href="#">` scroll-to-top** — add `onClick={e => e.preventDefault()}` to card header links in `FlaggedMarkersCard`, `TrendsGridCard`, `ReportsListCard` until real routes exist
+<!-- List goals here -->
 
 ## Notes
 
-- Scope is strictly fixes — no new features, no routing, no auth wiring
-- Each fix is independent; implement and verify one file at a time
-- Run `npm run build` and `npm run lint` before committing
+<!-- Add notes here -->
 
 ## History
+
+- Dashboard audit quick wins — eight low-risk code quality fixes surfaced by the lumen-code-scanner audit: (1) replaced real developer email in `MOCK_USER` with fictional `sarah.chen@example.com` persona in `lib/mock-data.ts`; (2) guarded `donutArcLen` against division by zero (`total === 0` returns 0); (3) guarded `getInitials` against `null | undefined | ""` (returns `'?'`, filters empty tokens); (4) moved `refRangeLabel` from inline in `TrendsGridCard.tsx` to `lib/helpers.ts`, updated call site to pass `(refLow, refHigh)` separately; (5) moved `DashboardViewProps` and `UploadFlowProps` from inline component definitions to `lib/types.ts` with `import type`; (6) replaced `(props: any)` with typed `DotProps` interface (`cx?: number; cy?: number; index: number`) in `Sparkline.tsx` dot renderer, added null guard on `cx`/`cy`; (7) added `type="button"` to all non-submit buttons in `FlaggedMarkersCard`, `DashboardPageHeader`, and `UploadFlow`; (8) fixed `<a href="#">` card header links — `FlaggedMarkersCard` gets `onClick={e => e.preventDefault()}`, `TrendsGridCard` points to `/dashboard/markers`, `ReportsListCard` points to `/reports`
 
 - Upload Flow — `components/dashboard/UploadFlow.tsx` client component; three sequential states driven by `useState<UploadStage>` + `useState<number>` for progress; **Idle** (`.dropzone`): paper-elevated bg + box-shadow, 1.5px dashed Line border, 16px radius, 64×64 Forest icon circle (`.dz-ico`, rgba(31,80,65,.12) + border), Newsreader 500 24px `.dz-title`, Mono uppercase `.dz-sub`, `.dz-trust` flex row with 3 middle-dot privacy items, "Simulate upload →" `.btn.btn-primary`; **In Progress** (`.upload-progress`): 44×44 doc icon well (`.up-file-ico`), Newsreader 500 18px file name + mono meta + Forest % right-aligned, 3px Forest progress bar (`.up-bar` / `.up-bar-fill`, transition width 0.3s), 4-step vertical list (`.up-step` grid `32px 1fr`) with dot states: inactive (0.35 opacity, Line border), active (Forest border+color+rgba bg), done (Forest solid + ✓), footnote mono Ink-dim; progress animation: 4 setTimeout frames totalling ~3.5s (600ms→30%, 900ms→65%, 1200ms→95%, 400ms→100%, 400ms→done); **Done** (`.upload-done`): Forest checkmark badge (`.ud-badge`), 46px Newsreader `.ud-title` with italic Forest "ready.", 4-col summary strip (`.ud-summary`, paper-warm bg, left-border cells, color-coded `.ud-v` Newsreader 500 36px: ink/leaf/ink-soft/coral), flagged markers list (`.ud-flagged`, 3 rows grid `60px 1fr auto`, Flag/Flag/Watch pills + name+code + value+ref), "Open full report →" + "Upload another" CTAs; `DashboardView.tsx` new client component owns `showUpload` boolean — passes server component cards as `children` from `page.tsx` (RSC boundary preserved); `DashboardPageHeader` updated with `onUpload: () => void` prop wired to the "Upload new report" button; `UploadStage` union type and `DashboardPageHeaderProps` interface added to `lib/types.ts`; CSS: `.upload-wrap .upload-title` compound selector for specificity over Tailwind h1 reset, dropzone box-shadow for card visibility (paper-elevated on paper is near-identical in color), responsive ≤640px collapses title to 36px and summary to 2-col grid
 
