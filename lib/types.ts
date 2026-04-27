@@ -15,6 +15,12 @@ export interface EmailValidation {
 
 export type LoginMode = 'login' | 'forgot' | 'forgot-success';
 
+export type UploadStage = 'idle' | 'uploading' | 'parsing' | 'reading' | 'questions' | 'done';
+
+export interface DashboardPageHeaderProps {
+  onUpload: () => void;
+}
+
 export type LoginError = null | 'wrong-password' | 'unknown-email' | 'network';
 
 export interface DashboardShellProps {
