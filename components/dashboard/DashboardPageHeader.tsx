@@ -2,8 +2,9 @@
 
 import { MOCK_USER, MOCK_LATEST_REPORT } from '@/lib/mock-data';
 import { daysAgo, getTimeOfDayGreeting } from '@/lib/helpers';
+import type { DashboardPageHeaderProps } from '@/lib/types';
 
-export default function DashboardPageHeader() {
+export default function DashboardPageHeader({ onUpload }: DashboardPageHeaderProps) {
   const firstName = MOCK_USER.fullName.split(' ')[0];
   const days = daysAgo(MOCK_LATEST_REPORT.uploadedAt);
 
@@ -22,7 +23,7 @@ export default function DashboardPageHeader() {
       </div>
       <div className="page-head-ctas">
         <button className="btn btn-secondary">Share with doctor</button>
-        <button className="btn btn-primary">
+        <button className="btn btn-primary" onClick={onUpload}>
           Upload new report
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
             <path
