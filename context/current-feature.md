@@ -1,16 +1,32 @@
-# Current Feature
+# Current Feature: Database Seed Script
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Create `prisma/seed.ts` that populates all six core models with realistic demo data
+- Seed 1 demo user (`demo@lumen.health` / `12345678`) with bcrypt-hashed password (12 rounds)
+- Seed 2 profiles: Sarah (self) and Dad (dependent)
+- Seed 8 reports: 7 for Sarah (2-year history) + 1 for Dad
+- Seed all 21 markers for Report 7 (latest annual panel) plus 3–5 representative markers for Reports 3, 5, and 8
+- Seed 5 questions for Report 7 and 4 questions for Report 8
+- Seed 25 MarkerCatalog entries (full reference catalog with urgent thresholds)
+- Seed NotificationPreferences for the demo user
+- Wire up `prisma/seed.ts` in `package.json` (`prisma.seed` field) so `prisma db seed` works
+- Cleanup step deletes all rows in reverse FK order before re-seeding (idempotent)
 
 ## Notes
 
-<!-- Add notes here -->
+- Uses `bcryptjs` for password hashing — install if not already present
+- Seed execution order: MarkerCatalog → User → Profile → Report → Marker → Question → NotificationPreferences
+- Potassium `urgentHigh: 6.0` and Troponin `urgentHigh: 0.04` are safety-critical — never remove
+- `biologicalSex` is used for cohort benchmarks only, never surfaced in medical advice
+- `isChecked` on Question is included for completeness even though it may live in client state
+- All `confidence` values are floats 0–1; ≥ 0.95 = high extraction certainty
+- Demo credentials: `demo@lumen.health` / `12345678`
+- Reports 1, 2, 4, and 6 have no markers seeded (brevity — only flagged/watch markers seeded for non-primary reports)
 
 ## History
 
