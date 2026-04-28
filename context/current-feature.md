@@ -1,34 +1,20 @@
-# Current Feature: Database Seed Script
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Create `prisma/seed.ts` that populates all six core models with realistic demo data
-- Seed 1 demo user (`demo@lumen.health` / `12345678`) with bcrypt-hashed password (12 rounds)
-- Seed 2 profiles: Sarah (self) and Dad (dependent)
-- Seed 8 reports: 7 for Sarah (2-year history) + 1 for Dad
-- Seed all 21 markers for Report 7 (latest annual panel) plus 3–5 representative markers for Reports 3, 5, and 8
-- Seed 5 questions for Report 7 and 4 questions for Report 8
-- Seed 25 MarkerCatalog entries (full reference catalog with urgent thresholds)
-- Seed NotificationPreferences for the demo user
-- Wire up `prisma/seed.ts` in `package.json` (`prisma.seed` field) so `prisma db seed` works
-- Cleanup step deletes all rows in reverse FK order before re-seeding (idempotent)
+<!-- List goals here -->
 
 ## Notes
 
-- Uses `bcryptjs` for password hashing — install if not already present
-- Seed execution order: MarkerCatalog → User → Profile → Report → Marker → Question → NotificationPreferences
-- Potassium `urgentHigh: 6.0` and Troponin `urgentHigh: 0.04` are safety-critical — never remove
-- `biologicalSex` is used for cohort benchmarks only, never surfaced in medical advice
-- `isChecked` on Question is included for completeness even though it may live in client state
-- All `confidence` values are floats 0–1; ≥ 0.95 = high extraction certainty
-- Demo credentials: `demo@lumen.health` / `12345678`
-- Reports 1, 2, 4, and 6 have no markers seeded (brevity — only flagged/watch markers seeded for non-primary reports)
+<!-- Add notes here -->
 
 ## History
+
+- Database seed script — updated `prisma/schema.prisma` with 10 missing fields across existing tables (`title`, `watchCount`, `category`, `isUrgent`, `isChecked`, `emailVerified`, `image`, `darkMode`, `emailInboxAddress`, `processingTime`, etc.) and 3 new models (`Reminder`, `NotificationPreferences`, `AuditLog`); migration `20260427210000_add_missing_fields_and_models` applied to Neon via `prisma migrate deploy`; `bcryptjs` installed for password hashing; `prisma/seed.ts` seeds in FK order: 25 `MarkerCatalog` entries (full reference catalog with safety-critical `urgentHigh` on Potassium=6.0 and Troponin=0.04), 1 `User` (`demo@lumen.health` / `12345678`, bcrypt 12 rounds, isPro), 2 `Profile`s (Sarah self + Dad parent), 8 `Report`s (7 Sarah spanning Feb 2024–Mar 2026 + 1 Dad Jan 2026), 33 `Marker`s (4 Report 3, 3 Report 5, 21 Report 7 primary, 5 Report 8 Dad), 9 `Question`s (5 Report 7, 4 Report 8), 1 `NotificationPreferences`; cleanup step deletes all rows in reverse FK order (idempotent); `prisma.config.ts` wired with `migrations.seed: "tsx prisma/seed.ts"` for `prisma db seed`; `scripts/test-db.ts` rewritten to fetch and display all seeded data with safety-threshold assertions
 
 - Prisma 7 + Neon PostgreSQL setup — installed `prisma@7`, `@prisma/client@7`, `@prisma/adapter-pg`, `pg`, `dotenv`, `tsx`; created `prisma.config.ts` (Prisma 7 datasource config — URL lives here, not in schema); `prisma/schema.prisma` with 9 models: `User`, `Profile`, `Report`, `Marker`, `Question`, `MarkerCatalog` (app) + `Account`, `Session`, `VerificationToken` (NextAuth v5); all foreign keys cascade on delete; indexes on every FK column; `lib/prisma.ts` singleton client using `PrismaPg` adapter (hot-reload safe via `globalThis`); import path is `generated/prisma/client` (Prisma 7 generates to custom output, not `node_modules`); initial migration `20260427200020_init` applied to Neon dev branch; `scripts/test-db.ts` verifies connection with create → query → delete round-trip; `.env.example` documents the direct (non-pooler) connection string requirement; `/generated/` added to `.gitignore`; `.env.example` exempted from `.env*` ignore rule
 
