@@ -1,35 +1,20 @@
-# Current Feature: Dashboard — Real Marker Data
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Replace all mock/dummy marker data in `FlaggedMarkersCard` with real data from the Neon DB via Prisma
-- Add/update `getFlaggedMarkers` in `lib/db/reports.ts` returning `FlaggedMarkerData` (including sparkline values and questions)
-- Build `getSparklineValues` helper — fetches last 5 historical values per marker name across the user's reports
-- Fetch questions per marker using `relatedTo` field within the current report
-- Create `lib/utils/marker-delta.ts` with `getDeltaVariant` helper for clinical delta badge logic
-- Wire `FlaggedMarkersCard.tsx` to accept and render real `FlaggedMarkerData[]` props (server component)
-- Implement three-zone expansion panel: Zone A (plain English / urgent banner), Zone B (why it matters), Zone C (doctor questions)
-- Show confidence warning (`< 0.90`) below marker name in expansion panel
-- Show urgent banner (coral) instead of plain-English explanation when `isUrgent === true`
-- Empty state: "Nothing flagged. Your latest results look clear." when `flaggedMarkers.length === 0`
+<!-- List goals here -->
 
 ## Notes
 
-- All DB queries must filter by `userId` from session — no cross-user data exposure
-- Sparkline status color: `flagged/urgent` → Coral, `borderline` → Ink-soft, `normal` → Leaf
-- Delta badge styling per variant: `up-bad` (coral), `down-bad` (grey), `stable` (leaf), `new` (transparent)
-- Inverted markers (going down is bad): Vitamin D, HDL Cholesterol, Ferritin, Vitamin B12, Magnesium, Hemoglobin, Hematocrit, eGFR, Platelets
-- `+ Add to questions` mutation: `PATCH /api/questions/[id]` (toggle) or `POST /api/questions` (new); optimistic UI + `revalidatePath("/dashboard")`
-- Do NOT build the full Report Detail page — only dashboard home screen data
-- Keep current design exactly as-is; only wire up real data
-- Data fetch in server components — no client-side fetching for marker data
-- Spec files: `context/features/database/dashboard-markers-spec.md`, `context/features/database/dashboard-reports-spec.md`
+<!-- Add notes here -->
 
 ## History
+
+- Dashboard real marker data — replaced all mock data in `FlaggedMarkersCard` with live Neon DB queries; `lib/db/reports.ts` new file with `getFlaggedMarkers(userId)` (queries latest ready report, fetches flagged/borderline/urgent markers, joins sparkline history via `getSparklineValues` — up to 5 prior values per marker name across all user reports — and joins questions filtered by `relatedTo` field); `lib/utils/marker-delta.ts` new file with `getDeltaVariant` + `getDeltaIcon` (inverted-marker list: Vitamin D, HDL Cholesterol, Ferritin, Vitamin B12, Magnesium, Hemoglobin, Hematocrit, eGFR, Platelets); `FlaggedMarkersCard.tsx` rewritten to accept `markers: FlaggedMarkerData[]` prop — 3-zone expansion panel: Zone A (PLAIN ENGLISH with `isUrgent` banner fallback, confidence warning `< 0.90`), Zone B (WHY IT MATTERS), Zone C (ASK YOUR DOCTOR — real questions list with strikethrough for `isChecked`); empty state: "Nothing flagged. Your latest results look clear." (leaf color); variant-based delta badges: `chg-up-bad` coral / `chg-down-bad` grey / `chg-stable` leaf / `chg-new` transparent; sparkline status mapped from DB `status` string (`flagged/urgent→flag`, `borderline→watch`, `normal→ok`); `app/dashboard/page.tsx` converted to async server component — looks up demo user by email, fetches markers in parallel, passes real array as prop (TODO: swap for `session.user.id` once NextAuth wired); CSS additions: `.chg-*` variants, `.urgent-banner`, `.confidence-warn`, `.empty-flagged`, `.fe-questions`, `.fe-label-gap`, `.fe-why`
 
 - Database seed script — updated `prisma/schema.prisma` with 10 missing fields across existing tables (`title`, `watchCount`, `category`, `isUrgent`, `isChecked`, `emailVerified`, `image`, `darkMode`, `emailInboxAddress`, `processingTime`, etc.) and 3 new models (`Reminder`, `NotificationPreferences`, `AuditLog`); migration `20260427210000_add_missing_fields_and_models` applied to Neon via `prisma migrate deploy`; `bcryptjs` installed for password hashing; `prisma/seed.ts` seeds in FK order: 25 `MarkerCatalog` entries (full reference catalog with safety-critical `urgentHigh` on Potassium=6.0 and Troponin=0.04), 1 `User` (`demo@lumen.health` / `12345678`, bcrypt 12 rounds, isPro), 2 `Profile`s (Sarah self + Dad parent), 8 `Report`s (7 Sarah spanning Feb 2024–Mar 2026 + 1 Dad Jan 2026), 33 `Marker`s (4 Report 3, 3 Report 5, 21 Report 7 primary, 5 Report 8 Dad), 9 `Question`s (5 Report 7, 4 Report 8), 1 `NotificationPreferences`; cleanup step deletes all rows in reverse FK order (idempotent); `prisma.config.ts` wired with `migrations.seed: "tsx prisma/seed.ts"` for `prisma db seed`; `scripts/test-db.ts` rewritten to fetch and display all seeded data with safety-threshold assertions
 
