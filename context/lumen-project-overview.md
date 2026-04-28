@@ -91,102 +91,248 @@ Sparkline and full-chart views showing how each marker has moved across past upl
 
 ---
 
-## 🗄️ Data Model (Rough Prisma Draft)
+## 🗄️ Data Model (Prisma Schema)
 
 > This schema is a starting point and **will evolve**
 
+### 🔍 Schema audit vs. feature set
+
+The following fields and models were added to cover features described in the spec that the original schema was missing:
+
+| Gap | Fix |
+|---|---|
+| Report has no `title` | Added `title String?` to `Report` |
+| Report has no `watchCount` | Added `watchCount Int` alongside `flagCount` |
+| Report has no `processingTime` | Added `processingTime Float?` (seconds) for the "read in 11 sec" UI |
+| Report has no `patientId` | Added `patientId String?` for the patient ID shown in report headers |
+| Marker has no `delta` or trend direction | Added `delta Float?` and `deltaDirection String?` for the trends view |
+| Marker has no `category` | Added `category String?` — needed to group markers by clinical system |
+| Marker has no `isUrgent` flag | Added `isUrgent Boolean` — separates urgent safety-rail triggers from regular flags |
+| `Question` has no `isChecked` state | Added `isChecked Boolean` — tracks appointment question completion |
+| No `Reminder` model | Added `Reminder` — supports the sidebar badge count and retest nudges |
+| No `NotificationPreferences` model | Added `NotificationPreferences` — supports email notification settings |
+| No `AuditLog` model | Added `AuditLog` — required for HIPAA-aligned audit trail |
+| `User` has no `emailVerified` field | Added `emailVerified DateTime?` — required by NextAuth v5 |
+| `User` has no `image` field | Added `image String?` — required by NextAuth v5 Google OAuth |
+| `User` has no `emailInboxAddress` | Added `emailInboxAddress String?` — unique inbox for email forwarding feature |
+| `User` has no `darkMode` preference | Added `darkMode Boolean` — opt-in dark mode from Additional Features |
+| `MarkerCatalog` has no `reviewedBy` | Added `reviewedBy String?` — tracks clinician review attribution |
+| `MarkerCatalog` has no `sourceUrl` | Added `sourceUrl String?` — links to USPSTF/ADA/NIH guideline source |
+| No `Account`/`Session` models | Added NextAuth v5 required models |
+
 ```prisma
+// ─── NextAuth v5 required ────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── Core models ─────────────────────────────────────────────────────
+
 model User {
-  id                   String   @id @default(cuid())
-  email                String   @unique
-  password             String?
-  fullName             String?
-  dateOfBirth          DateTime?
-  biologicalSex        String?   // for cohort benchmarks
-  isPro                Boolean  @default(false)
-  stripeCustomerId     String?
-  stripeSubscriptionId String?
-  reports              Report[]
-  profiles             Profile[]
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  emailVerified         DateTime?             // NextAuth v5
+  image                 String?               // NextAuth v5 Google OAuth avatar
+  password              String?
+  fullName              String?
+  dateOfBirth           DateTime?
+  biologicalSex         String?               // "male" | "female" | "other" — for cohort benchmarks only
+  isPro                 Boolean   @default(false)
+  stripeCustomerId      String?
+  stripeSubscriptionId  String?
+  emailInboxAddress     String?   @unique     // unique forwarding inbox e.g. sarah.x7k2@in.lumen.health
+  darkMode              Boolean   @default(false)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  accounts              Account[]
+  sessions              Session[]
+  reports               Report[]
+  profiles              Profile[]
+  reminders             Reminder[]
+  notificationPrefs     NotificationPreferences?
+  auditLogs             AuditLog[]
 }
 
 model Profile {
-  id            String   @id @default(cuid())
-  name          String   // "Mom", "Self", "Daughter"
+  id            String    @id @default(cuid())
+  name          String    // "Mom", "Self", "Daughter"
   dateOfBirth   DateTime?
   biologicalSex String?
-  relationship  String?
+  relationship  String?   // "self" | "parent" | "child" | "partner" | "other"
   userId        String
-  user          User @relation(fields: [userId], references: [id])
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   reports       Report[]
-  createdAt     DateTime @default(now())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Report {
-  id            String   @id @default(cuid())
-  source        String   // "pdf" | "photo" | "email" | "portal"
-  fileUrl       String?
-  fileName      String?
-  labProvider   String?  // "Quest", "LabCorp", "Kaiser", etc.
-  collectedAt   DateTime?
-  uploadedAt    DateTime @default(now())
-  status        String   // "processing" | "ready" | "failed"
+  id              String    @id @default(cuid())
+  title           String?   // "Annual panel", "Lipid panel" — derived from lab report or user-edited
+  source          String    // "pdf" | "photo" | "email" | "portal"
+  fileUrl         String?
+  fileName        String?
+  fileSize        Int?      // bytes
+  labProvider     String?   // "Quest", "LabCorp", "Kaiser", etc.
+  patientId       String?   // patient ID printed on the lab report (e.g. "7A21K")
+  collectedAt     DateTime?
+  uploadedAt      DateTime  @default(now())
+  processedAt     DateTime?
+  processingTime  Float?    // seconds — shown in UI as "read in 11 sec"
+  status          String    // "processing" | "ready" | "failed"
+  summary         String?   // AI-generated plain-English paragraph for the whole report
+  flagCount       Int       @default(0)
+  watchCount      Int       @default(0)   // borderline markers — distinct from flagged
+  urgentFlag      Boolean   @default(false)
+  isFavorite      Boolean   @default(false)
 
-  userId        String
-  user          User @relation(fields: [userId], references: [id])
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  profileId     String?
-  profile       Profile? @relation(fields: [profileId], references: [id])
+  profileId       String?
+  profile         Profile?  @relation(fields: [profileId], references: [id])
 
-  markers       Marker[]
-  questions     Question[]
-  summary       String?  // overall plain-English summary
-  flagCount     Int      @default(0)
-  urgentFlag    Boolean  @default(false)
+  markers         Marker[]
+  questions       Question[]
+  reminders       Reminder[]
 }
 
 model Marker {
   id              String   @id @default(cuid())
   name            String   // "LDL Cholesterol"
   code            String?  // "LDL-C"
+  category        String?  // "lipids" | "metabolic" | "thyroid" | "vitamins" | "bloodCount" | "kidney" | "liver" | "other"
   value           Float
   unit            String   // "mg/dL"
   referenceMin    Float?
   referenceMax    Float?
   status          String   // "normal" | "borderline" | "flagged" | "urgent"
+  isUrgent        Boolean  @default(false) // true = triggered hard-coded safety rail, bypassed LLM
   explanation     String   // plain-English sentence
-  whatItMeasures  String?  // tooltip content
-  confidence      Float    // 0-1 AI extraction confidence
+  whyItMatters    String?  // physiological context paragraph (Zone B in expansion panel)
+  whatItMeasures  String?  // tooltip / Zone A header sentence
+  confidence      Float    // 0–1 AI extraction certainty
+  delta           Float?   // change from previous report (positive = increase)
+  deltaDirection  String?  // "up" | "down" | "stable" | null (no prior data)
 
   reportId        String
-  report          Report @relation(fields: [reportId], references: [id])
+  report          Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
 
   createdAt       DateTime @default(now())
 }
 
 model Question {
-  id         String @id @default(cuid())
+  id         String   @id @default(cuid())
   text       String
-  priority   Int    // 1 = most important
-  relatedTo  String? // marker name this is tied to
+  priority   Int      // 1 = most important
+  relatedTo  String?  // marker name this question is tied to
+  isChecked  Boolean  @default(false) // checked off during appointment
+  addedBy    String   @default("ai") // "ai" | "user" — whether AI-generated or manually added
 
   reportId   String
-  report     Report @relation(fields: [reportId], references: [id])
+  report     Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
 }
 
+// ─── Reference / catalog ─────────────────────────────────────────────
+
 model MarkerCatalog {
-  id             String @id @default(cuid())
-  canonicalName  String @unique
+  id             String   @id @default(cuid())
+  canonicalName  String   @unique
   aliases        String[] // ["LDL", "LDL-C", "LDL Cholesterol"]
-  category       String   // "lipids", "metabolic", "thyroid", etc.
-  whatItMeasures String
+  category       String   // "lipids" | "metabolic" | "thyroid" | "vitamins" | "bloodCount" | "kidney" | "liver" | "other"
+  whatItMeasures String   // one-sentence tooltip
+  whyItMatters   String?  // paragraph used in marker expansion Zone B
   normalRangeMin Float?
   normalRangeMax Float?
   unit           String
-  urgentHigh     Float?   // triggers hard-coded urgent alert
-  urgentLow      Float?
+  urgentHigh     Float?   // triggers hard-coded ER alert — NEVER REMOVE
+  urgentLow      Float?   // triggers hard-coded ER alert — NEVER REMOVE
+  sourceUrl      String?  // link to USPSTF / ADA / AHA / NIH guideline
+  reviewedBy     String?  // "MD + PharmD" — clinician review attribution shown in UI
+  updatedAt      DateTime @updatedAt
+}
+
+// ─── Reminders ────────────────────────────────────────────────────────
+
+model Reminder {
+  id          String   @id @default(cuid())
+  type        String   // "retest" | "appointment" | "custom"
+  markerName  String?  // e.g. "Vitamin D" — which marker triggered this
+  message     String   // plain-English reminder text
+  dueDate     DateTime?
+  isDone      Boolean  @default(false)
+  sentAt      DateTime?
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  reportId    String?
+  report      Report?  @relation(fields: [reportId], references: [id])
+
+  createdAt   DateTime @default(now())
+}
+
+// ─── Notification preferences ────────────────────────────────────────
+
+model NotificationPreferences {
+  id                     String   @id @default(cuid())
+  flaggedMarkerReminders Boolean  @default(true)
+  monthlyCheckInNudge    Boolean  @default(true)
+  productUpdates         Boolean  @default(false)
+
+  userId                 String   @unique
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─── HIPAA audit log ──────────────────────────────────────────────────
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  action     String   // "report.view" | "report.delete" | "export.pdf" | "export.csv" | "account.delete"
+  entityType String?  // "Report" | "Marker" | "User"
+  entityId   String?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 ```
 

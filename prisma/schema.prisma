@@ -56,6 +56,8 @@ model VerificationToken {
 model User {
   id                   String    @id @default(cuid())
   email                String    @unique
+  emailVerified        DateTime?
+  image                String?
   password             String?
   fullName             String?
   dateOfBirth          DateTime?
@@ -63,11 +65,16 @@ model User {
   isPro                Boolean   @default(false)
   stripeCustomerId     String?
   stripeSubscriptionId String?
+  emailInboxAddress    String?   @unique
+  darkMode             Boolean   @default(false)
 
-  accounts Account[]
-  sessions Session[]
-  reports  Report[]
-  profiles Profile[]
+  accounts      Account[]
+  sessions      Session[]
+  reports       Report[]
+  profiles      Profile[]
+  reminders     Reminder[]
+  notificationPrefs NotificationPreferences?
+  auditLogs     AuditLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -84,22 +91,30 @@ model Profile {
   reports       Report[]
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
 }
 
 model Report {
-  id          String    @id @default(cuid())
-  source      String
-  fileUrl     String?
-  fileName    String?
-  labProvider String?
-  collectedAt DateTime?
-  uploadedAt  DateTime  @default(now())
-  status      String
-  summary     String?   @db.Text
-  flagCount   Int       @default(0)
-  urgentFlag  Boolean   @default(false)
+  id             String    @id @default(cuid())
+  title          String?
+  source         String
+  fileUrl        String?
+  fileName       String?
+  fileSize       Int?
+  labProvider    String?
+  patientId      String?
+  collectedAt    DateTime?
+  uploadedAt     DateTime  @default(now())
+  processedAt    DateTime?
+  processingTime Float?
+  status         String
+  summary        String?   @db.Text
+  flagCount      Int       @default(0)
+  watchCount     Int       @default(0)
+  urgentFlag     Boolean   @default(false)
+  isFavorite     Boolean   @default(false)
 
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -108,6 +123,7 @@ model Report {
 
   markers   Marker[]
   questions Question[]
+  reminders Reminder[]
 
   @@index([userId])
   @@index([profileId])
@@ -117,14 +133,19 @@ model Marker {
   id             String  @id @default(cuid())
   name           String
   code           String?
+  category       String?
   value          Float
   unit           String
   referenceMin   Float?
   referenceMax   Float?
   status         String
+  isUrgent       Boolean @default(false)
   explanation    String  @db.Text
+  whyItMatters   String? @db.Text
   whatItMeasures String? @db.Text
   confidence     Float
+  delta          Float?
+  deltaDirection String?
 
   reportId String
   report   Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
@@ -139,9 +160,13 @@ model Question {
   text      String  @db.Text
   priority  Int
   relatedTo String?
+  isChecked Boolean @default(false)
+  addedBy   String  @default("ai")
 
   reportId String
   report   Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 
   @@index([reportId])
 }
@@ -152,9 +177,70 @@ model MarkerCatalog {
   aliases        String[]
   category       String
   whatItMeasures String   @db.Text
+  whyItMatters   String?  @db.Text
   normalRangeMin Float?
   normalRangeMax Float?
   unit           String
   urgentHigh     Float?
   urgentLow      Float?
+  sourceUrl      String?
+  reviewedBy     String?
+
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================================
+// REMINDERS
+// ============================================================
+
+model Reminder {
+  id         String    @id @default(cuid())
+  type       String
+  markerName String?
+  message    String    @db.Text
+  dueDate    DateTime?
+  isDone     Boolean   @default(false)
+  sentAt     DateTime?
+
+  userId   String
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reportId String?
+  report   Report? @relation(fields: [reportId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ============================================================
+// NOTIFICATION PREFERENCES
+// ============================================================
+
+model NotificationPreferences {
+  id                     String  @id @default(cuid())
+  flaggedMarkerReminders Boolean @default(true)
+  monthlyCheckInNudge    Boolean @default(true)
+  productUpdates         Boolean @default(false)
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ============================================================
+// HIPAA AUDIT LOG
+// ============================================================
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  action     String
+  entityType String?
+  entityId   String?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
