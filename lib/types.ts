@@ -19,6 +19,9 @@ export type UploadStage = 'idle' | 'uploading' | 'parsing' | 'reading' | 'questi
 
 export interface DashboardPageHeaderProps {
   onUpload: () => void;
+  totalReports: number;
+  trackedSince: string | null;
+  lastUploadedAt: string | null;
 }
 
 export type LoginError = null | 'wrong-password' | 'unknown-email' | 'network';
@@ -84,6 +87,9 @@ export interface TrendCell {
 
 export interface DashboardViewProps {
   children: React.ReactNode;
+  totalReports: number;
+  trackedSince: string | null;
+  lastUploadedAt: string | null;
 }
 
 export interface UploadFlowProps {

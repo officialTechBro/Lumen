@@ -38,8 +38,9 @@ export function donutArcLen(count: number, total: number, circ = 314): number {
   return (count / total) * circ;
 }
 
-export function refRangeLabel(refLow: number, refHigh: number): string {
-  if (refHigh > 500) return `Ref ${refLow}–—`;
-  if (refLow === 0) return `Ref < ${refHigh}`;
+export function refRangeLabel(refLow: number | null, refHigh: number | null): string {
+  if (refLow == null && refHigh == null) return '—';
+  if (refLow == null || refLow === 0) return refHigh != null ? `Ref < ${refHigh}` : '—';
+  if (refHigh == null || refHigh > 500) return `Ref ${refLow}–—`;
   return `Ref ${refLow}–${refHigh}`;
 }

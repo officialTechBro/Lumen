@@ -1,18 +1,61 @@
-import { MOCK_HERO_REPORT, MOCK_SUMMARY } from "@/lib/mock-data";
+import type { LatestReportData, ReportStatsData } from "@/lib/db/reports";
 import { donutArcLen } from "@/lib/helpers";
+
+interface Props {
+  report: LatestReportData | null;
+  stats: ReportStatsData;
+}
 
 const CIRC = 314;
 
-export default function HeroReportCard() {
-  const r = MOCK_HERO_REPORT;
-  const s = MOCK_SUMMARY;
+function formatLongDate(date: Date | null): string {
+  if (!date) return "—";
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+}
 
-  const total = r.normal + r.watch + r.flagged;
-  const normalLen = donutArcLen(r.normal, total);
-  const watchLen = donutArcLen(r.watch, total);
-  const flagLen = donutArcLen(r.flagged, total);
+function formatShortDate(date: Date | null): string {
+  if (!date) return "—";
+  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(date);
+}
+
+function formatTrackedSince(date: Date | null): string {
+  if (!date) return "—";
+  return new Intl.DateTimeFormat("en-US", { month: "short", year: "numeric" }).format(date);
+}
+
+export default function HeroReportCard({ report, stats }: Props) {
+  if (!report) {
+    return (
+      <div className="hero-report fade d2">
+        <div className="hr-left">
+          <p style={{ color: "var(--ink-soft)" }}>
+            No reports yet. Upload your first lab report.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const { normal, watch, flagged } = report.donutSegments;
+  const total = normal + watch + flagged;
+
+  const normalLen = donutArcLen(normal, total);
+  const watchLen = donutArcLen(watch, total);
+  const flagLen = donutArcLen(flagged, total);
   const watchOffset = -normalLen;
   const flagOffset = -(normalLen + watchLen);
+
+  const subLine = [
+    report.labProvider,
+    formatLongDate(report.collectedAt),
+    report.patientId ? `Patient ID ${report.patientId}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
     <div className="hero-report fade d2">
@@ -20,16 +63,20 @@ export default function HeroReportCard() {
       <div className="hr-left">
         <div className="badges">
           <span className="pill new">Latest report</span>
-          <span className="pill flag">{r.flagged} flagged</span>
-          <span className="pill watch">{r.watch} watch</span>
+          {report.flagCount > 0 && (
+            <span className="pill flag">{report.flagCount} flagged</span>
+          )}
+          {report.watchCount > 0 && (
+            <span className="pill watch">{report.watchCount} watch</span>
+          )}
         </div>
 
         <h2 className="hr-title">
-          {r.title},{" "}
+          {report.title ?? "Lab panel"},{" "}
           <span className="italic">explained.</span>
         </h2>
 
-        <p className="hr-sub">{r.sub}</p>
+        <p className="hr-sub">{subLine}</p>
 
         <div className="hr-ctas">
           <button className="btn btn-primary" type="button">
@@ -43,15 +90,17 @@ export default function HeroReportCard() {
         <div className="hr-meta">
           <div className="hr-meta-item">
             <div className="lbl">Tracked since</div>
-            <div className="v">{s.trackedSince}</div>
+            <div className="v">{formatTrackedSince(stats.trackedSince)}</div>
           </div>
           <div className="hr-meta-item">
             <div className="lbl">Total reports</div>
-            <div className="v">{s.totalReports}</div>
+            <div className="v">{stats.totalReports}</div>
           </div>
           <div className="hr-meta-item">
-            <div className="lbl">Next reminder</div>
-            <div className="v long">{s.nextReminder}</div>
+            <div className="lbl">Read time</div>
+            <div className="v">
+              {report.processingTime != null ? `${report.processingTime} sec` : "—"}
+            </div>
           </div>
         </div>
       </div>
@@ -60,7 +109,7 @@ export default function HeroReportCard() {
       <div className="hr-right">
         <div className="hr-summary">
           <div className="hr-sum-head">
-            <span>Summary · {r.shortDate}</span>
+            <span>Summary · {formatShortDate(report.collectedAt)}</span>
             <span>{total} markers</span>
           </div>
 
@@ -108,7 +157,7 @@ export default function HeroReportCard() {
               fontWeight={500}
               fill="#1A2620"
             >
-              {r.normal}
+              {normal}
             </text>
             {/* Center: label */}
             <text
@@ -127,15 +176,15 @@ export default function HeroReportCard() {
           <div className="hr-legend">
             <div className="hr-legend-row">
               <span className="hr-legend-dot normal" />
-              <span>{r.normal} normal</span>
+              <span>{normal} normal</span>
             </div>
             <div className="hr-legend-row">
               <span className="hr-legend-dot watch" />
-              <span>{r.watch} watch</span>
+              <span>{watch} watch</span>
             </div>
             <div className="hr-legend-row">
               <span className="hr-legend-dot flag" />
-              <span>{r.flagged} flagged</span>
+              <span>{flagged} flagged</span>
             </div>
           </div>
         </div>

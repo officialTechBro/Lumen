@@ -1,12 +1,24 @@
 'use client';
 
-import { MOCK_USER, MOCK_LATEST_REPORT } from '@/lib/mock-data';
+import { MOCK_USER } from '@/lib/mock-data';
 import { daysAgo, getTimeOfDayGreeting } from '@/lib/helpers';
 import type { DashboardPageHeaderProps } from '@/lib/types';
 
-export default function DashboardPageHeader({ onUpload }: DashboardPageHeaderProps) {
+export default function DashboardPageHeader({
+  onUpload,
+  totalReports,
+  trackedSince,
+  lastUploadedAt,
+}: DashboardPageHeaderProps) {
   const firstName = MOCK_USER.fullName.split(' ')[0];
-  const days = daysAgo(MOCK_LATEST_REPORT.uploadedAt);
+
+  const metaParts: string[] = [];
+  if (lastUploadedAt) {
+    const days = daysAgo(lastUploadedAt);
+    metaParts.push(`Last upload ${days} ${days === 1 ? 'day' : 'days'} ago`);
+  }
+  metaParts.push(`${totalReports} ${totalReports === 1 ? 'report' : 'reports'}`);
+  if (trackedSince) metaParts.push(`tracked since ${trackedSince}`);
 
   return (
     <div className="page-head fade d1">
@@ -16,10 +28,7 @@ export default function DashboardPageHeader({ onUpload }: DashboardPageHeaderPro
           Your health,{' '}
           <span className="italic">in plain English.</span>
         </h1>
-        <p className="meta">
-          Last upload {days} {days === 1 ? 'day' : 'days'} ago
-          {' · '}{MOCK_LATEST_REPORT.title} from {MOCK_LATEST_REPORT.lab}
-        </p>
+        <p className="meta">{metaParts.join(' · ')}</p>
       </div>
       <div className="page-head-ctas">
         <button type="button" className="btn btn-secondary">Share with doctor</button>

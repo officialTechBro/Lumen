@@ -1,16 +1,33 @@
-# Current Feature
+# Current Feature: Dashboard Reports — Real Data
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Replace all mock/dummy data in the dashboard with real Neon DB data via Prisma
+- Wire up **Hero Report Card** to `getLatestReport(userId)`
+- Wire up **Flagged Markers Card** to `getFlaggedMarkers(userId)` (already partially done — verify completeness against spec)
+- Wire up **Trends Grid** to `getMarkerTrends(userId)`
+- Wire up **Reports List Card** to `getRecentReports(userId)`
+- Wire up **Page Header** meta line to `getReportStats(userId)`
+- All four cards load in parallel via `Promise.all` in the dashboard Server Component
+- Keep current design exactly as-is — no layout, spacing, or typography changes
 
 ## Notes
 
-<!-- Add notes here -->
+- Spec file: `context/features/database/dashboard-reports-spec.md`
+- `lib/db/reports.ts` already exists with `getFlaggedMarkers` — extend it with the remaining four functions
+- Functions to add/verify: `getLatestReport`, `getMarkerTrends`, `getRecentReports`, `getReportStats`
+- `getMarkerTrends` uses a fixed set of 6 markers (priority order): LDL Cholesterol, Vitamin D, HbA1c, TSH, HDL Cholesterol, Ferritin
+- `getRecentReports` fetches 7 most recent ready reports, badges first/latest rows
+- Hero Card border accent: flag → Coral, watch → amber, all clear → Leaf (derived from dominant marker status)
+- Flag count in Reports List: Coral if > 0, Ink-faint if = 0
+- All functions receive `userId` from session — never expose cross-user data
+- Empty states required per card (see spec for copy)
+- Do NOT touch the right-column Question Panel or Report Actions card
+- `app/dashboard/page.tsx` currently looks up demo user by email — wire to real `session.user.id` once NextAuth is available (keep TODO comment for now)
 
 ## History
 
