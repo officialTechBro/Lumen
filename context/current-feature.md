@@ -1,35 +1,20 @@
-# Current Feature: Dashboard Reports — Real Data
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Replace all mock/dummy data in the dashboard with real Neon DB data via Prisma
-- Wire up **Hero Report Card** to `getLatestReport(userId)`
-- Wire up **Flagged Markers Card** to `getFlaggedMarkers(userId)` (already partially done — verify completeness against spec)
-- Wire up **Trends Grid** to `getMarkerTrends(userId)`
-- Wire up **Reports List Card** to `getRecentReports(userId)`
-- Wire up **Page Header** meta line to `getReportStats(userId)`
-- All four cards load in parallel via `Promise.all` in the dashboard Server Component
-- Keep current design exactly as-is — no layout, spacing, or typography changes
+<!-- List goals here -->
 
 ## Notes
 
-- Spec file: `context/features/database/dashboard-reports-spec.md`
-- `lib/db/reports.ts` already exists with `getFlaggedMarkers` — extend it with the remaining four functions
-- Functions to add/verify: `getLatestReport`, `getMarkerTrends`, `getRecentReports`, `getReportStats`
-- `getMarkerTrends` uses a fixed set of 6 markers (priority order): LDL Cholesterol, Vitamin D, HbA1c, TSH, HDL Cholesterol, Ferritin
-- `getRecentReports` fetches 7 most recent ready reports, badges first/latest rows
-- Hero Card border accent: flag → Coral, watch → amber, all clear → Leaf (derived from dominant marker status)
-- Flag count in Reports List: Coral if > 0, Ink-faint if = 0
-- All functions receive `userId` from session — never expose cross-user data
-- Empty states required per card (see spec for copy)
-- Do NOT touch the right-column Question Panel or Report Actions card
-- `app/dashboard/page.tsx` currently looks up demo user by email — wire to real `session.user.id` once NextAuth is available (keep TODO comment for now)
+<!-- Add notes here -->
 
 ## History
+
+- Dashboard reports real data — wired all four dashboard cards and page header to live Neon DB queries; `lib/db/reports.ts` extended with 4 new types (`LatestReportData`, `MarkerTrendData`, `RecentReportData`, `ReportStatsData`) and 4 functions: `getLatestReport` (fetches latest ready report, computes donut segments by counting marker statuses from DB), `getMarkerTrends` (parallel fetch of 6 fixed tracked markers — LDL Cholesterol, Vitamin D, HbA1c, TSH, HDL Cholesterol, Ferritin — with full value + date history; maps DB status to UI "ok/watch/flag"), `getRecentReports` (7 most recent ready reports, badges "latest"/"first" by querying oldest report in parallel), `getReportStats` (total count + trackedSince from oldest report); `lib/helpers.ts` updated — `refRangeLabel` now accepts `number | null` for both params; `HeroReportCard.tsx` rewritten to accept `report: LatestReportData | null` + `stats: ReportStatsData` — empty state if no reports, meta strip maps to Tracked since / Total reports / Read time, sub line constructed from labProvider + collectedAt + patientId; `TrendsGridCard.tsx` rewritten to accept `MarkerTrendData[]` — empty state when no marker has ≥2 data points ("Upload a second report…"); `ReportsListCard.tsx` rewritten to accept `RecentReportData[]` + `ReportStatsData` — formats date to "Mon DD, 'YY", derives `R-YYYY-MM` report code from collectedAt; `DashboardPageHeader.tsx` updated to accept `totalReports`, `trackedSince`, `lastUploadedAt` props — meta line shows "X days ago · N reports · tracked since Mon YYYY"; `DashboardView.tsx` updated to accept and pass through those header props; `app/dashboard/page.tsx` full parallel `Promise.all` fetch of all 5 queries — `trackedSince` formatted to string before passing to client component, `uploadedAt` serialized to ISO string; `DashboardViewProps` and `DashboardPageHeaderProps` updated in `lib/types.ts`
 
 - Dashboard real marker data — replaced all mock data in `FlaggedMarkersCard` with live Neon DB queries; `lib/db/reports.ts` new file with `getFlaggedMarkers(userId)` (queries latest ready report, fetches flagged/borderline/urgent markers, joins sparkline history via `getSparklineValues` — up to 5 prior values per marker name across all user reports — and joins questions filtered by `relatedTo` field); `lib/utils/marker-delta.ts` new file with `getDeltaVariant` + `getDeltaIcon` (inverted-marker list: Vitamin D, HDL Cholesterol, Ferritin, Vitamin B12, Magnesium, Hemoglobin, Hematocrit, eGFR, Platelets); `FlaggedMarkersCard.tsx` rewritten to accept `markers: FlaggedMarkerData[]` prop — 3-zone expansion panel: Zone A (PLAIN ENGLISH with `isUrgent` banner fallback, confidence warning `< 0.90`), Zone B (WHY IT MATTERS), Zone C (ASK YOUR DOCTOR — real questions list with strikethrough for `isChecked`); empty state: "Nothing flagged. Your latest results look clear." (leaf color); variant-based delta badges: `chg-up-bad` coral / `chg-down-bad` grey / `chg-stable` leaf / `chg-new` transparent; sparkline status mapped from DB `status` string (`flagged/urgent→flag`, `borderline→watch`, `normal→ok`); `app/dashboard/page.tsx` converted to async server component — looks up demo user by email, fetches markers in parallel, passes real array as prop (TODO: swap for `session.user.id` once NextAuth wired); CSS additions: `.chg-*` variants, `.urgent-banner`, `.confidence-warn`, `.empty-flagged`, `.fe-questions`, `.fe-label-gap`, `.fe-why`
 
