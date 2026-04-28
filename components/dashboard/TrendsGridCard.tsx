@@ -1,8 +1,14 @@
-import { MOCK_TREND_CELLS } from "@/lib/mock-data";
+import type { MarkerTrendData } from "@/lib/db/reports";
 import { refRangeLabel } from "@/lib/helpers";
 import Sparkline from "./Sparkline";
 
-export default function TrendsGridCard() {
+interface Props {
+  trends: MarkerTrendData[];
+}
+
+export default function TrendsGridCard({ trends }: Props) {
+  const hasEnoughData = trends.some((t) => t.values.length >= 2);
+
   return (
     <div className="card fade d4">
       <div className="card-head">
@@ -13,37 +19,45 @@ export default function TrendsGridCard() {
         <a href="/dashboard/markers" className="card-link">View all →</a>
       </div>
 
-      <div className="trends-grid">
-        {MOCK_TREND_CELLS.map((cell) => (
-          <div key={cell.id} className="trend-cell">
-            <div className="tc-top">
-              <span className="tc-name">{cell.name}</span>
-              <span className={`pill ${cell.status}`}>
-                {cell.status === "flag" ? "Flagged" : cell.status === "watch" ? "Watch" : "OK"}
-              </span>
-            </div>
-
-            <div className="tc-spark">
-              <Sparkline
-                values={cell.values}
-                status={cell.status}
-                refLow={cell.refLow}
-                refHigh={cell.refHigh}
-                width={260}
-                height={52}
-              />
-            </div>
-
-            <div className="tc-bot">
-              <div>
-                <span className="tc-v">{cell.current}</span>
-                <span className="tc-u">{cell.unit}</span>
+      {!hasEnoughData ? (
+        <p style={{ padding: "24px", color: "var(--ink-soft)", fontSize: "15px" }}>
+          Upload a second report to see how your markers are moving.
+        </p>
+      ) : (
+        <div className="trends-grid">
+          {trends.map((trend) => (
+            <div key={trend.name} className="trend-cell">
+              <div className="tc-top">
+                <span className="tc-name">{trend.name}</span>
+                <span className={`pill ${trend.status}`}>
+                  {trend.status === "flag" ? "Flagged" : trend.status === "watch" ? "Watch" : "OK"}
+                </span>
               </div>
-              <span className="tc-ref">{refRangeLabel(cell.refLow, cell.refHigh)}</span>
+
+              <div className="tc-spark">
+                <Sparkline
+                  values={trend.values}
+                  status={trend.status as "flag" | "watch" | "ok"}
+                  refLow={trend.referenceMin ?? undefined}
+                  refHigh={trend.referenceMax ?? undefined}
+                  width={260}
+                  height={52}
+                />
+              </div>
+
+              <div className="tc-bot">
+                <div>
+                  <span className="tc-v">{trend.currentValue}</span>
+                  <span className="tc-u">{trend.unit}</span>
+                </div>
+                <span className="tc-ref">
+                  {refRangeLabel(trend.referenceMin, trend.referenceMax)}
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
