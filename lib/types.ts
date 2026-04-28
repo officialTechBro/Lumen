@@ -102,3 +102,7 @@ export interface ReportRow {
   watch: number;
   badge?: 'Latest' | 'First';
 }
+
+export interface FlaggedMarkersCardProps {
+  markers: import('@/lib/db/reports').FlaggedMarkerData[];
+}

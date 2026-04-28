@@ -1,16 +1,33 @@
-# Current Feature
+# Current Feature: Dashboard — Real Marker Data
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Replace all mock/dummy marker data in `FlaggedMarkersCard` with real data from the Neon DB via Prisma
+- Add/update `getFlaggedMarkers` in `lib/db/reports.ts` returning `FlaggedMarkerData` (including sparkline values and questions)
+- Build `getSparklineValues` helper — fetches last 5 historical values per marker name across the user's reports
+- Fetch questions per marker using `relatedTo` field within the current report
+- Create `lib/utils/marker-delta.ts` with `getDeltaVariant` helper for clinical delta badge logic
+- Wire `FlaggedMarkersCard.tsx` to accept and render real `FlaggedMarkerData[]` props (server component)
+- Implement three-zone expansion panel: Zone A (plain English / urgent banner), Zone B (why it matters), Zone C (doctor questions)
+- Show confidence warning (`< 0.90`) below marker name in expansion panel
+- Show urgent banner (coral) instead of plain-English explanation when `isUrgent === true`
+- Empty state: "Nothing flagged. Your latest results look clear." when `flaggedMarkers.length === 0`
 
 ## Notes
 
-<!-- Add notes here -->
+- All DB queries must filter by `userId` from session — no cross-user data exposure
+- Sparkline status color: `flagged/urgent` → Coral, `borderline` → Ink-soft, `normal` → Leaf
+- Delta badge styling per variant: `up-bad` (coral), `down-bad` (grey), `stable` (leaf), `new` (transparent)
+- Inverted markers (going down is bad): Vitamin D, HDL Cholesterol, Ferritin, Vitamin B12, Magnesium, Hemoglobin, Hematocrit, eGFR, Platelets
+- `+ Add to questions` mutation: `PATCH /api/questions/[id]` (toggle) or `POST /api/questions` (new); optimistic UI + `revalidatePath("/dashboard")`
+- Do NOT build the full Report Detail page — only dashboard home screen data
+- Keep current design exactly as-is; only wire up real data
+- Data fetch in server components — no client-side fetching for marker data
+- Spec files: `context/features/database/dashboard-markers-spec.md`, `context/features/database/dashboard-reports-spec.md`
 
 ## History
 
