@@ -112,3 +112,7 @@ export interface ReportRow {
 export interface FlaggedMarkersCardProps {
   markers: import('@/lib/db/reports').FlaggedMarkerData[];
 }
+
+export interface SidebarProps {
+  counts: import('@/lib/db/sidebar').SidebarCountsData;
+}

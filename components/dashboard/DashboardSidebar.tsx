@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
-import type { NavItem } from "@/lib/types";
+import type { SidebarProps } from "@/lib/types";
 import Link from "next/link";
-import { MOCK_NAV_LIBRARY, MOCK_NAV_ACTIONS } from "@/lib/mock-data";
 import SidebarProfile from "./SidebarProfile";
 
 const ICONS: Record<string, ReactNode> = {
@@ -55,17 +54,7 @@ const ICONS: Record<string, ReactNode> = {
   ),
 };
 
-function NavBtn({ item }: { item: NavItem }) {
-  return (
-    <button className={`navbtn${item.active ? " active" : ""}`}>
-      <span className="ico">{ICONS[item.id]}</span>
-      {item.label}
-      {item.count !== null && <span className="count">{item.count}</span>}
-    </button>
-  );
-}
-
-export default function DashboardSidebar() {
+export default function DashboardSidebar({ counts }: SidebarProps) {
   return (
     <aside className="sidebar">
       {/* Brand */}
@@ -80,9 +69,53 @@ export default function DashboardSidebar() {
       {/* Nav */}
       <nav className="sidebar-nav">
         <div className="group-label">Library</div>
-        {MOCK_NAV_LIBRARY.map((item) => <NavBtn key={item.id} item={item} />)}
+
+        <button className="navbtn active">
+          <span className="ico">{ICONS.home}</span>
+          Dashboard
+        </button>
+
+        <button className="navbtn">
+          <span className="ico">{ICONS.reports}</span>
+          Reports
+          <span className="count">{counts.reports}</span>
+        </button>
+
+        <button className="navbtn">
+          <span className="ico">{ICONS.markers}</span>
+          Markers
+          <span className="count">{counts.markers}</span>
+        </button>
+
+        <button className="navbtn">
+          <span className="ico">{ICONS.flags}</span>
+          Flagged
+          <span className="count">{counts.flagged}</span>
+        </button>
+
+        <button className="navbtn">
+          <span className="ico">{ICONS.questions}</span>
+          {"Doctor Q's"}
+          {counts.questions > 0 && <span className="count">{counts.questions}</span>}
+        </button>
+
+        <button className="navbtn">
+          <span className="ico">{ICONS.reminders}</span>
+          Reminders
+          {counts.reminders > 0 && <span className="count">{counts.reminders}</span>}
+        </button>
+
         <div className="group-label actions-label">Actions</div>
-        {MOCK_NAV_ACTIONS.map((item) => <NavBtn key={item.id} item={item} />)}
+
+        <button className="navbtn">
+          <span className="ico">{ICONS.upload}</span>
+          Upload report
+        </button>
+
+        <button className="navbtn">
+          <span className="ico">{ICONS.settings}</span>
+          Settings
+        </button>
       </nav>
 
       <SidebarProfile />
