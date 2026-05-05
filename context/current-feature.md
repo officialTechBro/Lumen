@@ -1,36 +1,22 @@
-# Current Feature: Auth Phase 2 — Email/Password Credentials Provider
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add a Credentials provider for email/password auth alongside the existing Google OAuth provider
-- Create `POST /api/auth/register` — validates input, hashes password, creates User + Profile + NotificationPreferences + AuditLog in a transaction
-- Create `POST /api/auth/check-email` — inline email availability check called on blur from the signup form
-- Update `auth.config.ts` with an edge-safe Credentials placeholder (`authorize: () => null`)
-- Update `auth.ts` to override the Credentials provider with real bcrypt validation and add `pages` config pointing to `/login`, `/signup`, `/login` (error)
-- Wire the existing `/login` LoginForm to call `signIn("credentials", ...)` and `signIn("google", ...)`
-- Wire the existing `/signup` SignupForm to `POST /api/auth/register` then auto-sign-in
-- Handle provider conflict: Google-only users (no `password`) get a graceful error on credentials login attempt
+<!-- List goals here -->
 
 ## Notes
 
-- `bcryptjs` is already installed; use it (not `bcrypt`)
-- `password String?` field already exists on the `User` model — no migration needed
-- The Credentials placeholder in `auth.config.ts` is required so the edge proxy recognises the provider; real logic lives only in `auth.ts`
-- After successful registration, write an `AuditLog` entry with `action: "account.create"` inside the same transaction
-- Provider conflict: Google-only users have no `password` — return `null` from `authorize`, login page shows "Incorrect password. Try again or reset it."
-- Google-then-credentials flow: Prisma adapter links the Google Account row to the existing User — no special handling needed
-- Custom pages config: `signIn: "/login"`, `newUser: "/signup"`, `error: "/login"`
-- Login/signup pages already exist at `app/(auth)/login/page.tsx` and `app/(auth)/signup/page.tsx` — only the client form components need wiring
+<!-- Add notes here -->
 
 ## History
 
 - Auth Phase 2 — Email/Password Credentials Provider; `auth.config.ts` updated — added edge-safe Credentials placeholder (`authorize: async () => null`) alongside Google so the edge proxy recognises the provider; `auth.ts` updated — overrides Credentials with real bcrypt `authorize` (finds user by email, checks `user.password` exists, `bcrypt.compare`), adds `pages: { signIn: "/login", newUser: "/signup", error: "/login" }`; `app/api/auth/register/route.ts` created — validates presence, email format, password length ≥ 8, passwords match, email uniqueness (409 on conflict), then `bcrypt.hash(password, 12)` + `$transaction` creating User + Profile (`relationship: "self"`) + NotificationPreferences + AuditLog (`action: "account.create"`), returns 201; `app/api/auth/check-email/route.ts` created — `POST { email }` → `{ available: boolean }`; `LoginForm.tsx` wired — `handleLoginSubmit` calls `signIn("credentials", { redirect: false })`, maps `result.error` to `"wrong-password"` state, catch maps to `"network"`, on success `router.push("/dashboard")`; Google button calls `signIn("google", { callbackUrl: "/dashboard" })`; `SignupForm.tsx` wired — `handleEmailBlur` hits `POST /api/auth/check-email` (falls back to `valid` on network error so users aren't blocked); `handleSubmit` calls register API, maps 409 to `emailVal.status = "taken"`, on 201 auto-signs-in via `signIn("credentials", { redirect: false })` then `router.push("/dashboard")` (falls back to `/login` if auto-sign-in fails); added `formError` state for server-level errors rendered as coral pill; removed mock `setTimeout` delays from both forms; `NavMobileMenu.tsx` — corrected stale `/sign-in` link to `/login`
 
-- Auth Phase 1 — NextAuth v5 + Google OAuth; installed `next-auth@beta` (5.0.0-beta.31) + `@auth/prisma-adapter`; split auth config pattern: `auth.config.ts` (edge-compatible — Google provider + `authorized` callback that returns `false` for unauthenticated `/dashboard/*` requests), `auth.ts` (full config — PrismaAdapter + JWT strategy, `jwt` callback persists `user.id` into token, `session` callback exposes `session.user.id`); `app/api/auth/[...nextauth]/route.ts` exports GET + POST handlers; `proxy.ts` at project root — Next.js 16's replacement for `middleware.ts`, exports `default auth` + `config.matcher: ["/dashboard/:path*"]`; `types/next-auth.d.ts` extends `Session` with `user.id`; `.env.local` scaffolded with generated `AUTH_SECRET` (needs `AUTH_GOOGLE_ID` + `AUTH_GOOGLE_SECRET` from Google Cloud Console); `authorized` callback needed because NextAuth v5 does not auto-redirect without it; `export const { auth: proxy }` (named export) rejected by Next.js 16 — must use `export default auth`; no schema migration needed (Account/Session/VerificationToken/emailVerified/image already exist) — NextAuth v5 + Google OAuth; installed `next-auth@beta` (5.0.0-beta.31) + `@auth/prisma-adapter`; split auth config pattern: `auth.config.ts` (edge-compatible — Google provider + `authorized` callback that returns `false` for unauthenticated `/dashboard/*` requests), `auth.ts` (full config — PrismaAdapter + JWT strategy, `jwt` callback persists `user.id` into token, `session` callback exposes `session.user.id`); `app/api/auth/[...nextauth]/route.ts` exports GET + POST handlers; `proxy.ts` at project root — Next.js 16's replacement for `middleware.ts`, exports `default auth` + `config.matcher: ["/dashboard/:path*"]`; `types/next-auth.d.ts` extends `Session` with `user.id`; `.env.local` scaffolded with generated `AUTH_SECRET` (needs `AUTH_GOOGLE_ID` + `AUTH_GOOGLE_SECRET` from Google Cloud Console); `authorized` callback needed because NextAuth v5 does not auto-redirect without it; `export const { auth: proxy }` (named export) rejected by Next.js 16 — must use `export default auth`; no schema migration needed (Account/Session/VerificationToken/emailVerified/image already exist)
+- Auth Phase 1 — NextAuth v5 + Google OAuth; installed `next-auth@beta` (5.0.0-beta.31) + `@auth/prisma-adapter`; split auth config pattern: `auth.config.ts` (edge-compatible — Google provider + `authorized` callback that returns `false` for unauthenticated `/dashboard/*` requests), `auth.ts` (full config — PrismaAdapter + JWT strategy, `jwt` callback persists `user.id` into token, `session` callback exposes `session.user.id`); `app/api/auth/[...nextauth]/route.ts` exports GET + POST handlers; `proxy.ts` at project root — Next.js 16's replacement for `middleware.ts`, exports `default auth` + `config.matcher: ["/dashboard/:path*"]`; `types/next-auth.d.ts` extends `Session` with `user.id`; `.env.local` scaffolded with generated `AUTH_SECRET` (needs `AUTH_GOOGLE_ID` + `AUTH_GOOGLE_SECRET` from Google Cloud Console); `authorized` callback needed because NextAuth v5 does not auto-redirect without it; `export const { auth: proxy }` (named export) rejected by Next.js 16 — must use `export default auth`; no schema migration needed (Account/Session/VerificationToken/emailVerified/image already exist)
 
 - Sidebar nav badge counts — replaced all mock nav counts in `DashboardSidebar.tsx` with live Neon DB queries; `lib/db/sidebar.ts` new file with `SidebarCountsData` type and `getSidebarCounts(userId)` — 5 parallel Prisma count queries: total ready reports, total markers across ready reports, flagged/urgent markers, unchecked questions, undone reminders; `app/dashboard/layout.tsx` converted from sync to async server component — looks up demo user by email (same pattern as `page.tsx`, TODO: swap for `session.user.id`), fetches `getSidebarCounts`, passes real `counts` prop to `<DashboardSidebar>`; `DashboardSidebar.tsx` rewritten to accept `counts: SidebarCountsData` prop — Doctor Q's and Reminders badges conditionally rendered only when count `> 0`, all other badges always shown; `SidebarProps` interface added to `lib/types.ts`
 
