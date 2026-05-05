@@ -1,47 +1,20 @@
-# Current Feature — Auth Phase 1: NextAuth v5 + Google Provider
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Install `next-auth@beta` and `@auth/prisma-adapter`
-- Set up the split auth config pattern for edge compatibility
-- Add Google OAuth provider
-- Protect `/dashboard/*` routes via Next.js middleware proxy
-- Redirect unauthenticated users to the NextAuth sign-in page
-- Extend the `Session` type to include `user.id`
+<!-- List goals here -->
 
 ## Notes
 
-### Files to create
-> Note: this project uses `app/` at the root, not `src/app/`. Paths below are adjusted accordingly.
-
-| File | Purpose |
-|---|---|
-| `auth.config.ts` | Edge-compatible config — providers only, no Prisma |
-| `auth.ts` | Full config with Prisma adapter + JWT strategy |
-| `app/api/auth/[...nextauth]/route.ts` | Export GET and POST handlers from `auth.ts` |
-| `proxy.ts` | Route protection — must be at project root level |
-| `types/next-auth.d.ts` | Extend `Session` with `user.id` |
-
-### Key constraints
-- Use `next-auth@beta` — `@latest` installs v4 (different API)
-- `proxy.ts` at project root (same level as `app/`), NOT `middleware.ts`
-- Session strategy must be `jwt` — required by the split config pattern
-- Do NOT set a custom `pages.signIn` in phase 1 — use NextAuth's built-in page
-- `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` must be added to `.env.local`
-- Prisma schema already has `Account`, `Session`, `VerificationToken`, `emailVerified`, `image` — verify before migrating
-
-### Environment variables needed
-```
-AUTH_SECRET=          # openssl rand -base64 32
-AUTH_GOOGLE_ID=       # Google Cloud Console
-AUTH_GOOGLE_SECRET=   # Google Cloud Console
-```
+<!-- Add notes here -->
 
 ## History
+
+- Auth Phase 1 — NextAuth v5 + Google OAuth; installed `next-auth@beta` (5.0.0-beta.31) + `@auth/prisma-adapter`; split auth config pattern: `auth.config.ts` (edge-compatible — Google provider + `authorized` callback that returns `false` for unauthenticated `/dashboard/*` requests), `auth.ts` (full config — PrismaAdapter + JWT strategy, `jwt` callback persists `user.id` into token, `session` callback exposes `session.user.id`); `app/api/auth/[...nextauth]/route.ts` exports GET + POST handlers; `proxy.ts` at project root — Next.js 16's replacement for `middleware.ts`, exports `default auth` + `config.matcher: ["/dashboard/:path*"]`; `types/next-auth.d.ts` extends `Session` with `user.id`; `.env.local` scaffolded with generated `AUTH_SECRET` (needs `AUTH_GOOGLE_ID` + `AUTH_GOOGLE_SECRET` from Google Cloud Console); `authorized` callback needed because NextAuth v5 does not auto-redirect without it; `export const { auth: proxy }` (named export) rejected by Next.js 16 — must use `export default auth`; no schema migration needed (Account/Session/VerificationToken/emailVerified/image already exist)
 
 - Sidebar nav badge counts — replaced all mock nav counts in `DashboardSidebar.tsx` with live Neon DB queries; `lib/db/sidebar.ts` new file with `SidebarCountsData` type and `getSidebarCounts(userId)` — 5 parallel Prisma count queries: total ready reports, total markers across ready reports, flagged/urgent markers, unchecked questions, undone reminders; `app/dashboard/layout.tsx` converted from sync to async server component — looks up demo user by email (same pattern as `page.tsx`, TODO: swap for `session.user.id`), fetches `getSidebarCounts`, passes real `counts` prop to `<DashboardSidebar>`; `DashboardSidebar.tsx` rewritten to accept `counts: SidebarCountsData` prop — Doctor Q's and Reminders badges conditionally rendered only when count `> 0`, all other badges always shown; `SidebarProps` interface added to `lib/types.ts`
 
