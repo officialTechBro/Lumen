@@ -63,7 +63,7 @@ export function NavMobileMenu() {
           </ul>
           <div className="flex items-center justify-between px-8 py-5 border-t border-line">
             <Link
-              href="/sign-in"
+              href="/login"
               onClick={() => setOpen(false)}
               className="text-[14.5px] text-ink-soft transition-colors duration-150 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest"
             >
