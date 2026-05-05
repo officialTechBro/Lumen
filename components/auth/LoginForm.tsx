@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import type { LoginMode, LoginError } from '@/lib/types';
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
@@ -43,6 +45,7 @@ function Spinner() {
 // ─── Form ─────────────────────────────────────────────────────────────────────
 
 export function LoginForm() {
+  const router = useRouter();
   const [mode, setMode] = useState<LoginMode>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -55,8 +58,28 @@ export function LoginForm() {
     if (isLoading) return;
     setLoginError(null);
     setIsLoading(true);
-    await new Promise(r => setTimeout(r, 1800));
-    setIsLoading(false);
+
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (!result || result.error) {
+        setLoginError('wrong-password');
+      } else {
+        router.push('/dashboard');
+      }
+    } catch {
+      setLoginError('network');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = () => {
+    signIn('google', { callbackUrl: '/dashboard' });
   };
 
   const handleForgotSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -271,6 +294,7 @@ export function LoginForm() {
       {/* Google OAuth */}
       <button
         type="button"
+        onClick={handleGoogleSignIn}
         className="fade w-full flex items-center justify-center gap-3 py-[15px] bg-[var(--paper)] border-[1.5px] border-[var(--line)] rounded-full font-sans font-semibold text-sm text-[var(--ink)] cursor-pointer transition-all duration-200 mb-8 hover:border-[var(--forest)] hover:-translate-y-px"
         style={{ animationDelay: '0.40s' }}
       >

@@ -2,6 +2,8 @@
 
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { getPasswordStrength, isValidEmail } from '@/lib/helpers';
 import type { PasswordStrength, FormState, EmailValidation } from '@/lib/types';
 
@@ -35,15 +37,6 @@ function CheckIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
-function EnvelopeIcon() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1F5041" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="2" y="4" width="20" height="16" rx="2" />
-      <path d="m2 7 10 7 10-7" />
     </svg>
   );
 }
@@ -92,54 +85,87 @@ function StrengthBar({ strength }: { strength: PasswordStrength }) {
 // ─── Form ─────────────────────────────────────────────────────────────────────
 
 export function SignupForm() {
+  const router = useRouter();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [emailVal, setEmailVal] = useState<EmailValidation>({ status: 'idle' });
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [formState, setFormState] = useState<FormState>('idle');
+  const [formError, setFormError] = useState<string | null>(null);
 
   const strength = getPasswordStrength(password);
 
-  const handleEmailBlur = useCallback(() => {
+  const handleEmailBlur = useCallback(async () => {
     if (!email) { setEmailVal({ status: 'idle' }); return; }
     if (!isValidEmail(email)) { setEmailVal({ status: 'invalid' }); return; }
-    setEmailVal({ status: 'valid' });
+
+    try {
+      const res = await fetch('/api/auth/check-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      setEmailVal(data.available ? { status: 'valid' } : { status: 'taken' });
+    } catch {
+      // Network error — fall back to valid so we don't block the user
+      setEmailVal({ status: 'valid' });
+    }
   }, [email]);
+
+  const handleGoogleSignUp = () => {
+    signIn('google', { callbackUrl: '/dashboard' });
+  };
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formState === 'loading') return;
+
+    setFormError(null);
     setFormState('loading');
-    await new Promise(r => setTimeout(r, 1800));
-    setFormState('success');
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, email, password, confirmPassword: password }),
+      });
+
+      const data = await res.json();
+
+      if (res.status === 409) {
+        setEmailVal({ status: 'taken' });
+        setFormState('idle');
+        return;
+      }
+
+      if (!res.ok) {
+        setFormError(data.error ?? 'Something went wrong. Please try again.');
+        setFormState('idle');
+        return;
+      }
+
+      // Auto sign-in after successful registration
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (!result || result.error) {
+        // Account created but auto-sign-in failed — send to login
+        router.push('/login');
+      } else {
+        router.push('/dashboard');
+      }
+    } catch {
+      setFormError('Something went wrong. Please try again.');
+      setFormState('idle');
+    }
   };
 
   const isError = emailVal.status === 'invalid' || emailVal.status === 'taken';
-
-  if (formState === 'success') {
-    return (
-      <div className="text-center py-2">
-        <div className="flex justify-center mb-6"><EnvelopeIcon /></div>
-        <h1 className="font-display text-[28px] font-medium tracking-[-0.02em] leading-[1.15] mb-4">
-          Check{' '}
-          <em className="not-italic font-light text-[var(--forest)] italic">your email.</em>
-        </h1>
-        <p className="text-base text-[var(--ink-soft)] leading-relaxed mb-6">
-          We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
-        </p>
-        <button
-          type="button"
-          className="bg-transparent border-none cursor-pointer text-[var(--forest)] text-sm font-medium p-0 mb-4 hover:underline"
-        >
-          Resend the email
-        </button>
-        <p className="font-mono text-[10px] text-[var(--ink-dim)] tracking-[0.12em] uppercase mt-4">
-          Link expires in 24 hours
-        </p>
-      </div>
-    );
-  }
 
   return (
     <form onSubmit={handleSubmit} noValidate>
@@ -153,6 +179,7 @@ export function SignupForm() {
       {/* Google OAuth */}
       <button
         type="button"
+        onClick={handleGoogleSignUp}
         className="w-full flex items-center justify-center gap-3 py-[15px] bg-[var(--paper)] border-[1.5px] border-[var(--line)] rounded-full font-sans font-semibold text-sm text-[var(--ink)] cursor-pointer transition-all duration-200 mb-6 hover:border-[var(--forest)] hover:-translate-y-px"
       >
         <GoogleIcon />
@@ -249,6 +276,13 @@ export function SignupForm() {
       </div>
 
       <StrengthBar strength={strength} />
+
+      {/* Form-level error */}
+      {formError && (
+        <p role="alert" className="text-[13px] text-[var(--coral)] text-center mb-4 px-3.5 py-2 bg-[var(--coral-soft)] rounded-full">
+          {formError}
+        </p>
+      )}
 
       {/* Submit */}
       <button
