@@ -1,16 +1,45 @@
-# Current Feature
+# Current Feature — Auth Phase 1: NextAuth v5 + Google Provider
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Install `next-auth@beta` and `@auth/prisma-adapter`
+- Set up the split auth config pattern for edge compatibility
+- Add Google OAuth provider
+- Protect `/dashboard/*` routes via Next.js middleware proxy
+- Redirect unauthenticated users to the NextAuth sign-in page
+- Extend the `Session` type to include `user.id`
 
 ## Notes
 
-<!-- Add notes here -->
+### Files to create
+> Note: this project uses `app/` at the root, not `src/app/`. Paths below are adjusted accordingly.
+
+| File | Purpose |
+|---|---|
+| `auth.config.ts` | Edge-compatible config — providers only, no Prisma |
+| `auth.ts` | Full config with Prisma adapter + JWT strategy |
+| `app/api/auth/[...nextauth]/route.ts` | Export GET and POST handlers from `auth.ts` |
+| `proxy.ts` | Route protection — must be at project root level |
+| `types/next-auth.d.ts` | Extend `Session` with `user.id` |
+
+### Key constraints
+- Use `next-auth@beta` — `@latest` installs v4 (different API)
+- `proxy.ts` at project root (same level as `app/`), NOT `middleware.ts`
+- Session strategy must be `jwt` — required by the split config pattern
+- Do NOT set a custom `pages.signIn` in phase 1 — use NextAuth's built-in page
+- `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` must be added to `.env.local`
+- Prisma schema already has `Account`, `Session`, `VerificationToken`, `emailVerified`, `image` — verify before migrating
+
+### Environment variables needed
+```
+AUTH_SECRET=          # openssl rand -base64 32
+AUTH_GOOGLE_ID=       # Google Cloud Console
+AUTH_GOOGLE_SECRET=   # Google Cloud Console
+```
 
 ## History
 
