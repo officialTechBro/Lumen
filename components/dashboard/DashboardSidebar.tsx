@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import type { SidebarProps } from "@/lib/types";
 import Link from "next/link";
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
 import SidebarProfile from "./SidebarProfile";
 
 const ICONS: Record<string, ReactNode> = {
@@ -54,7 +56,19 @@ const ICONS: Record<string, ReactNode> = {
   ),
 };
 
-export default function DashboardSidebar({ counts }: SidebarProps) {
+export default async function DashboardSidebar({ counts }: SidebarProps) {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  let isPro = false;
+  if (userId) {
+    const dbUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { isPro: true },
+    });
+    isPro = dbUser?.isPro ?? false;
+  }
+
   return (
     <aside className="sidebar">
       {/* Brand */}
@@ -118,7 +132,12 @@ export default function DashboardSidebar({ counts }: SidebarProps) {
         </button>
       </nav>
 
-      <SidebarProfile />
+      <SidebarProfile
+        image={session?.user?.image ?? null}
+        fullName={session?.user?.name ?? null}
+        email={session?.user?.email ?? null}
+        isPro={isPro}
+      />
     </aside>
   );
 }

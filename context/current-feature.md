@@ -1,16 +1,31 @@
-# Current Feature
+# Current Feature: Auth Phase 3 — Connect Custom Auth Pages + Sidebar Profile
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Wire `/login` email/password form to `signIn("credentials", { redirect: false })` and handle inline errors
+- Wire `/login` Google button to `signIn("google", { callbackUrl: "/dashboard" })`
+- Implement forgot-password in-place swap (client-side state only; stub success after any email entered — no API call)
+- Redirect already-signed-in users from `/login` and `/signup` to `/dashboard` via `auth()` in server component
+- Wire `/signup` form to `POST /api/auth/register` with inline field-level error mapping
+- Auto sign-in after successful registration via `signIn("credentials", { redirect: false })` then push to `/dashboard`
+- Wire `/signup` Google button to `signIn("google", { callbackUrl: "/dashboard" })`
+- Hit `POST /api/auth/check-email` on email field blur for inline availability check
+- Create `UserAvatar` component at `components/ui/UserAvatar.tsx` (shows Google `image` or initials in Forest circle)
+- Create `SignOutButton` client component that calls `signOut({ callbackUrl: "/login" })`
+- Replace mock user data in sidebar bottom block with real session values (`fullName`, `image`, `isPro` fetched from DB)
 
 ## Notes
 
-<!-- Add notes here -->
+- Pages themselves are fully designed and built — this phase is purely auth wiring, no UI redesign
+- Forgot password: client-side state toggle only; stub the submit with a "Check your inbox." success state regardless of email entered
+- Auto sign-in after registration: skip the confirmation/envelope state, go directly to `/dashboard`; fall back to `/login?registered=true` if auto sign-in fails
+- `isPro` is not stored in the JWT — must query `prisma.user.findUnique` in the sidebar server component
+- Sidebar bottom block: avatar link navigates to `/dashboard/settings`; sign-out button is a separate client component to the right
+- `CredentialsSignin` error from NextAuth always maps to password field (do not distinguish wrong-password vs unknown-email to avoid account enumeration)
 
 ## History
 

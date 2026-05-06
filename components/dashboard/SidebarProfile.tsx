@@ -1,10 +1,17 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { MOCK_USER } from '@/lib/mock-data';
-import { getInitials } from '@/lib/helpers';
+import { UserAvatar } from '@/components/ui/UserAvatar';
+import { SignOutButton } from '@/components/dashboard/SignOutButton';
 
-export default function SidebarProfile() {
+type SidebarProfileProps = {
+  image: string | null;
+  fullName: string | null;
+  email: string | null;
+  isPro: boolean;
+};
+
+export default function SidebarProfile({ image, fullName, email, isPro }: SidebarProfileProps) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
@@ -19,26 +26,23 @@ export default function SidebarProfile() {
     return () => document.removeEventListener('mousedown', onClickOutside);
   }, [open]);
 
-  const initials = getInitials(MOCK_USER.fullName);
-  const firstName = MOCK_USER.fullName.split(' ')[0];
-  const planLabel = MOCK_USER.isPro ? 'Annual plan' : 'Free plan';
+  const firstName = fullName?.split(' ')[0] ?? 'Account';
+  const planLabel = isPro ? 'Lumen+' : 'Free plan';
 
   return (
     <div className="profile-wrap" ref={wrapRef}>
       {open && (
         <div className="profile-popup" role="dialog" aria-label="Profile menu">
           <div className="popup-user">
-            <div className="popup-avatar">{initials}</div>
+            <UserAvatar image={image} fullName={fullName} size={36} />
             <div className="popup-info">
-              <div className="popup-name">{MOCK_USER.fullName}</div>
-              <div className="popup-email">{MOCK_USER.email}</div>
+              <div className="popup-name">{fullName ?? 'My Account'}</div>
+              <div className="popup-email">{email}</div>
             </div>
           </div>
           <div className="popup-plan-badge">{planLabel}</div>
           <div className="popup-divider" />
-          <button className="popup-signout" type="button">
-            Sign out
-          </button>
+          <SignOutButton />
         </div>
       )}
       <button
@@ -48,7 +52,7 @@ export default function SidebarProfile() {
         aria-label="Open profile menu"
         aria-expanded={open}
       >
-        <div className="avatar">{initials}</div>
+        <UserAvatar image={image} fullName={fullName} size={32} />
         <div>
           <div className="name">{firstName}</div>
           <div className="plan">{planLabel}</div>
