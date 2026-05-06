@@ -44,13 +44,15 @@ export async function POST(req: Request) {
 
     const hashed = await bcrypt.hash(password, 12)
 
+    const requireVerification = process.env.REQUIRE_EMAIL_VERIFICATION !== "false"
+
     await prisma.$transaction(async (tx) => {
       const user = await tx.user.create({
         data: {
           fullName,
           email,
           password: hashed,
-          emailVerified: null,
+          emailVerified: requireVerification ? null : new Date(),
         },
       })
 
@@ -81,12 +83,13 @@ export async function POST(req: Request) {
       })
     })
 
-    // Send verification email — outside transaction so a send failure doesn't roll back the account
-    const token = await createVerificationToken(email)
-    await sendVerificationEmail(email, token)
+    if (requireVerification) {
+      const token = await createVerificationToken(email)
+      await sendVerificationEmail(email, token)
+    }
 
     return NextResponse.json(
-      { success: true, pendingVerification: true },
+      { success: true, pendingVerification: requireVerification },
       { status: 201 }
     )
   } catch {

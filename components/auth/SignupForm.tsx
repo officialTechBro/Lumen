@@ -146,8 +146,12 @@ export function SignupForm() {
         return;
       }
 
-      // Redirect to verify-email holding page — user must click the link before accessing dashboard
-      router.push(`/verify-email?email=${encodeURIComponent(email)}`);
+      if (data.pendingVerification) {
+        router.push(`/verify-email?email=${encodeURIComponent(email)}`);
+      } else {
+        const result = await signIn('credentials', { email, password, redirect: false });
+        router.push(result?.ok ? '/dashboard' : '/login');
+      }
     } catch {
       setFormError('Something went wrong. Please try again.');
       setFormState('idle');
