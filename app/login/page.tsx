@@ -1,3 +1,5 @@
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { LoginForm } from '@/components/auth/LoginForm';
 
@@ -7,7 +9,9 @@ const STATS = [
   { value: 'MD + PharmD', label: 'reviewed templates for top 100 markers.' },
 ];
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await auth();
+  if (session) redirect('/dashboard');
   return (
     <div className="min-h-screen bg-[var(--paper)] font-sans">
 

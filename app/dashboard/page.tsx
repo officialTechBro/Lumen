@@ -10,16 +10,7 @@ import {
   getRecentReports,
   getReportStats,
 } from "@/lib/db/reports";
-import { prisma } from "@/lib/prisma";
-
-// TODO: replace with session.user.id once NextAuth is wired
-async function getDemoUserId(): Promise<string | null> {
-  const user = await prisma.user.findUnique({
-    where: { email: "demo@lumen.health" },
-    select: { id: true },
-  });
-  return user?.id ?? null;
-}
+import { auth } from "@/auth";
 
 function formatTrackedSince(date: Date | null): string | null {
   if (!date) return null;
@@ -30,13 +21,14 @@ function formatTrackedSince(date: Date | null): string | null {
 }
 
 export default async function DashboardPage() {
-  const userId = await getDemoUserId();
+  const session = await auth();
+  const userId = session?.user?.id;
 
   if (!userId) {
     return (
       <DashboardView totalReports={0} trackedSince={null} lastUploadedAt={null}>
         <p style={{ padding: "24px", color: "var(--ink-soft)" }}>
-          Demo user not found.
+          No session found.
         </p>
       </DashboardView>
     );

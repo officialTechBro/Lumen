@@ -1,3 +1,5 @@
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { SignupForm } from '@/components/auth/SignupForm';
 
@@ -14,7 +16,9 @@ const FREE_ITEMS = [
   'Doctor question generator',
 ];
 
-export default function SignupPage() {
+export default async function SignupPage() {
+  const session = await auth();
+  if (session) redirect('/dashboard');
   return (
     <div className="min-h-screen bg-[var(--paper)] font-sans">
 
