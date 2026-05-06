@@ -1,28 +1,20 @@
-# Current Feature: Email Verification Toggle
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Add a single env var (`REQUIRE_EMAIL_VERIFICATION`) that can be set to `false` to bypass the email verification requirement
-- When disabled: register route skips token creation + email send, sets `emailVerified` immediately, returns a normal session (user lands on dashboard)
-- When disabled: dashboard layout skips the "redirect to /verify-email if unverified" guard
-- When enabled (default, i.e. var is unset or `true`): existing flow is completely unchanged
-- Document the new var in `.env.example` with a clear comment
+<!-- List goals here -->
 
 ## Notes
 
-- Root cause: Resend sandbox restricts outbound email to verified addresses only — no custom domain yet means only `taiwooladosu1@gmail.com` (the Resend account owner) can receive verification emails, blocking all test registrations
-- Chosen approach: env var opt-out — `REQUIRE_EMAIL_VERIFICATION=false` disables the guard. Default is **on** (no var = verification required), so production behaviour is safe
-- Touch points:
-  - `app/api/auth/register/route.ts` — when flag is off, skip `createVerificationToken` + `sendVerificationEmail`; set `emailVerified: new Date()` in the user creation transaction; return `{ success: true }` so the form auto-signs-in as before
-  - `app/dashboard/layout.tsx` — when flag is off, skip the `emailVerified === null` redirect
-  - `.env.example` — add `REQUIRE_EMAIL_VERIFICATION=true  # set to false to bypass during dev (Resend sandbox limitation)`
-- No changes needed to `lib/email.ts`, `lib/verification.ts`, or any UI components — those paths simply won't be reached when the flag is off
+<!-- Add notes here -->
 
 ## History
+
+- Email Verification Toggle — `REQUIRE_EMAIL_VERIFICATION` env var added; when set to `"false"`: `app/api/auth/register/route.ts` sets `emailVerified: new Date()` in the transaction, skips `createVerificationToken` + `sendVerificationEmail`, returns `{ pendingVerification: false }`; `components/auth/SignupForm.tsx` checks `data.pendingVerification` — if false, auto-signs-in via credentials and pushes to `/dashboard` instead of redirecting to `/verify-email`; `app/dashboard/layout.tsx` wraps the `emailVerified` null-check in `process.env.REQUIRE_EMAIL_VERIFICATION !== "false"` guard so existing unverified users also pass through; `.env.example` documents the var with a comment; `.env.local` is the correct place to set the flag (takes precedence over `.env`)
 
 - Email Verification on Register — `resend` npm package installed; `lib/email.ts` new file — `sendVerificationEmail(to, token)` sends branded HTML email via Resend (`RESEND_FROM_EMAIL` env var, falls back to `onboarding@resend.dev`), checks `{ data, error }` response and throws on failure with console log; `lib/verification.ts` new file — `createVerificationToken(email)` deletes any existing token for that email, creates new 32-byte hex token with 24h expiry in `VerificationToken` table; `app/api/auth/register/route.ts` updated — transaction unchanged, but after commit calls `createVerificationToken` + `sendVerificationEmail`, returns `{ pendingVerification: true }` (no auto sign-in); `app/api/auth/verify-email/route.ts` new GET handler — validates token, checks expiry, sets `user.emailVerified = new Date()` + deletes token in one transaction, redirects to `/login?verified=true`; `app/api/auth/resend-verification/route.ts` new POST handler — looks up user by email, no-ops if not found or already verified (prevents enumeration), creates new token + sends email, returns 200; `app/verify-email/page.tsx` new server component — three states via `searchParams.error`: default (check inbox), `expired` (coral icon), `invalid` (coral icon); shows email from query param, imports `<VerifyEmailActions>`; `components/auth/VerifyEmailActions.tsx` new client component — resend button with loading/sent/error states, optional email input when no address provided; `components/auth/SignupForm.tsx` updated — on 201 redirects to `/verify-email?email=...` instead of auto-signing-in; `components/auth/LoginForm.tsx` updated — accepts `verified?: boolean` prop, renders green "Email verified. Sign in to continue." banner when true; `app/login/page.tsx` updated — reads `searchParams.verified`, passes `verified={verified === 'true'}` to `LoginForm`; `app/dashboard/layout.tsx` updated — after `auth()`, queries `user.emailVerified`; if null redirects to `/verify-email` (Google OAuth users are safe — adapter sets emailVerified on first sign-in); `scripts/purge-non-demo-users.ts` new utility script — deletes all users and cascaded data except `demo@lumen.health`, aborts if demo user not found
 
