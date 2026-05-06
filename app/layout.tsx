@@ -21,7 +21,7 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "Lumen — Your lab results, in plain English.",
+  title: "Lumen | Your lab results, in plain English.",
   description:
     "Upload a lab report. Get every number explained, every flag prioritized, and the exact questions to ask your doctor.",
 };

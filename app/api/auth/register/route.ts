@@ -4,10 +4,10 @@ import { prisma } from "@/lib/prisma"
 
 export async function POST(req: Request) {
   try {
-    const { fullName, email, password, confirmPassword } = await req.json()
+    const { fullName, email, password } = await req.json()
 
     // 1. Presence check
-    if (!fullName || !email || !password || !confirmPassword) {
+    if (!fullName || !email || !password) {
       return NextResponse.json(
         { error: "All fields are required." },
         { status: 400 }
@@ -32,12 +32,12 @@ export async function POST(req: Request) {
     }
 
     // 4. Passwords match
-    if (password !== confirmPassword) {
-      return NextResponse.json(
-        { error: "Passwords do not match." },
-        { status: 400 }
-      )
-    }
+    // if (password !== confirmPassword) {
+    //   return NextResponse.json(
+    //     { error: "Passwords do not match." },
+    //     { status: 400 }
+    //   )
+    // }
 
     // 5. Email uniqueness
     const existing = await prisma.user.findUnique({ where: { email } })

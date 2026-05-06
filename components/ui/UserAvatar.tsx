@@ -9,12 +9,20 @@ type UserAvatarProps = {
 export function UserAvatar({ image, fullName, size = 32 }: UserAvatarProps) {
   if (image) {
     return (
+      // eslint-disable-next-line @next/next/no-img-element
       <img
         src={image}
         alt={fullName ?? 'User'}
         width={size}
         height={size}
-        style={{ borderRadius: '999px', objectFit: 'cover', flexShrink: 0 }}
+        style={{
+          display: 'block',
+          width: size,
+          height: size,
+          borderRadius: '999px',
+          objectFit: 'cover',
+          flexShrink: 0,
+        }}
       />
     );
   }
