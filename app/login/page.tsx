@@ -9,9 +9,14 @@ const STATS = [
   { value: 'MD + PharmD', label: 'reviewed templates for top 100 markers.' },
 ];
 
-export default async function LoginPage() {
+interface Props {
+  searchParams: Promise<{ verified?: string }>
+}
+
+export default async function LoginPage({ searchParams }: Props) {
   const session = await auth();
   if (session) redirect('/dashboard');
+  const { verified } = await searchParams;
   return (
     <div className="min-h-screen bg-[var(--paper)] font-sans">
 
@@ -86,7 +91,7 @@ export default async function LoginPage() {
 
           {/* ── Right — form card ─────────────────────────── */}
           <div className="fade d1 bg-[var(--paper-elevated)] border border-[var(--line-soft)] rounded-2xl p-[48px_44px]">
-            <LoginForm />
+            <LoginForm verified={verified === 'true'} />
           </div>
 
         </div>
