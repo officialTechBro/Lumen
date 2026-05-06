@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
+import { createVerificationToken } from "@/lib/verification"
+import { sendVerificationEmail } from "@/lib/email"
 
 export async function POST(req: Request) {
   try {
@@ -31,15 +33,7 @@ export async function POST(req: Request) {
       )
     }
 
-    // 4. Passwords match
-    // if (password !== confirmPassword) {
-    //   return NextResponse.json(
-    //     { error: "Passwords do not match." },
-    //     { status: 400 }
-    //   )
-    // }
-
-    // 5. Email uniqueness
+    // 4. Email uniqueness
     const existing = await prisma.user.findUnique({ where: { email } })
     if (existing) {
       return NextResponse.json(
@@ -87,8 +81,12 @@ export async function POST(req: Request) {
       })
     })
 
+    // Send verification email — outside transaction so a send failure doesn't roll back the account
+    const token = await createVerificationToken(email)
+    await sendVerificationEmail(email, token)
+
     return NextResponse.json(
-      { success: true, message: "Account created." },
+      { success: true, pendingVerification: true },
       { status: 201 }
     )
   } catch {

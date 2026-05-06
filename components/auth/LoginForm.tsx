@@ -44,7 +44,7 @@ function Spinner() {
 
 // ─── Form ─────────────────────────────────────────────────────────────────────
 
-export function LoginForm() {
+export function LoginForm({ verified = false }: { verified?: boolean }) {
   const router = useRouter();
   const [mode, setMode] = useState<LoginMode>('login');
   const [email, setEmail] = useState('');
@@ -172,6 +172,18 @@ export function LoginForm() {
   // ── Login form ────────────────────────────────────────────────────────────
   return (
     <form onSubmit={handleLoginSubmit} noValidate>
+
+      {/* Verified banner */}
+      {verified && (
+        <div className="flex items-center gap-2.5 mb-6 px-4 py-3 bg-[var(--leaf-soft)] border border-[var(--leaf)] rounded-xl">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5A7A3F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+          <p className="text-[13px] font-medium text-[var(--leaf)]">
+            Email verified. Sign in to continue.
+          </p>
+        </div>
+      )}
 
       {/* Heading */}
       <div className="fade mb-9">
