@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { Navigation } from "@/components/home/Navigation";
 import { Hero } from "@/components/home/Hero";
 import { HowItWorks } from "@/components/home/HowItWorks";
@@ -10,10 +11,13 @@ import { FAQ } from "@/components/home/FAQ";
 import { CTABand } from "@/components/home/CTABand";
 import { Footer } from "@/components/home/Footer";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+  const isSignedIn = !!session?.user;
+
   return (
     <>
-      <Navigation />
+      <Navigation isSignedIn={isSignedIn} />
       <main className="flex-1">
         <Hero />
         <HowItWorks />

@@ -1,6 +1,4 @@
-'use client';
-
-import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { UserAvatar } from '@/components/ui/UserAvatar';
 import { SignOutButton } from '@/components/dashboard/SignOutButton';
 
@@ -12,52 +10,18 @@ type SidebarProfileProps = {
 };
 
 export default function SidebarProfile({ image, fullName, email, isPro }: SidebarProfileProps) {
-  const [open, setOpen] = useState(false);
-  const wrapRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    function onClickOutside(e: MouseEvent) {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', onClickOutside);
-    return () => document.removeEventListener('mousedown', onClickOutside);
-  }, [open]);
-
-  const firstName = fullName?.split(' ')[0] ?? 'Account';
   const planLabel = isPro ? 'Lumen+' : 'Free plan';
 
   return (
-    <div className="profile-wrap" ref={wrapRef}>
-      {open && (
-        <div className="profile-popup" role="dialog" aria-label="Profile menu">
-          <div className="popup-user">
-            <UserAvatar image={image} fullName={fullName} size={36} />
-            <div className="popup-info">
-              <div className="popup-name">{fullName ?? 'My Account'}</div>
-              <div className="popup-email">{email}</div>
-            </div>
-          </div>
-          <div className="popup-plan-badge">{planLabel}</div>
-          <div className="popup-divider" />
-          <SignOutButton />
-        </div>
-      )}
-      <button
-        className={`profile${open ? ' open' : ''}`}
-        onClick={() => setOpen((o) => !o)}
-        type="button"
-        aria-label="Open profile menu"
-        aria-expanded={open}
-      >
+    <div className="profile">
+      <Link href="/dashboard/settings" className="profile-link" title={email ?? undefined}>
         <UserAvatar image={image} fullName={fullName} size={32} />
-        <div>
-          <div className="name">{firstName}</div>
-          <div className="plan">{planLabel}</div>
+        <div className="profile-info">
+          <span className="profile-name">{fullName ?? 'My Account'}</span>
+          <span className="profile-plan">{planLabel}</span>
         </div>
-      </button>
+      </Link>
+      <SignOutButton />
     </div>
   );
 }
