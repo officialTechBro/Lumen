@@ -18,7 +18,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const session = await auth();
   const userId = session?.user?.id;
 
-  if (userId) {
+  if (userId && process.env.REQUIRE_EMAIL_VERIFICATION !== "false") {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { emailVerified: true },

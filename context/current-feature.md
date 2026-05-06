@@ -1,16 +1,26 @@
-# Current Feature
+# Current Feature: Email Verification Toggle
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Add a single env var (`REQUIRE_EMAIL_VERIFICATION`) that can be set to `false` to bypass the email verification requirement
+- When disabled: register route skips token creation + email send, sets `emailVerified` immediately, returns a normal session (user lands on dashboard)
+- When disabled: dashboard layout skips the "redirect to /verify-email if unverified" guard
+- When enabled (default, i.e. var is unset or `true`): existing flow is completely unchanged
+- Document the new var in `.env.example` with a clear comment
 
 ## Notes
 
-<!-- Add notes here -->
+- Root cause: Resend sandbox restricts outbound email to verified addresses only — no custom domain yet means only `taiwooladosu1@gmail.com` (the Resend account owner) can receive verification emails, blocking all test registrations
+- Chosen approach: env var opt-out — `REQUIRE_EMAIL_VERIFICATION=false` disables the guard. Default is **on** (no var = verification required), so production behaviour is safe
+- Touch points:
+  - `app/api/auth/register/route.ts` — when flag is off, skip `createVerificationToken` + `sendVerificationEmail`; set `emailVerified: new Date()` in the user creation transaction; return `{ success: true }` so the form auto-signs-in as before
+  - `app/dashboard/layout.tsx` — when flag is off, skip the `emailVerified === null` redirect
+  - `.env.example` — add `REQUIRE_EMAIL_VERIFICATION=true  # set to false to bypass during dev (Resend sandbox limitation)`
+- No changes needed to `lib/email.ts`, `lib/verification.ts`, or any UI components — those paths simply won't be reached when the flag is off
 
 ## History
 
