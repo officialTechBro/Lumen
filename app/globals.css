@@ -751,73 +751,39 @@
   color: var(--mint);
 }
 
-.profile-wrap {
+/* ─── Sidebar profile row ────────────────────────────────── */
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   margin-top: auto;
-  position: relative;
+  padding: 4px 0;
 }
 
-.sidebar .profile {
+.profile-link {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px;
-  border-radius: 10px;
-  border: 1px solid var(--line-soft);
-  width: 100%;
-  background: transparent;
-  text-align: left;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
-}
-
-.sidebar .profile:hover,
-.sidebar .profile.open {
-  background: var(--paper-warm);
-  border-color: var(--line);
-}
-
-/* ─── Profile popup ─────────────────────────────────────── */
-.profile-popup {
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 0;
-  right: 0;
-  background: var(--paper-elevated);
-  border: 1px solid var(--line-soft);
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 8px 32px -8px rgba(26, 38, 32, 0.16);
-  z-index: 10;
-}
-
-.popup-user {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.popup-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  background: var(--forest);
-  color: var(--paper);
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.popup-info {
   flex: 1;
   min-width: 0;
+  text-decoration: none;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: background 0.15s;
 }
 
-.popup-name {
+.profile-link:hover {
+  background: var(--paper-warm);
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-name {
   font-family: var(--font-sans);
   font-weight: 500;
   font-size: 13px;
@@ -828,55 +794,51 @@
   text-overflow: ellipsis;
 }
 
-.popup-email {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--ink-dim);
-  margin-top: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.popup-plan-badge {
-  display: inline-block;
+.profile-plan {
   font-family: var(--font-mono);
   font-size: 9px;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  color: var(--ink-dim);
   text-transform: uppercase;
-  color: var(--forest);
-  background: rgba(31, 80, 65, 0.08);
-  padding: 3px 8px;
-  border-radius: 999px;
-  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+  margin-top: 1px;
 }
 
-.popup-divider {
-  height: 1px;
-  background: var(--line-soft);
+.signout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   border: none;
-  margin: 0 0 10px;
-}
-
-.popup-signout {
-  display: block;
-  width: 100%;
-  text-align: left;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--coral);
-  background: transparent;
-  border: none;
-  padding: 5px 4px;
+  background: none;
   cursor: pointer;
-  border-radius: 6px;
-  transition: background 0.15s;
+  color: var(--ink-dim);
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
 }
 
-.popup-signout:hover {
+.signout-btn:hover {
   background: var(--coral-soft);
+  color: var(--coral);
+}
+
+/* ─── Marketing nav sign-out ─────────────────────────────── */
+.nav-signout {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  font-weight: 400;
+  color: var(--ink-soft);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.nav-signout:hover {
+  color: var(--ink);
 }
 
 .sidebar .avatar {
