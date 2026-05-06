@@ -1,33 +1,20 @@
-# Current Feature: Auth Phase 3 — Connect Custom Auth Pages + Sidebar Profile
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Wire `/login` email/password form to `signIn("credentials", { redirect: false })` and handle inline errors
-- Wire `/login` Google button to `signIn("google", { callbackUrl: "/dashboard" })`
-- Implement forgot-password in-place swap (client-side state only; stub success after any email entered — no API call)
-- Redirect already-signed-in users from `/login` and `/signup` to `/dashboard` via `auth()` in server component
-- Wire `/signup` form to `POST /api/auth/register` with inline field-level error mapping
-- Auto sign-in after successful registration via `signIn("credentials", { redirect: false })` then push to `/dashboard`
-- Wire `/signup` Google button to `signIn("google", { callbackUrl: "/dashboard" })`
-- Hit `POST /api/auth/check-email` on email field blur for inline availability check
-- Create `UserAvatar` component at `components/ui/UserAvatar.tsx` (shows Google `image` or initials in Forest circle)
-- Create `SignOutButton` client component that calls `signOut({ callbackUrl: "/login" })`
-- Replace mock user data in sidebar bottom block with real session values (`fullName`, `image`, `isPro` fetched from DB)
+<!-- List goals here -->
 
 ## Notes
 
-- Pages themselves are fully designed and built — this phase is purely auth wiring, no UI redesign
-- Forgot password: client-side state toggle only; stub the submit with a "Check your inbox." success state regardless of email entered
-- Auto sign-in after registration: skip the confirmation/envelope state, go directly to `/dashboard`; fall back to `/login?registered=true` if auto sign-in fails
-- `isPro` is not stored in the JWT — must query `prisma.user.findUnique` in the sidebar server component
-- Sidebar bottom block: avatar link navigates to `/dashboard/settings`; sign-out button is a separate client component to the right
-- `CredentialsSignin` error from NextAuth always maps to password field (do not distinguish wrong-password vs unknown-email to avoid account enumeration)
+<!-- Add notes here -->
 
 ## History
+
+- Auth Phase 3 — Connect Custom Auth Pages + Sidebar Profile; `app/login/page.tsx` and `app/signup/page.tsx` converted to `async` server components — call `auth()` at the top and `redirect("/dashboard")` if a session already exists; `components/ui/UserAvatar.tsx` created — renders Google `<img>` (when `image` is set) or a Forest initials circle using `getInitials()`; `components/dashboard/SignOutButton.tsx` created — `'use client'` component that calls `signOut({ callbackUrl: "/login" })`; `components/dashboard/SidebarProfile.tsx` rewritten — removed `MOCK_USER` import, now accepts `{ image, fullName, email, isPro }` props, uses `UserAvatar` in both the trigger button and popup, uses `SignOutButton` for the popup sign-out action; `components/dashboard/DashboardSidebar.tsx` made `async` — calls `auth()` to get session, queries `prisma.user.findUnique` for `isPro` (not stored in JWT), passes `session.user.image/name/email` + `isPro` to `SidebarProfile`; `app/dashboard/layout.tsx` replaced `getDemoUserId()` with `auth()` + `session?.user?.id`; `app/dashboard/page.tsx` same replacement
 
 - Auth Phase 2 — Email/Password Credentials Provider; `auth.config.ts` updated — added edge-safe Credentials placeholder (`authorize: async () => null`) alongside Google so the edge proxy recognises the provider; `auth.ts` updated — overrides Credentials with real bcrypt `authorize` (finds user by email, checks `user.password` exists, `bcrypt.compare`), adds `pages: { signIn: "/login", newUser: "/signup", error: "/login" }`; `app/api/auth/register/route.ts` created — validates presence, email format, password length ≥ 8, passwords match, email uniqueness (409 on conflict), then `bcrypt.hash(password, 12)` + `$transaction` creating User + Profile (`relationship: "self"`) + NotificationPreferences + AuditLog (`action: "account.create"`), returns 201; `app/api/auth/check-email/route.ts` created — `POST { email }` → `{ available: boolean }`; `LoginForm.tsx` wired — `handleLoginSubmit` calls `signIn("credentials", { redirect: false })`, maps `result.error` to `"wrong-password"` state, catch maps to `"network"`, on success `router.push("/dashboard")`; Google button calls `signIn("google", { callbackUrl: "/dashboard" })`; `SignupForm.tsx` wired — `handleEmailBlur` hits `POST /api/auth/check-email` (falls back to `valid` on network error so users aren't blocked); `handleSubmit` calls register API, maps 409 to `emailVal.status = "taken"`, on 201 auto-signs-in via `signIn("credentials", { redirect: false })` then `router.push("/dashboard")` (falls back to `/login` if auto-sign-in fails); added `formError` state for server-level errors rendered as coral pill; removed mock `setTimeout` delays from both forms; `NavMobileMenu.tsx` — corrected stale `/sign-in` link to `/login`
 
