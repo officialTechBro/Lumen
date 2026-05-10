@@ -1,22 +1,13 @@
-import { auth } from '@/auth';
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { LoginForm } from '@/components/auth/LoginForm';
-
-const STATS = [
-  { value: '94 panels',   label: 'of biomarkers explained in plain English.' },
-  { value: '11 seconds',  label: 'average time to read a full lab report.' },
-  { value: 'MD + PharmD', label: 'reviewed templates for top 100 markers.' },
-];
+import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm';
 
 interface Props {
-  searchParams: Promise<{ verified?: string; reset?: string }>
+  searchParams: Promise<{ token?: string }>
 }
 
-export default async function LoginPage({ searchParams }: Props) {
-  const session = await auth();
-  if (session) redirect('/dashboard');
-  const { verified, reset } = await searchParams;
+export default async function ResetPasswordPage({ searchParams }: Props) {
+  const { token } = await searchParams;
+
   return (
     <div className="min-h-screen bg-[var(--paper)] font-sans">
 
@@ -32,9 +23,9 @@ export default async function LoginPage({ searchParams }: Props) {
           </span>
         </Link>
         <div className="flex items-center gap-2 text-sm text-[var(--ink-soft)]">
-          <span>Don&apos;t have an account?</span>
-          <Link href="/signup" className="text-[var(--forest)] font-medium no-underline hover:underline">
-            Create one →
+          <span>Remember it now?</span>
+          <Link href="/login" className="text-[var(--forest)] font-medium no-underline hover:underline">
+            Sign in →
           </Link>
         </div>
       </nav>
@@ -46,52 +37,57 @@ export default async function LoginPage({ searchParams }: Props) {
           {/* ── Left rail — hidden on mobile ──────────────── */}
           <div className="hidden min-[960px]:block">
             <p className="fade d1 font-mono text-[11px] text-[var(--forest)] tracking-[0.18em] uppercase mb-7">
-              SINCE FEB 2024
+              ACCOUNT SECURITY
             </p>
 
             <h1 className="fade d1 font-display font-normal leading-[1.05] tracking-[-0.03em] mb-5" style={{ fontSize: 'clamp(30px, 2.8vw, 42px)' }}>
-              Your health,<br />
-              <em className="font-light italic text-[var(--forest)]">in plain English.</em>
+              A fresh start,<br />
+              <em className="font-light italic text-[var(--forest)]">just like that.</em>
             </h1>
 
             <p className="fade d2 text-[15px] text-[var(--ink-soft)] leading-[1.6] mb-8">
-              Lab results explained, flagged, and turned into questions for your doctor.
+              Choose a strong password. You&apos;ll be back to your health data in seconds.
             </p>
 
             <div className="fade d2 h-px bg-[var(--line-soft)] mb-8" />
 
-            {/* Stats with Forest dots — matches signup feature list pattern */}
-            <div className="flex flex-col gap-6 mb-8">
-              {STATS.map((s, i) => (
-                <div key={s.value} className={`fade d${i + 2} grid gap-3.5 items-start`} style={{ gridTemplateColumns: '16px 1fr' }}>
-                  <div className="w-[7px] h-[7px] rounded-full bg-[var(--forest)] mt-2 shrink-0" />
-                  <div>
-                    <p className="font-display text-lg font-medium tracking-[-0.01em] mb-1">{s.value}</p>
-                    <p className="text-sm text-[var(--ink-soft)] leading-relaxed">{s.label}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="fade d5 h-px bg-[var(--line-soft)] mb-8" />
-
-            {/* Quote — matches signup's free-plan callout box */}
-            <div className="fade d5 bg-[var(--paper-warm)] border border-[var(--line-soft)] rounded-[10px] p-[16px_20px]">
+            <div className="fade d3 bg-[var(--paper-warm)] border border-[var(--line-soft)] rounded-[10px] p-[16px_20px]">
               <p className="font-mono text-[10px] text-[var(--forest)] tracking-[0.14em] uppercase mb-3.5">
-                FROM OUR USERS
+                GOOD TO KNOW
               </p>
-              <blockquote className="m-0 font-display text-[16px] italic font-light leading-[1.55] text-[var(--ink-soft)] mb-3">
-                &ldquo;My LDL had been rising for two years. Nobody told me. Lumen showed me the trend.&rdquo;
-              </blockquote>
-              <p className="font-mono text-[10px] text-[var(--ink-dim)] tracking-[0.12em] uppercase">
-                Marco D. · Brooklyn
+              <p className="text-[14px] text-[var(--ink-soft)] leading-[1.6]">
+                Your reset link expires in <strong>1 hour</strong>. Once you save a new password, the link is invalidated.
               </p>
             </div>
           </div>
 
           {/* ── Right — form card ─────────────────────────── */}
           <div className="fade d1 bg-[var(--paper-elevated)] border border-[var(--line-soft)] rounded-2xl p-[48px_44px]">
-            <LoginForm verified={verified === 'true'} passwordReset={reset === 'true'} />
+            {token ? (
+              <ResetPasswordForm token={token} />
+            ) : (
+              <div className="text-center py-4">
+                <div className="flex justify-center mb-6">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                </div>
+                <h2 className="font-display text-[30px] font-medium tracking-[-0.025em] leading-[1.1] mb-3">
+                  Invalid reset link.
+                </h2>
+                <p className="text-[15px] text-[var(--ink-soft)] leading-relaxed mb-8">
+                  This link is missing a token. Request a new one from the sign-in page.
+                </p>
+                <Link
+                  href="/login"
+                  className="inline-block px-6 py-3 bg-[var(--ink)] text-[var(--paper)] font-medium text-sm rounded-full no-underline hover:bg-[var(--forest)] transition-colors"
+                >
+                  Back to sign in →
+                </Link>
+              </div>
+            )}
           </div>
 
         </div>

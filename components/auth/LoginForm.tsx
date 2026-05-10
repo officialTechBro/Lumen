@@ -44,7 +44,7 @@ function Spinner() {
 
 // ─── Form ─────────────────────────────────────────────────────────────────────
 
-export function LoginForm({ verified = false }: { verified?: boolean }) {
+export function LoginForm({ verified = false, passwordReset = false }: { verified?: boolean; passwordReset?: boolean }) {
   const router = useRouter();
   const [mode, setMode] = useState<LoginMode>('login');
   const [email, setEmail] = useState('');
@@ -86,9 +86,30 @@ export function LoginForm({ verified = false }: { verified?: boolean }) {
     e.preventDefault();
     if (isLoading) return;
     setIsLoading(true);
-    await new Promise(r => setTimeout(r, 1400));
-    setIsLoading(false);
-    setMode('forgot-success');
+    try {
+      await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+    } catch {
+      // Silently succeed — never reveal errors to prevent enumeration
+    } finally {
+      setIsLoading(false);
+      setMode('forgot-success');
+    }
+  };
+
+  const handleResendReset = async () => {
+    try {
+      await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+    } catch {
+      // Silently succeed
+    }
   };
 
   // ── Forgot password success ──────────────────────────────────────────────
@@ -102,10 +123,11 @@ export function LoginForm({ verified = false }: { verified?: boolean }) {
           Check your inbox.
         </h2>
         <p className="text-[15px] text-[var(--ink-soft)] leading-relaxed mb-8">
-          We sent a link to <strong>{email}</strong>. It expires in 15 minutes.
+          We sent a link to <strong>{email}</strong>. It expires in 1 hour.
         </p>
         <button
           type="button"
+          onClick={handleResendReset}
           className="bg-transparent border-none cursor-pointer text-[var(--forest)] text-sm font-medium p-0 hover:underline"
         >
           Resend the email
@@ -181,6 +203,18 @@ export function LoginForm({ verified = false }: { verified?: boolean }) {
           </svg>
           <p className="text-[13px] font-medium text-[var(--leaf)]">
             Email verified. Sign in to continue.
+          </p>
+        </div>
+      )}
+
+      {/* Password reset banner */}
+      {passwordReset && (
+        <div className="flex items-center gap-2.5 mb-6 px-4 py-3 bg-[var(--leaf-soft)] border border-[var(--leaf)] rounded-xl">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5A7A3F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+          <p className="text-[13px] font-medium text-[var(--leaf)]">
+            Password updated. Sign in to continue.
           </p>
         </div>
       )}
