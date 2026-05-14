@@ -324,9 +324,7 @@ export function SampleReport() {
               }}
             >
               This is what a{' '}
-              <em className="text-forest" style={{ fontStyle: 'italic', fontWeight: 300 }}>
-                real
-              </em>{' '}
+              <em className="em-accent">real</em>{' '}
               Lumen read looks like.
             </h2>
 

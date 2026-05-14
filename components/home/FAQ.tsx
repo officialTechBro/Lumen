@@ -104,9 +104,7 @@ export function FAQ() {
             }}
           >
             Short answers.{' '}
-            <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'var(--forest)' }}>
-              No legalese.
-            </em>
+            <em className="em-accent">No legalese.</em>
           </h2>
         </div>
 

@@ -144,55 +144,56 @@ export default function FlaggedMarkersCard({ markers }: Props) {
                 </div>
               </div>
 
-              {open === i && (
-                <div className="flagged-expand">
-                  {/* Zone A + B — left column */}
-                  <div>
-                    <span className="fe-label">Plain English</span>
-                    {m.isUrgent ? (
-                      <div className="urgent-banner">
-                        <strong>This value may require urgent attention.</strong>{" "}
-                        Contact your doctor today or call 911 in an emergency.
-                      </div>
-                    ) : (
-                      <p className="fe-plain">{m.explanation}</p>
-                    )}
-                    {m.confidence < 0.9 && (
-                      <span className="confidence-warn">
-                        AI CONFIDENCE {Math.round(m.confidence * 100)}% — verify value against original report
-                      </span>
-                    )}
+              <div
+                className={`flagged-expand${open === i ? " open" : ""}`}
+                aria-hidden={open !== i}
+              >
+                {/* Zone A + B — left column */}
+                <div>
+                  <span className="fe-label">Plain English</span>
+                  {m.isUrgent ? (
+                    <div className="urgent-banner">
+                      <strong>This value may require urgent attention.</strong>{" "}
+                      Contact your doctor today or call 911 in an emergency.
+                    </div>
+                  ) : (
+                    <p className="fe-plain">{m.explanation}</p>
+                  )}
+                  {m.confidence < 0.9 && (
+                    <span className="confidence-warn">
+                      AI CONFIDENCE {Math.round(m.confidence * 100)}% — verify value against original report
+                    </span>
+                  )}
 
-                    {m.whyItMatters && (
-                      <>
-                        <span className="fe-label fe-label-gap">Why It Matters</span>
-                        <p className="fe-plain fe-why">{m.whyItMatters}</p>
-                      </>
-                    )}
-                  </div>
-
-                  {/* Zone C — right column */}
-                  <div>
-                    <span className="fe-label">Ask Your Doctor</span>
-                    {m.questions.length > 0 ? (
-                      <ul className="fe-questions">
-                        {m.questions.map((q) => (
-                          <li key={q.id} className="fe-question-item">
-                            <p className={`fe-q${q.isChecked ? " fe-q-checked" : ""}`}>
-                              &ldquo;{q.text}&rdquo;
-                            </p>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="fe-q fe-q-empty">No questions generated for this marker.</p>
-                    )}
-                    <button type="button" className="btn btn-ghost btn-sm">
-                      + Add to my questions
-                    </button>
-                  </div>
+                  {m.whyItMatters && (
+                    <>
+                      <span className="fe-label fe-label-gap">Why It Matters</span>
+                      <p className="fe-plain fe-why">{m.whyItMatters}</p>
+                    </>
+                  )}
                 </div>
-              )}
+
+                {/* Zone C — right column */}
+                <div>
+                  <span className="fe-label">Ask Your Doctor</span>
+                  {m.questions.length > 0 ? (
+                    <ul className="fe-questions">
+                      {m.questions.map((q) => (
+                        <li key={q.id} className="fe-question-item">
+                          <p className={`fe-q${q.isChecked ? " fe-q-checked" : ""}`}>
+                            &ldquo;{q.text}&rdquo;
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="fe-q fe-q-empty">No questions generated for this marker.</p>
+                  )}
+                  <button type="button" className="btn btn-ghost btn-sm">
+                    + Add to my questions
+                  </button>
+                </div>
+              </div>
             </Fragment>
           );
         })}

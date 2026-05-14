@@ -75,9 +75,7 @@ export function CTABand() {
           }}
         >
           Your next appointment,{' '}
-          <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'var(--forest)' }}>
-            ten minutes better.
-          </em>
+          <em className="em-accent">ten minutes better.</em>
         </h2>
 
         {/* Sub paragraph */}

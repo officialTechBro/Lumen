@@ -147,9 +147,7 @@ export function Features() {
             }}
           >
             Everything a careful reader would find —{' '}
-            <em className="text-forest" style={{ fontStyle: 'italic', fontWeight: 300 }}>
-              faster.
-            </em>
+            <em className="em-accent">faster.</em>
           </h2>
 
           <p

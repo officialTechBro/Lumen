@@ -179,9 +179,7 @@ export function HowItWorks() {
             }}
           >
             Three steps.{' '}
-            <em className="text-forest" style={{ fontStyle: 'italic', fontWeight: 300 }}>
-              No jargon,
-            </em>{' '}
+            <em className="em-accent">No jargon,</em>{' '}
             no gatekeeping.
           </h2>
 
