@@ -50,12 +50,7 @@ export function Hero() {
           >
             Your lab results,
             <br />
-            <em
-              className="text-forest"
-              style={{ fontStyle: "italic", fontWeight: 300, fontSize: "0.90em" }}
-            >
-              in plain English.
-            </em>
+            <em className="em-accent">in plain English.</em>
           </h1>
 
           {/* Sub-headline */}

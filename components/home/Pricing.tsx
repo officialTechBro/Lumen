@@ -103,9 +103,7 @@ export function Pricing() {
             }}
           >
             Honest pricing,{' '}
-            <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'var(--forest)' }}>
-              no upsells.
-            </em>
+            <em className="em-accent">no upsells.</em>
           </h2>
 
           <p

@@ -94,9 +94,7 @@ export function Testimonials() {
             }}
           >
             Built for the{' '}
-            <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'var(--forest)' }}>
-              twelve minutes
-            </em>{' '}
+            <em className="em-accent">twelve minutes</em>{' '}
             you actually get
             <br />
             with your doctor.

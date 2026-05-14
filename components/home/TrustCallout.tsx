@@ -94,9 +94,7 @@ export function TrustCallout() {
                 We explain.{' '}
                 <br />
                 We do not{' '}
-                <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'var(--mint)' }}>
-                  diagnose.
-                </em>
+                <em className="em-accent-dark">diagnose.</em>
               </h2>
 
               {/* Sub */}
