@@ -1,0 +1,4 @@
+- [Lumen Codebase Architecture](project_architecture.md) — dashboard fully scaffolded with mock data; no backend, auth, or Prisma built yet
+- [Recurring Inline Style Pattern](feedback_inline_styles.md) — nearly all components use inline styles instead of Tailwind classes; accepted pattern for this codebase stage
+- [Client Component Overuse](feedback_use_client.md) — 9 of 11 home components have 'use client' solely for IntersectionObserver; known issue to address
+- [Broken CSS Token](project_broken_token.md) — var(--paper-elev) used in Testimonials.tsx but token is --paper-elevated; causes transparent card backgrounds

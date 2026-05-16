@@ -1,16 +1,36 @@
-# Current Feature
+# Current Feature: Profile & Settings Page
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Create `/dashboard/settings` page (protected, inside existing dashboard auth shell)
+- Display user info: full name, email, avatar (Google image or initials at 72px), account creation date, plan badge
+- Show usage stats: total reports, total markers read, flagged count, unique lab count, plus a by-lab breakdown bar chart
+- Inline full name edit with `PATCH /api/profile` — "Saved." success state for 2s, coral inline error on failure
+- Notification preference toggles (3) calling `PATCH /api/profile/notifications` with optimistic UI
+- Change password section (email users only, hidden for Google OAuth) calling `PATCH /api/profile/password`
+- Delete account with inline confirmation (type "delete my account") calling `DELETE /api/profile` — cascades all data, signs out, redirects to `/`
+- Wire sidebar profile block link to `/dashboard/settings`
+- Create `lib/db/profile.ts` with `getProfileData(userId)` — parallel queries for user + notification prefs, report stats by lab, marker aggregate + flagged count
+- Follow existing codebase data-fetching patterns (Server Component page, Client Components only for interactive sections)
 
 ## Notes
 
-<!-- Add notes here -->
+- Route: `/dashboard/settings` (spec references both `/dashboard/profile` and `/dashboard/settings` — use `/dashboard/settings` to match the existing sidebar link from auth-phase-4)
+- The sidebar profile block (`SidebarProfile.tsx`) already has `<Link href="/dashboard/settings">` from auth-phase-4 — just verify it's correct
+- `UserAvatar` component already exists at `components/ui/UserAvatar.tsx` — render at size 72 for this page
+- `user.password !== null` check determines whether to show the Change Password section
+- Delete confirmation: inline (no modal) — button replaced in-place with text input + "Permanently delete" button (disabled until exact string typed)
+- `DELETE /api/profile`: write AuditLog `action: "account.delete"` before deleting user (cascade handles all related data), then sign out and redirect to `/`
+- Toggle styling: `.toggle-track` (36×20px, border-radius 999px, Forest when on, Line when off) + `.toggle-thumb` (14×14px, Paper, translateX 3px off / 19px on)
+- Danger zone card: `border: 1px solid var(--coral-soft)`, `border-radius: 14px`
+- Stats values: Newsreader 500 36px, tracking -0.025em; labels: Geist Mono 10px uppercase 0.14em tracking Ink-dim
+- Flagged count renders in Coral if > 0, Ink-faint if = 0
+- Lab breakdown bar: proportional fill, Forest 20% opacity, full bar is Line-soft
+- Page H1: "Your account, managed." — italic forest accent on "managed."
 
 ## History
 
