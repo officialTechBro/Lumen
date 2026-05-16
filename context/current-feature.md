@@ -1,38 +1,20 @@
-# Current Feature: Profile & Settings Page
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- Create `/dashboard/settings` page (protected, inside existing dashboard auth shell)
-- Display user info: full name, email, avatar (Google image or initials at 72px), account creation date, plan badge
-- Show usage stats: total reports, total markers read, flagged count, unique lab count, plus a by-lab breakdown bar chart
-- Inline full name edit with `PATCH /api/profile` — "Saved." success state for 2s, coral inline error on failure
-- Notification preference toggles (3) calling `PATCH /api/profile/notifications` with optimistic UI
-- Change password section (email users only, hidden for Google OAuth) calling `PATCH /api/profile/password`
-- Delete account with inline confirmation (type "delete my account") calling `DELETE /api/profile` — cascades all data, signs out, redirects to `/`
-- Wire sidebar profile block link to `/dashboard/settings`
-- Create `lib/db/profile.ts` with `getProfileData(userId)` — parallel queries for user + notification prefs, report stats by lab, marker aggregate + flagged count
-- Follow existing codebase data-fetching patterns (Server Component page, Client Components only for interactive sections)
+<!-- List goals here -->
 
 ## Notes
 
-- Route: `/dashboard/settings` (spec references both `/dashboard/profile` and `/dashboard/settings` — use `/dashboard/settings` to match the existing sidebar link from auth-phase-4)
-- The sidebar profile block (`SidebarProfile.tsx`) already has `<Link href="/dashboard/settings">` from auth-phase-4 — just verify it's correct
-- `UserAvatar` component already exists at `components/ui/UserAvatar.tsx` — render at size 72 for this page
-- `user.password !== null` check determines whether to show the Change Password section
-- Delete confirmation: inline (no modal) — button replaced in-place with text input + "Permanently delete" button (disabled until exact string typed)
-- `DELETE /api/profile`: write AuditLog `action: "account.delete"` before deleting user (cascade handles all related data), then sign out and redirect to `/`
-- Toggle styling: `.toggle-track` (36×20px, border-radius 999px, Forest when on, Line when off) + `.toggle-thumb` (14×14px, Paper, translateX 3px off / 19px on)
-- Danger zone card: `border: 1px solid var(--coral-soft)`, `border-radius: 14px`
-- Stats values: Newsreader 500 36px, tracking -0.025em; labels: Geist Mono 10px uppercase 0.14em tracking Ink-dim
-- Flagged count renders in Coral if > 0, Ink-faint if = 0
-- Lab breakdown bar: proportional fill, Forest 20% opacity, full bar is Line-soft
-- Page H1: "Your account, managed." — italic forest accent on "managed."
+<!-- Add notes here -->
 
 ## History
+
+- Profile & Settings Page — `/dashboard/settings` page (protected, inside existing dashboard auth shell); user info block (avatar at 72px, full name, email, account creation date, plan badge); usage stats (total reports, total markers, flagged count, unique lab count) + by-lab breakdown bar chart; inline full name edit via `PATCH /api/profile` with 2s "Saved." success state and coral inline error; 3 notification preference toggles via `PATCH /api/profile/notifications` with optimistic UI; change password section (email users only, hidden for Google OAuth) via `PATCH /api/profile/password`; delete account with inline confirmation (type "delete my account") via `DELETE /api/profile` — writes AuditLog, cascades all data, signs out, redirects to `/`; `lib/db/profile.ts` with `getProfileData(userId)` — parallel queries for user + notification prefs, report stats by lab, marker aggregate + flagged count; page H1 "Your account, managed." with italic Forest accent on "managed."
 
 - Forgot Password Flow — `lib/verification.ts` extended with `createPasswordResetToken(email)` — uses `VerificationToken` table with `identifier: "password-reset:{email}"` prefix (prevents collision with email verification tokens), 32-byte hex token, 1-hour expiry, deletes any existing reset token before creating new one; `lib/email.ts` extended with `sendPasswordResetEmail(to, token)` — branded HTML Resend email linking to `/reset-password?token={token}`; `app/api/auth/forgot-password/route.ts` new POST handler — normalises email, silently no-ops if user not found or has no password (OAuth-only), creates token + sends email, always returns 200 to prevent enumeration; `app/api/auth/reset-password/route.ts` new POST handler — validates `{ token, password, confirmPassword }`, checks token exists with `"password-reset:"` prefix, checks expiry, bcrypt-hashes new password, updates user + deletes token in a single `$transaction`, returns 200; `app/reset-password/page.tsx` new server component — same auth-shell layout as `/login`/`/signup`; renders `<ResetPasswordForm>` when `?token=` param is present, coral error state with "Back to sign in" link when absent; `components/auth/ResetPasswordForm.tsx` new client component — new password + confirm password fields with SHOW/HIDE toggles, 3-segment strength bar, mismatch guard, API error display, redirects to `/login?reset=true` on success; `components/auth/LoginForm.tsx` updated — `handleForgotSubmit` now calls POST `/api/auth/forgot-password` instead of mock `setTimeout`; added `handleResendReset` wired to "Resend the email" button; updated "15 minutes" copy to "1 hour"; added `passwordReset?: boolean` prop that renders a green "Password updated. Sign in to continue." banner; `app/login/page.tsx` updated — reads `?reset=true` from searchParams, passes `passwordReset` prop to `LoginForm`; no schema migration needed
 
