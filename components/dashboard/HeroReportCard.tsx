@@ -155,7 +155,7 @@ export default function HeroReportCard({ report, stats }: Props) {
               fontFamily="var(--font-display)"
               fontSize={26}
               fontWeight={500}
-              fill="#1A2620"
+              style={{ fill: "var(--ink)" }}
             >
               {normal}
             </text>
@@ -167,7 +167,7 @@ export default function HeroReportCard({ report, stats }: Props) {
               fontFamily="var(--font-mono)"
               fontSize={8}
               letterSpacing={1.5}
-              fill="#6B756F"
+              style={{ fill: "var(--ink-dim)" }}
             >
               NORMAL
             </text>
