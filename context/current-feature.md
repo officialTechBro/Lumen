@@ -2,25 +2,21 @@
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-1. **Reports link** → wire sidebar Reports button to `/dashboard/reports`; full list of all reports styled like the dashboard's recent-reports section; each row links to `/dashboard/reports/:id`
-2. **Report detail** → `/dashboard/reports/:id` shows the full report: header meta, AI summary, all markers (status-grouped, expandable explanations), and doctor questions
-3. **Settings link** → wire sidebar Settings button to `/dashboard/settings`
-4. **Sidebar stat cards** → replace Markers, Flagged, and Doctor Q's nav buttons with a compact 3-stat card block (non-interactive, shows counts visually)
+<!-- Add goals here -->
 
 ## Notes
 
-- Branch: `feat/sidebar-cleanup`
-- `SidebarNavLink.tsx` client component handles active-state detection via `usePathname`
-- `DashboardSidebar.tsx` stays a Server Component; imports the client link component
-- `getAllReports` and `getReportById` added to `lib/db/reports.ts`
-- Report detail markers are grouped: urgent → flagged → borderline → normal
-- Marker expansion accordion implemented as `ReportMarkersAccordion` client component
+<!-- Add notes here -->
 
 ## History
+
+- Rate Limiting for Auth — `lib/rate-limit.ts` reusable utility (Upstash Redis, sliding window, fail-open via null limiter + try/catch); 6 limiters: `loginLimiter` 5/15m keyed IP+email via `auth.ts` `authorize()`, `registerLimiter` 3/1h IP, `forgotLimiter` 3/1h IP, `resetLimiter` 5/15m IP, `resendLimiter` 3/15m IP+email, `checkEmailLimiter` 5/15m IP; all routes return 429 + `Retry-After` header on breach; frontend 429 handling in LoginForm (forgot-password flow), SignupForm, ResetPasswordForm, VerifyEmailActions; security fixes bundled: dashboard auth bypass (redirect on null userId), password hash stripped from ProfileData, N+1 getFlaggedMarkers replaced with 3 batch queries, AuditLog.userId nullable + onDelete:SetNull, delete-account wrapped in transaction, verify-email token namespace guard
+
+- Reports & Report Detail + Sidebar Cleanup — Reports link wired to `/dashboard/reports`; full report list styled like dashboard recent-reports; each row links to `/dashboard/reports/:id`; report detail page shows header meta, AI summary, markers grouped urgent → flagged → borderline → normal with expandable accordion (`ReportMarkersAccordion` client component), doctor questions; Settings link wired to `/dashboard/settings`; Markers / Flagged / Doctor Q's nav buttons replaced with compact 3-stat card block; `getAllReports` and `getReportById` added to `lib/db/reports.ts`; `SidebarNavLink.tsx` client component for active-state detection
 
 - Profile & Settings Page — `/dashboard/settings` page (protected, inside existing dashboard auth shell); user info block (avatar at 72px, full name, email, account creation date, plan badge); usage stats (total reports, total markers, flagged count, unique lab count) + by-lab breakdown bar chart; inline full name edit via `PATCH /api/profile` with 2s "Saved." success state and coral inline error; 3 notification preference toggles via `PATCH /api/profile/notifications` with optimistic UI; change password section (email users only, hidden for Google OAuth) via `PATCH /api/profile/password`; delete account with inline confirmation (type "delete my account") via `DELETE /api/profile` — writes AuditLog, cascades all data, signs out, redirects to `/`; `lib/db/profile.ts` with `getProfileData(userId)` — parallel queries for user + notification prefs, report stats by lab, marker aggregate + flagged count; page H1 "Your account, managed." with italic Forest accent on "managed."
 
