@@ -18,17 +18,19 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const session = await auth();
   const userId = session?.user?.id;
 
-  if (userId && process.env.REQUIRE_EMAIL_VERIFICATION !== "false") {
+  if (!userId) redirect("/login");
+
+  if (process.env.REQUIRE_EMAIL_VERIFICATION !== "false") {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { emailVerified: true },
     });
-    if (user && !user.emailVerified) {
+    if (!user?.emailVerified) {
       redirect("/verify-email");
     }
   }
 
-  const counts = userId ? await getSidebarCounts(userId) : EMPTY_COUNTS;
+  const counts = await getSidebarCounts(userId);
 
   return (
     <DashboardShell sidebar={<DashboardSidebar counts={counts} />}>

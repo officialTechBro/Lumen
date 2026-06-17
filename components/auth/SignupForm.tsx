@@ -140,6 +140,12 @@ export function SignupForm() {
         return;
       }
 
+      if (res.status === 429) {
+        setFormError('Too many sign-up attempts. Please try again later.');
+        setFormState('idle');
+        return;
+      }
+
       if (!res.ok) {
         setFormError(data.error ?? 'Something went wrong. Please try again.');
         setFormState('idle');

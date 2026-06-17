@@ -35,16 +35,17 @@ export async function DELETE() {
   const userId = session?.user?.id;
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  await prisma.auditLog.create({
-    data: {
-      userId,
-      action: "account.delete",
-      entityType: "User",
-      entityId: userId,
-    },
-  });
-
-  await prisma.user.delete({ where: { id: userId } });
+  await prisma.$transaction([
+    prisma.auditLog.create({
+      data: {
+        userId,
+        action: "account.delete",
+        entityType: "User",
+        entityId: userId,
+      },
+    }),
+    prisma.user.delete({ where: { id: userId } }),
+  ]);
 
   return NextResponse.json({ ok: true });
 }

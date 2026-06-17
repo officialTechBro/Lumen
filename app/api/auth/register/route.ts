@@ -1,17 +1,35 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 import { createVerificationToken } from "@/lib/verification"
 import { sendVerificationEmail } from "@/lib/email"
+import { registerLimiter, checkRateLimitWithRetry } from "@/lib/rate-limit"
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip") ?? "unknown"
+  const { allowed, retryAfter } = await checkRateLimitWithRetry(registerLimiter, `register:${ip}`)
+  if (!allowed) {
+    return NextResponse.json(
+      { error: `Too many attempts. Please try again in ${retryAfter} seconds.` },
+      { status: 429, headers: { "Retry-After": String(retryAfter) } },
+    )
+  }
+
   try {
     const { fullName, email, password } = await req.json()
 
-    // 1. Presence check
-    if (!fullName || !email || !password) {
+    // 1. Presence + type check
+    if (!fullName || typeof fullName !== "string" || !email || !password) {
       return NextResponse.json(
         { error: "All fields are required." },
+        { status: 400 }
+      )
+    }
+
+    // 1b. Name length
+    if (fullName.trim().length === 0 || fullName.trim().length > 100) {
+      return NextResponse.json(
+        { error: "Name must be between 1 and 100 characters." },
         { status: 400 }
       )
     }

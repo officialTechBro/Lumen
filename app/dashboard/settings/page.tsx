@@ -22,7 +22,7 @@ export default async function SettingsPage() {
   const data = await getProfileData(userId);
   if (!data) redirect("/login");
 
-  const { user, totalReports, totalMarkers, flaggedCount, reportsByLab } = data;
+  const { user, hasPassword, totalReports, totalMarkers, flaggedCount, reportsByLab } = data;
 
   const maxLabCount = reportsByLab.length > 0
     ? Math.max(...reportsByLab.map((l) => l.count))
@@ -140,7 +140,7 @@ export default async function SettingsPage() {
           </section>
 
           {/* Change password (email users only) */}
-          {user.password !== null && (
+          {hasPassword && (
             <section className="sett-section">
               <p className="sett-eyebrow">CHANGE PASSWORD</p>
               <div className="sett-card">

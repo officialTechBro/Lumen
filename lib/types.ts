@@ -24,7 +24,7 @@ export interface DashboardPageHeaderProps {
   lastUploadedAt: string | null;
 }
 
-export type LoginError = null | 'wrong-password' | 'unknown-email' | 'network';
+export type LoginError = null | 'wrong-password' | 'unknown-email' | 'network' | 'rate-limited';
 
 export interface DashboardShellProps {
   sidebar: React.ReactNode;

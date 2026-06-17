@@ -81,6 +81,11 @@ export function ResetPasswordForm({ token }: { token: string }) {
         body: JSON.stringify({ token, password, confirmPassword }),
       });
 
+      if (res.status === 429) {
+        setError('Too many attempts. Please try again later.');
+        return;
+      }
+
       const data = await res.json();
 
       if (!res.ok) {
