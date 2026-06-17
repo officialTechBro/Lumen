@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { RecentReportData, ReportStatsData } from "@/lib/db/reports";
 
 interface Props {
@@ -45,7 +46,7 @@ export default function ReportsListCard({ reports, stats }: Props) {
             <span>Recent reports</span>
             <span className="card-count">0 total</span>
           </span>
-          <a href="/reports" className="card-link">Archive →</a>
+          <Link href="/dashboard/reports" className="card-link">Archive →</Link>
         </div>
         <p style={{ padding: "24px", color: "var(--ink-soft)", fontSize: "15px" }}>
           No reports yet.
@@ -61,7 +62,7 @@ export default function ReportsListCard({ reports, stats }: Props) {
           <span>Recent reports</span>
           <span className="card-count">{stats.totalReports} total</span>
         </span>
-        <a href="/reports" className="card-link">Archive →</a>
+        <Link href="/dashboard/reports" className="card-link">Archive →</Link>
       </div>
 
       <div className="reports-head">
@@ -74,7 +75,7 @@ export default function ReportsListCard({ reports, stats }: Props) {
       </div>
 
       {reports.map((report) => (
-        <div key={report.id} className="report-row">
+        <Link key={report.id} href={`/dashboard/reports/${report.id}`} className="report-row report-row-link">
           <div>
             <div className="rr-title">
               {report.title ?? "Lab panel"}
@@ -101,7 +102,7 @@ export default function ReportsListCard({ reports, stats }: Props) {
               <path d="M5 2.5L9.5 7L5 11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
