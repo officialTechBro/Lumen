@@ -4,6 +4,7 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import SidebarProfile from "./SidebarProfile";
+import SidebarNavLink from "./SidebarNavLink";
 
 const ICONS: Record<string, ReactNode> = {
   home: (
@@ -14,25 +15,6 @@ const ICONS: Record<string, ReactNode> = {
   reports: (
     <svg viewBox="0 0 20 20" fill="none" width={16} height={16} stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round">
       <path d="M4 3 H13 L16 6 V17 H4 Z M13 3 V6 H16 M7 10 H13 M7 13 H11" />
-    </svg>
-  ),
-  markers: (
-    <svg viewBox="0 0 20 20" fill="none" width={16} height={16} stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M2 15 L7 9 L12 12 L18 5" />
-      <circle cx="7" cy="9" r="1.8" fill="currentColor" stroke="none" />
-      <circle cx="12" cy="12" r="1.8" fill="currentColor" stroke="none" />
-    </svg>
-  ),
-  flags: (
-    <svg viewBox="0 0 20 20" fill="none" width={16} height={16} stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 3 V17 M5 4 H14 L12 7 L14 10 H5" />
-    </svg>
-  ),
-  questions: (
-    <svg viewBox="0 0 20 20" fill="none" width={16} height={16} stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="10" cy="10" r="8" />
-      <path d="M7.5 8 Q7.5 5.5 10 5.5 Q12.5 5.5 12.5 8 Q12.5 10 10 10.5 V12.5" />
-      <circle cx="10" cy="14.5" r="0.8" fill="currentColor" stroke="none" />
     </svg>
   ),
   reminders: (
@@ -84,52 +66,44 @@ export default async function DashboardSidebar({ counts }: SidebarProps) {
       <nav className="sidebar-nav">
         <div className="group-label">Library</div>
 
-        <button className="navbtn active">
-          <span className="ico">{ICONS.home}</span>
+        <SidebarNavLink href="/dashboard" icon={ICONS.home} exact>
           Dashboard
-        </button>
+        </SidebarNavLink>
 
-        <button className="navbtn">
-          <span className="ico">{ICONS.reports}</span>
+        <SidebarNavLink href="/dashboard/reports" icon={ICONS.reports} count={counts.reports}>
           Reports
-          <span className="count">{counts.reports}</span>
-        </button>
+        </SidebarNavLink>
 
-        <button className="navbtn">
-          <span className="ico">{ICONS.markers}</span>
-          Markers
-          <span className="count">{counts.markers}</span>
-        </button>
+        {/* Stat card: Markers / Flagged / Doctor Q's */}
+        <div className="sidebar-stats">
+          <div className="sstat">
+            <span className="sstat-l">Markers</span>
+            <span className="sstat-v">{counts.markers}</span>
+          </div>
+          <div className="sstat sstat-mid">
+            <span className="sstat-l">Flagged</span>
+            <span className="sstat-v sstat-coral">{counts.flagged}</span>
+          </div>
+          <div className="sstat">
+            <span className="sstat-l">Dr. Q&apos;s</span>
+            <span className="sstat-v">{counts.questions}</span>
+          </div>
+        </div>
 
-        <button className="navbtn">
-          <span className="ico">{ICONS.flags}</span>
-          Flagged
-          <span className="count">{counts.flagged}</span>
-        </button>
-
-        <button className="navbtn">
-          <span className="ico">{ICONS.questions}</span>
-          {"Doctor Q's"}
-          {counts.questions > 0 && <span className="count">{counts.questions}</span>}
-        </button>
-
-        <button className="navbtn">
-          <span className="ico">{ICONS.reminders}</span>
+        <SidebarNavLink href="/dashboard/reminders" icon={ICONS.reminders} count={counts.reminders > 0 ? counts.reminders : null}>
           Reminders
-          {counts.reminders > 0 && <span className="count">{counts.reminders}</span>}
-        </button>
+        </SidebarNavLink>
 
         <div className="group-label actions-label">Actions</div>
 
-        <button className="navbtn">
+        <button type="button" className="navbtn">
           <span className="ico">{ICONS.upload}</span>
           Upload report
         </button>
 
-        <button className="navbtn">
-          <span className="ico">{ICONS.settings}</span>
+        <SidebarNavLink href="/dashboard/settings" icon={ICONS.settings}>
           Settings
-        </button>
+        </SidebarNavLink>
       </nav>
 
       <SidebarProfile

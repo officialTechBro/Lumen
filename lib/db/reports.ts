@@ -325,3 +325,157 @@ export async function getReportStats(
     trackedSince: oldest?.collectedAt ?? null,
   };
 }
+
+export async function getAllReports(
+  userId: string,
+  page: number = 1,
+  perPage: number = 20
+): Promise<{ reports: RecentReportData[]; total: number }> {
+  const skip = (page - 1) * perPage;
+
+  const [reports, oldest, total] = await Promise.all([
+    prisma.report.findMany({
+      where: { userId, status: "ready" },
+      orderBy: { collectedAt: "desc" },
+      skip,
+      take: perPage,
+      select: {
+        id: true,
+        title: true,
+        labProvider: true,
+        collectedAt: true,
+        flagCount: true,
+        watchCount: true,
+        status: true,
+        _count: { select: { markers: true } },
+      },
+    }),
+    prisma.report.findFirst({
+      where: { userId, status: "ready" },
+      orderBy: { collectedAt: "asc" },
+      select: { id: true },
+    }),
+    prisma.report.count({ where: { userId, status: "ready" } }),
+  ]);
+
+  return {
+    total,
+    reports: reports.map((report, i) => ({
+      id: report.id,
+      title: report.title,
+      labProvider: report.labProvider,
+      collectedAt: report.collectedAt,
+      markerCount: report._count.markers,
+      flagCount: report.flagCount,
+      watchCount: report.watchCount,
+      status: report.status,
+      badge:
+        i === 0 && page === 1
+          ? "latest"
+          : report.id === oldest?.id
+          ? "first"
+          : null,
+    })),
+  };
+}
+
+export type ReportDetailData = {
+  id: string;
+  title: string | null;
+  labProvider: string | null;
+  collectedAt: Date | null;
+  uploadedAt: Date;
+  processedAt: Date | null;
+  processingTime: number | null;
+  patientId: string | null;
+  summary: string | null;
+  flagCount: number;
+  watchCount: number;
+  urgentFlag: boolean;
+  markers: {
+    id: string;
+    name: string;
+    code: string | null;
+    category: string | null;
+    value: number;
+    unit: string;
+    referenceMin: number | null;
+    referenceMax: number | null;
+    status: string;
+    isUrgent: boolean;
+    explanation: string;
+    whyItMatters: string | null;
+    confidence: number;
+    delta: number | null;
+    deltaDirection: string | null;
+  }[];
+  questions: {
+    id: string;
+    text: string;
+    priority: number;
+    isChecked: boolean;
+    addedBy: string;
+    relatedTo: string | null;
+  }[];
+};
+
+export async function getReportById(
+  userId: string,
+  reportId: string
+): Promise<ReportDetailData | null> {
+  const report = await prisma.report.findFirst({
+    where: { id: reportId, userId },
+    include: {
+      markers: {
+        orderBy: [{ isUrgent: "desc" }, { status: "asc" }, { name: "asc" }],
+        select: {
+          id: true,
+          name: true,
+          code: true,
+          category: true,
+          value: true,
+          unit: true,
+          referenceMin: true,
+          referenceMax: true,
+          status: true,
+          isUrgent: true,
+          explanation: true,
+          whyItMatters: true,
+          confidence: true,
+          delta: true,
+          deltaDirection: true,
+        },
+      },
+      questions: {
+        orderBy: { priority: "asc" },
+        select: {
+          id: true,
+          text: true,
+          priority: true,
+          isChecked: true,
+          addedBy: true,
+          relatedTo: true,
+        },
+      },
+    },
+  });
+
+  if (!report) return null;
+
+  return {
+    id: report.id,
+    title: report.title,
+    labProvider: report.labProvider,
+    collectedAt: report.collectedAt,
+    uploadedAt: report.uploadedAt,
+    processedAt: report.processedAt,
+    processingTime: report.processingTime,
+    patientId: report.patientId,
+    summary: report.summary,
+    flagCount: report.flagCount,
+    watchCount: report.watchCount,
+    urgentFlag: report.urgentFlag,
+    markers: report.markers,
+    questions: report.questions,
+  };
+}
