@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
 
   const record = await prisma.verificationToken.findUnique({ where: { token } })
 
-  if (!record) {
+  if (!record || record.identifier.startsWith("password-reset:")) {
     return NextResponse.redirect(new URL("/verify-email?error=invalid", origin))
   }
 

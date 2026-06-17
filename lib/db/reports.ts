@@ -75,31 +75,6 @@ export type FlaggedMarkerData = {
   refHigh: number | null;
 };
 
-async function getSparklineValues(
-  markerName: string,
-  userId: string,
-  excludeReportId: string,
-  currentValue: number
-): Promise<number[]> {
-  const history = await prisma.marker.findMany({
-    where: {
-      name: markerName,
-      report: {
-        userId,
-        status: "ready",
-        id: { not: excludeReportId },
-      },
-    },
-    orderBy: {
-      report: { collectedAt: "asc" },
-    },
-    select: { value: true },
-    take: 5,
-  });
-
-  return [...history.map((m) => m.value), currentValue];
-}
-
 export async function getFlaggedMarkers(
   userId: string
 ): Promise<FlaggedMarkerData[]> {
@@ -140,35 +115,54 @@ export async function getFlaggedMarkers(
     },
   });
 
-  return Promise.all(
-    markers.map(async (marker) => {
-      const [sparklineValues, questions] = await Promise.all([
-        getSparklineValues(marker.name, userId, latestReport.id, marker.value),
-        prisma.question.findMany({
-          where: {
-            reportId: latestReport.id,
-            relatedTo: marker.name,
-          },
-          orderBy: { priority: "asc" },
-          select: {
-            id: true,
-            text: true,
-            priority: true,
-            isChecked: true,
-            addedBy: true,
-          },
-        }),
-      ]);
+  if (markers.length === 0) return [];
 
-      return {
-        ...marker,
-        sparklineValues,
-        questions,
-        refLow: marker.referenceMin,
-        refHigh: marker.referenceMax,
-      };
-    })
-  );
+  const markerNames = markers.map((m) => m.name);
+
+  // Single query for all questions, single query for all sparkline history
+  const [allQuestions, allHistory] = await Promise.all([
+    prisma.question.findMany({
+      where: { reportId: latestReport.id, relatedTo: { in: markerNames } },
+      orderBy: { priority: "asc" },
+      select: { id: true, text: true, priority: true, isChecked: true, addedBy: true, relatedTo: true },
+    }),
+    prisma.marker.findMany({
+      where: {
+        name: { in: markerNames },
+        report: { userId, status: "ready", id: { not: latestReport.id } },
+      },
+      orderBy: { report: { collectedAt: "asc" } },
+      select: { name: true, value: true },
+    }),
+  ]);
+
+  const questionsByMarker = new Map<string, typeof allQuestions>();
+  for (const q of allQuestions) {
+    const key = q.relatedTo ?? "";
+    if (!questionsByMarker.has(key)) questionsByMarker.set(key, []);
+    questionsByMarker.get(key)!.push(q);
+  }
+
+  const historyByMarker = new Map<string, number[]>();
+  for (const h of allHistory) {
+    if (!historyByMarker.has(h.name)) historyByMarker.set(h.name, []);
+    historyByMarker.get(h.name)!.push(h.value);
+  }
+
+  return markers.map((marker) => {
+    const history = historyByMarker.get(marker.name) ?? [];
+    const sparklineValues = [...history.slice(-5), marker.value];
+    const questions = (questionsByMarker.get(marker.name) ?? []).map(
+      ({ relatedTo: _r, ...q }) => q
+    );
+    return {
+      ...marker,
+      sparklineValues,
+      questions,
+      refLow: marker.referenceMin,
+      refHigh: marker.referenceMax,
+    };
+  });
 }
 
 export async function getLatestReport(

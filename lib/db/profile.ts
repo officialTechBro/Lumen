@@ -12,7 +12,6 @@ export type ProfileUser = {
   email: string | null;
   image: string | null;
   isPro: boolean;
-  password: string | null;
   createdAt: Date;
   notificationPrefs: NotificationPrefs | null;
 };
@@ -24,6 +23,7 @@ export type LabStat = {
 
 export type ProfileData = {
   user: ProfileUser;
+  hasPassword: boolean;
   totalReports: number;
   totalMarkers: number;
   flaggedCount: number;
@@ -40,7 +40,7 @@ export async function getProfileData(userId: string): Promise<ProfileData | null
         email: true,
         image: true,
         isPro: true,
-        password: true,
+        password: true, // used only to derive hasPassword; never returned to callers
         createdAt: true,
         notificationPrefs: {
           select: {
@@ -66,6 +66,9 @@ export async function getProfileData(userId: string): Promise<ProfileData | null
 
   if (!user) return null;
 
+  const hasPassword = user.password !== null;
+  const { password: _pw, ...userWithoutPassword } = user;
+
   const totalReports = reportStats.reduce((sum, r) => sum + r._count.id, 0);
   const totalMarkers = markerStats._count.id ?? 0;
 
@@ -77,7 +80,8 @@ export async function getProfileData(userId: string): Promise<ProfileData | null
   });
 
   return {
-    user,
+    user: userWithoutPassword,
+    hasPassword,
     totalReports,
     totalMarkers,
     flaggedCount,

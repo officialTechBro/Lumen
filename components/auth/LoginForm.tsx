@@ -66,7 +66,9 @@ export function LoginForm({ verified = false, passwordReset = false }: { verifie
         redirect: false,
       });
 
-      if (!result || result.error) {
+      if (!result) {
+        setLoginError('network');
+      } else if (result.error) {
         setLoginError('wrong-password');
       } else {
         router.push('/dashboard');
@@ -85,18 +87,24 @@ export function LoginForm({ verified = false, passwordReset = false }: { verifie
   const handleForgotSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isLoading) return;
+    setLoginError(null);
     setIsLoading(true);
+    let rateLimited = false;
     try {
-      await fetch('/api/auth/forgot-password', {
+      const res = await fetch('/api/auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
+      if (res.status === 429) {
+        rateLimited = true;
+        setLoginError('rate-limited');
+      }
     } catch {
-      // Silently succeed — never reveal errors to prevent enumeration
+      // Silently succeed — never reveal whether the email exists
     } finally {
       setIsLoading(false);
-      setMode('forgot-success');
+      if (!rateLimited) setMode('forgot-success');
     }
   };
 
@@ -165,6 +173,12 @@ export function LoginForm({ verified = false, passwordReset = false }: { verifie
             className="auth-input"
           />
         </div>
+
+        {loginError === 'rate-limited' && (
+          <p role="alert" className="text-[13px] text-[var(--coral)] text-center mb-4 px-3.5 py-2 bg-[var(--coral-soft)] rounded-full">
+            Too many attempts. Please try again later.
+          </p>
+        )}
 
         <button
           type="submit"
@@ -320,10 +334,12 @@ export function LoginForm({ verified = false, passwordReset = false }: { verifie
         {isLoading ? (<>Signing in… <Spinner /></>) : 'Sign in →'}
       </button>
 
-      {/* Network error */}
-      {loginError === 'network' && (
+      {/* Network / rate-limit errors */}
+      {(loginError === 'network' || loginError === 'rate-limited') && (
         <p role="alert" className="text-[13px] text-[var(--coral)] text-center mt-3 px-3.5 py-2 bg-[var(--coral-soft)] rounded-full">
-          Something went wrong. Please try again.
+          {loginError === 'rate-limited'
+            ? 'Too many attempts. Please try again later.'
+            : 'Something went wrong. Please try again.'}
         </p>
       )}
 

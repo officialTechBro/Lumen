@@ -21,7 +21,7 @@ function Spinner() {
 }
 
 export function VerifyEmailActions({ email }: Props) {
-  const [state, setState] = useState<'idle' | 'loading' | 'sent' | 'error'>('idle')
+  const [state, setState] = useState<'idle' | 'loading' | 'sent' | 'error' | 'rate-limited'>('idle')
   const [inputEmail, setInputEmail] = useState(email ?? '')
 
   const handleResend = async () => {
@@ -31,12 +31,12 @@ export function VerifyEmailActions({ email }: Props) {
 
     setState('loading')
     try {
-      await fetch('/api/auth/resend-verification', {
+      const res = await fetch('/api/auth/resend-verification', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: target }),
       })
-      setState('sent')
+      setState(res.status === 429 ? 'rate-limited' : 'sent')
     } catch {
       setState('error')
     }
@@ -78,6 +78,11 @@ export function VerifyEmailActions({ email }: Props) {
       {state === 'error' && (
         <p className="text-[13px] text-[var(--coral)] text-center">
           Something went wrong. Please try again.
+        </p>
+      )}
+      {state === 'rate-limited' && (
+        <p className="text-[13px] text-[var(--coral)] text-center">
+          Too many attempts. Please try again later.
         </p>
       )}
     </div>

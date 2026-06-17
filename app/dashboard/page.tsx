@@ -10,6 +10,7 @@ import {
   getRecentReports,
   getReportStats,
 } from "@/lib/db/reports";
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 
 function formatTrackedSince(date: Date | null): string | null {
@@ -24,15 +25,7 @@ export default async function DashboardPage() {
   const session = await auth();
   const userId = session?.user?.id;
 
-  if (!userId) {
-    return (
-      <DashboardView totalReports={0} trackedSince={null} lastUploadedAt={null}>
-        <p style={{ padding: "24px", color: "var(--ink-soft)" }}>
-          No session found.
-        </p>
-      </DashboardView>
-    );
-  }
+  if (!userId) redirect("/login");
 
   const [latestReport, flaggedMarkers, markerTrends, recentReports, stats] =
     await Promise.all([

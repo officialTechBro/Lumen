@@ -5,6 +5,7 @@ import Google from "next-auth/providers/google"
 import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 import { authConfig } from "./auth.config"
+import { loginLimiter, checkRateLimit } from "@/lib/rate-limit"
 
 // PrismaAdapter passes NextAuth's `name` field to prisma.user.create, but our
 // schema uses `fullName`. Override createUser and updateUser to remap it.
@@ -38,17 +39,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
-      // Allow Google sign-in to link to an existing email/password account
-      allowDangerousEmailAccountLinking: true,
     }),
     Credentials({
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         const { email, password } = credentials as {
           email: string
           password: string
         }
 
         if (!email || !password) return null
+
+        const ip = request?.headers?.get("x-forwarded-for")
+          ?? request?.headers?.get("x-real-ip")
+          ?? "unknown"
+        const allowed = await checkRateLimit(loginLimiter, `login:${ip}:${email}`)
+        if (!allowed) return null
 
         const user = await prisma.user.findUnique({ where: { email } })
 
